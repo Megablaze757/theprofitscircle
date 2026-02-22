@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Economic Calendar – The Profits Circle</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .tv-widget-wrap {
+      background: var(--black3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      min-height: 700px;
+    }
+    .tv-widget-wrap iframe {
+      width: 100%;
+      border: none;
+      display: block;
+    }
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .75rem;
+      background: var(--black3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .impact-dot {
+      width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="./">
+    <span class="nav-brand">THE <span>PROFITS</span> CIRCLE</span>
+  </a>
+  <div class="nav-menu">
+    <a href="./" data-page="home">Home</a>
+    <a href="./journal.html" data-page="journal">Journal</a>
+    <a href="./calendar.html" data-page="calendar" class="active">Calendar</a>
+    <a href="./education.html" data-page="education">Academy</a>
+    <a href="./affiliate.html" data-page="affiliate">Affiliate</a>
+    <a href="./vip.html" data-page="vip">VIP</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-badge">Live</span>
+    <a href="https://t.me/theprofitscirclesupport" target="_blank" class="nav-cta">Join Free</a>
+    <a href="./login.html" class="nav-login-btn" id="navAuthBtn"><span id="navAuthLabel">Log In</span></a>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./">🏠 Home</a>
+  <a href="./journal.html">📖 Journal</a>
+  <a href="./calendar.html" class="active">📅 Calendar</a>
+  <a href="./education.html">🎓 Academy</a>
+  <a href="./affiliate.html">💰 Affiliate</a>
+  <a href="./vip.html">👑 VIP</a>
+  <div class="mobile-menu-actions">
+    <a href="./login.html" class="btn btn-gold btn-full">Log In / Sign Up</a>
+  </div>
+</div>
+
+<div class="page-content">
+<div class="section-pad">
+<div class="container">
+
+  <div class="flex items-center justify-between mb-3" style="flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div class="section-eyebrow">📅 Market Events</div>
+      <h1 class="section-title" style="margin-bottom:0;">Economic <span class="text-gold">Calendar</span></h1>
+    </div>
+    <a href="https://t.me/theprofitscirclesupport" target="_blank" class="btn btn-tg">💬 Get Alerts on Telegram</a>
+  </div>
+
+  <!-- LOCKED STATE -->
+  <div id="lockedState" class="hidden" style="text-align:center;padding:4rem 0;">
+    <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+    <h2 class="mb-1">Login Required</h2>
+    <p class="text-dim mb-3">Sign in to access the full economic calendar with live event data.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;">
+      <a href="./login.html" class="btn btn-gold btn-lg">Log In</a>
+      <a href="./vip.html" class="btn btn-ghost btn-lg">Get VIP Free</a>
+    </div>
+  </div>
+
+  <div id="calendarMain">
+    <!-- INFO BAR -->
+    <div class="filter-bar">
+      <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;">
+        <span class="impact-dot" style="background:var(--red);"></span> High Impact
+        <span class="impact-dot" style="background:var(--gold);margin-left:.5rem;"></span> Medium
+        <span class="impact-dot" style="background:var(--white3);margin-left:.5rem;"></span> Low
+      </div>
+      <div style="margin-left:auto;font-size:.8rem;color:var(--white3);">Data via TradingView · Updates in real-time</div>
+    </div>
+
+    <!-- TRADINGVIEW ECONOMIC CALENDAR WIDGET -->
+    <div class="tv-widget-wrap">
+      <!-- TradingView Widget BEGIN -->
+      <div class="tradingview-widget-container" style="min-height:700px;">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+        {
+          "colorTheme": "dark",
+          "isTransparent": true,
+          "width": "100%",
+          "height": "700",
+          "locale": "en",
+          "importanceFilter": "-1,0,1",
+          "countryFilter": "us,eu,gb,ca,au,nz,ch,jp,cn"
+        }
+        </script>
+      </div>
+      <!-- TradingView Widget END -->
+    </div>
+
+    <!-- XAUUSD SPECIFIC EVENTS NOTE -->
+    <div class="card mt-3" style="border-color:var(--gold-border);background:linear-gradient(135deg,rgba(212,168,67,.04),var(--black3));">
+      <h3 class="text-gold mb-2">🥇 Key Events That Move XAUUSD</h3>
+      <div class="grid-3" style="gap:1rem;">
+        <div>
+          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">🔴 Very High Impact</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--white2);">
+            <li>• US Non-Farm Payrolls (NFP)</li>
+            <li>• FOMC Interest Rate Decision</li>
+            <li>• US CPI Inflation Data</li>
+            <li>• US GDP Data</li>
+            <li>• Fed Chair Speech / Press Conference</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">🟡 High Impact</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--white2);">
+            <li>• Core PCE Price Index</li>
+            <li>• US Initial Jobless Claims</li>
+            <li>• ISM Manufacturing PMI</li>
+            <li>• US Durable Goods Orders</li>
+            <li>• ECB Rate Decision</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">💡 Trading Tips</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--white2);">
+            <li>• Avoid trading 30 min before high-impact</li>
+            <li>• Wait for the candle to close after news</li>
+            <li>• Widen your SL during news periods</li>
+            <li>• Best entries often come after volatility</li>
+            <li>• Join Telegram for live news alerts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /calendarMain -->
+
+</div>
+</div>
+</div>
+
+<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span class="footer-copy">© 2025 The Profits Circle. All rights reserved.</span>
+      <div class="footer-legal-links"><a href="./">Home</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+<div class="risk-bar">
+  <div class="container">
+    <p class="risk-text">⚠️ Economic calendar data provided by TradingView. Events and times are subject to change. Always verify before trading.</p>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  PC.initNav('calendar');
+  if (!PC.isLoggedIn()) {
+    document.getElementById('lockedState').classList.remove('hidden');
+    document.getElementById('calendarMain').classList.add('hidden');
+  }
+</script>
+</body>
+</html>

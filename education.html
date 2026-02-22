@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Academy – The Profits Circle</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .lesson-modal-content { max-height: 60vh; overflow-y: auto; padding-right: .5rem; }
+    .lesson-modal-content p { color: var(--white2); line-height: 1.8; margin-bottom: 1rem; font-size: .95rem; }
+    .lesson-modal-content h4 { color: var(--gold2); margin-bottom: .5rem; margin-top: 1.25rem; font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; }
+    .lesson-modal-content ul { padding-left: 1.25rem; color: var(--white2); font-size: .9rem; line-height: 1.8; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="./">
+    <span class="nav-brand">THE <span>PROFITS</span> CIRCLE</span>
+  </a>
+  <div class="nav-menu">
+    <a href="./" data-page="home">Home</a>
+    <a href="./journal.html" data-page="journal">Journal</a>
+    <a href="./calendar.html" data-page="calendar">Calendar</a>
+    <a href="./education.html" data-page="education" class="active">Academy</a>
+    <a href="./affiliate.html" data-page="affiliate">Affiliate</a>
+    <a href="./vip.html" data-page="vip">VIP</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-badge">Live</span>
+    <a href="https://t.me/theprofitscirclesupport" target="_blank" class="nav-cta">Join Free</a>
+    <a href="./login.html" class="nav-login-btn" id="navAuthBtn"><span id="navAuthLabel">Log In</span></a>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./">🏠 Home</a>
+  <a href="./journal.html">📖 Journal</a>
+  <a href="./calendar.html">📅 Calendar</a>
+  <a href="./education.html" class="active">🎓 Academy</a>
+  <a href="./affiliate.html">💰 Affiliate</a>
+  <a href="./vip.html">👑 VIP</a>
+  <div class="mobile-menu-actions">
+    <a href="./login.html" class="btn btn-gold btn-full">Log In / Sign Up</a>
+  </div>
+</div>
+
+<div class="page-content">
+<div class="section-pad">
+<div class="container">
+
+  <!-- LOCKED STATE -->
+  <div id="lockedState" class="hidden" style="text-align:center;padding:4rem 0;">
+    <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+    <h2 class="mb-1">Login Required</h2>
+    <p class="text-dim mb-3">Sign in to access all 9 trading lessons.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;">
+      <a href="./login.html" class="btn btn-gold btn-lg">Log In</a>
+      <a href="./vip.html" class="btn btn-ghost btn-lg">Get VIP Free</a>
+    </div>
+    <!-- Show free preview lessons when not logged in -->
+    <div id="freePreview" style="margin-top:3rem;text-align:left;"></div>
+  </div>
+
+  <!-- ACADEMY CONTENT -->
+  <div id="academyMain">
+    <div class="text-center mb-3">
+      <div class="section-eyebrow">🎓 Learn to Trade</div>
+      <h1 class="section-title">Trading <span class="text-gold">Academy</span></h1>
+      <p class="section-sub" style="margin:0 auto 1.5rem;">From beginner to professional. 9 structured lessons covering everything from XAUUSD basics to advanced institutional strategies.</p>
+      <div style="max-width:400px;margin:0 auto 1rem;">
+        <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width:0%;"></div></div>
+        <p style="font-size:.8rem;color:var(--white3);margin-top:.4rem;" id="progressLabel">0 of 9 lessons completed</p>
+      </div>
+    </div>
+
+    <!-- BEGINNER -->
+    <div class="mb-3">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+        <span class="badge badge-green">Beginner</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <div class="grid-3" id="beginnerGrid"></div>
+    </div>
+
+    <!-- INTERMEDIATE -->
+    <div class="mb-3">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+        <span class="badge badge-gold">Intermediate</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <div class="grid-3" id="intermediateGrid"></div>
+    </div>
+
+    <!-- ADVANCED -->
+    <div>
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+        <span class="badge" style="background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);">Advanced</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <div class="grid-3" id="advancedGrid"></div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- LESSON MODAL -->
+<div class="modal-overlay" id="lessonModal">
+  <div class="modal-box" style="max-width:640px;">
+    <div class="modal-header">
+      <div>
+        <h3 id="lessonModalTitle">Lesson</h3>
+        <div id="lessonModalMeta" style="font-size:.8rem;color:var(--white3);margin-top:.25rem;"></div>
+      </div>
+      <button class="modal-close" onclick="PC.closeModal('lessonModal')">✕</button>
+    </div>
+    <div class="lesson-modal-content" id="lessonModalBody"></div>
+    <div style="display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap;">
+      <button class="btn btn-gold" id="lessonCompleteBtn" onclick="markComplete()">Mark as Complete ✓</button>
+      <button class="btn btn-ghost" onclick="PC.closeModal('lessonModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span class="footer-copy">© 2025 The Profits Circle. All rights reserved.</span>
+      <div class="footer-legal-links"><a href="./">Home</a><a href="#">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+PC.initNav('education');
+
+const lessons = [
+  {
+    id: 1, level: 'Beginner', emoji: '📊', title: 'Understanding Gold (XAUUSD)', duration: '15 min',
+    body: `<p>Gold, traded as XAUUSD, is one of the most liquid instruments in the world. The pair represents the price of one troy ounce of gold in US dollars.</p>
+<h4>Why Does Gold Move?</h4>
+<ul><li>US Dollar strength — gold moves inversely to DXY</li><li>Inflation expectations — gold is a traditional inflation hedge</li><li>Geopolitical uncertainty — safe haven demand drives prices up</li><li>Federal Reserve policy — interest rate changes heavily influence gold</li><li>Central bank buying — large-scale accumulation impacts price</li></ul>
+<h4>Key Characteristics</h4>
+<p>XAUUSD is active nearly 24/5. The most liquid trading sessions are London (8am-5pm GMT) and New York (1pm-10pm GMT). The overlap period (1pm-5pm GMT) typically sees the highest volatility.</p>
+<h4>Why We Trade Gold</h4>
+<p>Gold offers clear technical levels, responds predictably to macroeconomic data, and provides excellent volatility for scalping, day trading, and swing trading strategies.</p>`
+  },
+  {
+    id: 2, level: 'Beginner', emoji: '📈', title: 'Reading Candlestick Charts', duration: '20 min',
+    body: `<p>Candlestick charts are the most powerful and widely used price visualization tool. Each candle represents a specific time period and shows four key prices.</p>
+<h4>Anatomy of a Candle</h4>
+<ul><li><strong>Open</strong> — The price at the start of the period</li><li><strong>Close</strong> — The price at the end of the period</li><li><strong>High</strong> — The highest price reached during the period</li><li><strong>Low</strong> — The lowest price reached during the period</li></ul>
+<h4>Key Patterns to Know</h4>
+<ul><li><strong>Doji</strong> — Open and close are nearly equal; signals indecision</li><li><strong>Hammer</strong> — Long lower wick; signals potential bullish reversal</li><li><strong>Shooting Star</strong> — Long upper wick; signals potential bearish reversal</li><li><strong>Engulfing</strong> — One candle completely engulfs the prior candle; strong reversal signal</li><li><strong>Pin Bar</strong> — Long wick rejecting a key level; one of the most reliable setups</li></ul>
+<h4>Timeframes</h4>
+<p>For XAUUSD, use the 4H and Daily charts for bias and key levels, then drop down to the 15M or 1H for precise entries. Never trade against the higher timeframe trend.</p>`
+  },
+  {
+    id: 3, level: 'Beginner', emoji: '🔑', title: 'Support & Resistance Basics', duration: '18 min',
+    body: `<p>Support and resistance are the most fundamental concepts in all of technical analysis. Master these and you have an enormous edge.</p>
+<h4>What is Support?</h4>
+<p>Support is a price level where buyers have historically stepped in and reversed a downward move. Think of it as the floor under price. When price approaches support, look for BUY opportunities.</p>
+<h4>What is Resistance?</h4>
+<p>Resistance is a price level where sellers have historically pushed price back down. Think of it as the ceiling above price. When price approaches resistance, look for SELL opportunities.</p>
+<h4>How to Draw Key Levels</h4>
+<ul><li>Use the weekly and daily charts to find the most significant levels</li><li>Draw at areas where price has repeatedly reacted — not single wicks</li><li>Zones are more powerful than exact lines — price rarely hits the same pip twice</li><li>Levels that have been tested multiple times are stronger</li></ul>
+<h4>Role Reversal</h4>
+<p>When a support level breaks, it often becomes resistance, and vice versa. This is called role reversal and provides excellent entry opportunities on the retest.</p>`
+  },
+  {
+    id: 4, level: 'Intermediate', emoji: '⚡', title: 'Entry & Exit Strategies', duration: '25 min',
+    body: `<p>Knowing WHEN to enter and WHERE to exit is what separates profitable traders from those who lose. Having a plan before entering every trade is non-negotiable.</p>
+<h4>Entry Confirmation</h4>
+<ul><li>Always wait for a candlestick close to confirm your entry signal</li><li>Look for confluence — multiple reasons to enter at the same level</li><li>Volume increase at a key level strengthens the signal</li><li>The best entries come after a pullback, not during a spike</li></ul>
+<h4>Setting Your Stop Loss</h4>
+<ul><li>Place SL beyond the structural level you're trading from</li><li>Never use a random pip value — base it on market structure</li><li>Account for spread and slippage — give price room to breathe</li></ul>
+<h4>Take Profit Strategy</h4>
+<ul><li>Target the next significant support/resistance level</li><li>Aim for a minimum 1:2 risk-reward ratio on every trade</li><li>Consider taking partial profits at 1:1 and moving SL to breakeven</li><li>Never close a trade early out of fear if your setup is intact</li></ul>`
+  },
+  {
+    id: 5, level: 'Intermediate', emoji: '🧠', title: 'Trading Psychology', duration: '22 min',
+    body: `<p>Statistics show that 80% of retail traders lose money — but it's not because of bad strategies. It's because of psychology. Mastering your mind is the ultimate edge.</p>
+<h4>The Emotional Trading Cycle</h4>
+<p>Fear causes you to miss entries or close trades early. Greed causes you to over-leverage and hold losers too long. FOMO causes you to chase entries. All three destroy accounts.</p>
+<h4>The Solution: A Written Trading Plan</h4>
+<ul><li>Write down your setup criteria before the market opens</li><li>Define your max daily loss limit — stop trading when you hit it</li><li>Never deviate from your plan during a trade</li><li>Review your journal weekly — patterns in your mistakes will become clear</li></ul>
+<h4>Dealing with Losing Streaks</h4>
+<p>Even the best traders have losing streaks. A 3-trade losing streak is normal. If you experience 5 consecutive losses, step away for 24 hours. Come back fresh. Don't revenge trade — it destroys accounts.</p>
+<h4>Mindset Shift</h4>
+<p>Think in probabilities, not certainties. No setup has a 100% win rate. Focus on executing your plan perfectly, not on the outcome of any individual trade.</p>`
+  },
+  {
+    id: 6, level: 'Intermediate', emoji: '📉', title: 'Risk Management Masterclass', duration: '30 min',
+    body: `<p>Risk management is the only thing that guarantees you stay in the game long enough to become profitable. Without it, even the best strategy will eventually blow your account.</p>
+<h4>The Golden Rule: 1-2% Risk Per Trade</h4>
+<p>Never risk more than 1-2% of your account on a single trade. This means a 10-trade losing streak only takes 10-20% of your account, which is recoverable. At 5% per trade, 10 losses wipes 50% — much harder to come back from.</p>
+<h4>Position Sizing Formula</h4>
+<p>Lot Size = (Account Size × Risk %) ÷ (SL in Pips × Pip Value)</p>
+<ul><li>Example: $10,000 account, 1% risk, 20 pip SL on XAUUSD</li><li>Risk amount = $100</li><li>Pip value on 1 lot XAUUSD ≈ $10</li><li>Lot size = $100 ÷ (20 × $10) = 0.5 lots</li></ul>
+<h4>Risk-to-Reward</h4>
+<p>Always aim for at least 1:2 R:R. At a 50% win rate with 1:2 R:R, you are profitable. At 60% win rate and 1:2 R:R, you build serious wealth over time.</p>
+<h4>Max Daily & Weekly Drawdown</h4>
+<p>Set a max daily loss of 3% and max weekly loss of 5%. When you hit these limits, stop trading. This prevents emotional spirals that destroy accounts in a single session.</p>`
+  },
+  {
+    id: 7, level: 'Advanced', emoji: '🏆', title: 'Advanced Gold Analysis', duration: '35 min',
+    body: `<p>To trade like an institution, you need to understand how institutions trade. Smart money doesn't buy at resistance or sell at support — they manipulate retail traders to do the opposite.</p>
+<h4>Liquidity Grabs</h4>
+<p>Institutions need liquidity to fill their massive orders. They hunt stop losses placed above recent highs and below recent lows. When you see a sharp wick through a key level that immediately reverses, that's a liquidity grab — and often an excellent entry in the opposite direction.</p>
+<h4>Order Blocks</h4>
+<p>An order block is the last bullish or bearish candle before a significant move. Price often returns to these zones to rebalance before continuing the original direction. These are high-probability entry zones.</p>
+<h4>Market Structure</h4>
+<ul><li>Uptrend: Higher Highs (HH) and Higher Lows (HL)</li><li>Downtrend: Lower Highs (LH) and Lower Lows (LL)</li><li>A Break of Structure (BOS) signals a potential trend change</li><li>Change of Character (CHoCH) is the earliest signal of reversal</li></ul>
+<h4>Premium & Discount Zones</h4>
+<p>Using Fibonacci, price above the 50% retracement of a move is Premium (look to sell), price below the 50% is Discount (look to buy). This filters entries to only take trades with institutional alignment.</p>`
+  },
+  {
+    id: 8, level: 'Advanced', emoji: '🔍', title: 'News Trading & NFP Strategy', duration: '28 min',
+    body: `<p>High-impact economic events create the biggest moves in XAUUSD. Learning to trade these events can generate significant profits — but they require a specific approach.</p>
+<h4>Before the News</h4>
+<ul><li>Mark key support/resistance levels on the daily and 4H charts</li><li>Note the market's current bias (trend direction)</li><li>Check the forecast vs previous reading — the deviation matters more than the number itself</li><li>Avoid entering new positions 30 minutes before high-impact events</li></ul>
+<h4>The NFP Strategy</h4>
+<p>Non-Farm Payrolls is released the first Friday of every month at 8:30am EST. For XAUUSD:</p>
+<ul><li>Strong NFP (more jobs than expected) = USD strong = XAUUSD drops</li><li>Weak NFP (fewer jobs than expected) = USD weak = XAUUSD rises</li><li>Wait for the initial volatility to settle (5-10 min candle close)</li><li>Enter on the retest of the breakout level, not the initial spike</li></ul>
+<h4>Post-News Trading</h4>
+<p>The best trades are often 15-30 minutes after the news release, once the fake-out moves have cleared and the real direction is established. Patience is key.</p>`
+  },
+  {
+    id: 9, level: 'Advanced', emoji: '💡', title: 'Building a Trading System', duration: '40 min',
+    body: `<p>A trading system is a set of rules you follow consistently on every trade. Without a system, you are gambling. With a tested system and proper risk management, trading becomes a business.</p>
+<h4>The 5 Elements of a Trading System</h4>
+<ul><li><strong>1. Market Selection</strong> — Focus on XAUUSD exclusively until mastery</li><li><strong>2. Timeframe</strong> — 4H bias, 1H entry confirmation, 15M precision entry</li><li><strong>3. Setup Criteria</strong> — What exact conditions must be met to enter?</li><li><strong>4. Risk Rules</strong> — Max 1% per trade, max 3% daily loss, 1:2 minimum R:R</li><li><strong>5. Trade Management</strong> — When to move SL, when to take partial profits</li></ul>
+<h4>Backtesting</h4>
+<p>Before trading live with any system, backtest it on at least 3-6 months of historical data. Look for: win rate, average R:R, max consecutive losses, and maximum drawdown.</p>
+<h4>Forward Testing (Paper Trading)</h4>
+<p>After backtesting, paper trade for at least 20-30 trades before going live. This builds confidence and reveals issues you didn't see in backtesting.</p>
+<h4>The Edge</h4>
+<p>Your edge comes from combining: high-probability technical setups at key levels, news awareness to avoid bad entries, strict risk management, and consistent execution. Our signals at The Profits Circle embody exactly this approach.</p>`
+  }
+];
+
+let completedLessons = JSON.parse(localStorage.getItem('pc_completed') || '[]');
+let currentLessonId = null;
+
+function renderLessons() {
+  const byLevel = { Beginner: [], Intermediate: [], Advanced: [] };
+  lessons.forEach(l => byLevel[l.level].push(l));
+  ['Beginner','Intermediate','Advanced'].forEach(level => {
+    const gridId = level.toLowerCase() + 'Grid';
+    document.getElementById(gridId).innerHTML = byLevel[level].map(l => {
+      const done = completedLessons.includes(l.id);
+      return `
+        <div class="lesson-card" style="${done ? 'opacity:.7;' : ''}">
+          <div class="lesson-thumb" style="background:linear-gradient(135deg,var(--black4),var(--black3));">
+            <span style="font-size:2.75rem;">${l.emoji}</span>
+            ${done ? `<div style="position:absolute;top:.5rem;right:.5rem;background:var(--green);color:var(--black);font-size:.65rem;font-weight:800;padding:.2rem .5rem;border-radius:50px;">✓ DONE</div>` : ''}
+          </div>
+          <div class="lesson-body">
+            <div class="flex items-center justify-between mb-1">
+              <span class="badge" style="font-size:.65rem;${level==='Beginner'?'background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);':level==='Intermediate'?'background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold2);':'background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);'}">${level}</span>
+              <span class="text-muted" style="font-size:.75rem;">⏱ ${l.duration}</span>
+            </div>
+            <h4 style="margin-bottom:.4rem;font-size:.95rem;">${l.title}</h4>
+            <button class="btn btn-ghost btn-full btn-sm mt-1" onclick="openLesson(${l.id})" style="margin-top:.75rem;">
+              ${done ? '📖 Review' : '▶ Start Lesson'}
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = Math.round(completedLessons.length / lessons.length * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${completedLessons.length} of ${lessons.length} lessons completed`;
+}
+
+function openLesson(id) {
+  const l = lessons.find(x => x.id === id);
+  currentLessonId = id;
+  document.getElementById('lessonModalTitle').textContent = l.emoji + ' ' + l.title;
+  document.getElementById('lessonModalMeta').textContent = l.level + ' · ' + l.duration;
+  document.getElementById('lessonModalBody').innerHTML = l.body;
+  const btn = document.getElementById('lessonCompleteBtn');
+  if (completedLessons.includes(id)) {
+    btn.textContent = '✓ Completed';
+    btn.classList.remove('btn-gold');
+    btn.classList.add('btn-ghost');
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'Mark as Complete ✓';
+    btn.classList.add('btn-gold');
+    btn.classList.remove('btn-ghost');
+    btn.disabled = false;
+  }
+  PC.openModal('lessonModal');
+}
+
+function markComplete() {
+  if (!completedLessons.includes(currentLessonId)) {
+    completedLessons.push(currentLessonId);
+    localStorage.setItem('pc_completed', JSON.stringify(completedLessons));
+    PC.toast('Lesson complete! 🎉', 'success');
+    renderLessons();
+    PC.closeModal('lessonModal');
+  }
+}
+
+if (PC.isLoggedIn()) {
+  renderLessons();
+} else {
+  document.getElementById('lockedState').classList.remove('hidden');
+  document.getElementById('academyMain').classList.add('hidden');
+  // Show 3 free preview lessons
+  const freeEl = document.getElementById('freePreview');
+  freeEl.innerHTML = `<h3 style="margin-bottom:1rem;" class="text-center">Free Preview Lessons</h3><div class="grid-3">` +
+    lessons.slice(0,3).map(l => `
+      <div class="lesson-card">
+        <div class="lesson-thumb"><span style="font-size:2.5rem;">${l.emoji}</span></div>
+        <div class="lesson-body">
+          <span class="badge badge-free" style="font-size:.65rem;margin-bottom:.5rem;">Free</span>
+          <h4 style="margin-bottom:.4rem;font-size:.9rem;">${l.title}</h4>
+          <a href="./login.html" class="btn btn-gold btn-full btn-sm" style="margin-top:.75rem;">Log In to Access</a>
+        </div>
+      </div>`).join('') + `</div>`;
+}
+</script>
+</body>
+</html>

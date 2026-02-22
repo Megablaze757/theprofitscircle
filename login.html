@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – The Profits Circle</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body style="background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,67,.07), transparent), var(--black);">
+
+<div class="login-container">
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="./" style="text-decoration:none;">
+        <h1>THE <span>PROFITS</span> CIRCLE</h1>
+      </a>
+      <p class="text-muted" style="font-size:.85rem;margin-top:.35rem;">Access your journal, calendar &amp; academy</p>
+    </div>
+
+    <div class="login-tabs">
+      <div class="login-tab active" id="ltab-login" onclick="switchTab('login')">Log In</div>
+      <div class="login-tab" id="ltab-signup" onclick="switchTab('signup')">Sign Up</div>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="loginEmail" placeholder="you@email.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button class="btn btn-gold btn-full mt-2" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
+      <p class="text-center text-muted mt-2" style="font-size:.78rem;">Demo login: admin@theprofitscircle.com / admin123</p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" style="display:none;">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="signupName" placeholder="Your name" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="signupEmail" placeholder="you@email.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="signupPassword" placeholder="Min. 8 characters" autocomplete="new-password" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Referral Code <span style="color:var(--white3);font-weight:400;">(optional)</span></label>
+        <input type="text" class="form-input" id="signupReferral" placeholder="e.g. JAMES22" style="text-transform:uppercase;" id="signupReferral" />
+        <div id="referralStatus" style="font-size:.78rem;margin-top:.35rem;min-height:1.1rem;"></div>
+      </div>
+      <button class="btn btn-gold btn-full mt-1" onclick="doSignup()" style="min-height:50px;font-size:1rem;font-weight:700;">Create Account →</button>
+      <div style="display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="font-size:.75rem;color:var(--white3);">or get instant VIP</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <a href="./vip.html" class="btn btn-outline btn-full">Sign Up With Broker — VIP Free</a>
+    </div>
+
+    <p class="text-center mt-3" style="font-size:.78rem;color:var(--white3);">
+      By continuing you agree to our <a href="#" class="text-gold2">Terms</a> and <a href="#" class="text-gold2">Privacy Policy</a>
+    </p>
+    <div class="text-center mt-2">
+      <a href="./" style="font-size:.82rem;color:var(--white3);">← Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
+
+<script src="assets/app.js"></script>
+<script>
+// Redirect if already logged in
+if (PC.isLoggedIn()) {
+  const r = sessionStorage.getItem('pc_redirect') || './';
+  sessionStorage.removeItem('pc_redirect');
+  window.location.href = r;
+}
+
+// Pre-fill referral code from URL ?ref=CODE
+const urlParams = new URLSearchParams(window.location.search);
+const refCode = urlParams.get('ref');
+if (refCode) {
+  switchTab('signup');
+  document.getElementById('signupReferral').value = refCode.toUpperCase();
+  validateReferral(refCode);
+}
+
+function switchTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('ltab-login').className = 'login-tab' + (tab==='login'?' active':'');
+  document.getElementById('ltab-signup').className = 'login-tab' + (tab==='signup'?' active':'');
+}
+
+function validateReferral(code) {
+  const el = document.getElementById('referralStatus');
+  if (!code) { el.textContent = ''; return; }
+  const u = PC.findUserByReferral(code.toUpperCase());
+  if (u) {
+    el.innerHTML = `<span style="color:var(--green);">✓ Valid referral code from ${u.name}</span>`;
+  } else {
+    el.innerHTML = `<span style="color:var(--red);">✗ Invalid referral code</span>`;
+  }
+}
+
+document.getElementById('signupReferral').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+  validateReferral(this.value);
+});
+
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  if (!email || !pw) { PC.toast('Please fill in all fields', 'error'); return; }
+  const res = PC.login(email, pw);
+  if (!res.ok) { PC.toast(res.msg, 'error'); return; }
+  const user = PC.getUser();
+  PC.toast('Welcome back, ' + user.name.split(' ')[0] + '! 👋', 'success');
+  setTimeout(() => {
+    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? './admin.html' : './');
+    sessionStorage.removeItem('pc_redirect');
+    window.location.href = redirect;
+  }, 700);
+}
+
+function doSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const pw = document.getElementById('signupPassword').value;
+  const ref = document.getElementById('signupReferral').value.trim();
+  if (!name || !email || !pw) { PC.toast('Please fill in all fields', 'error'); return; }
+  if (pw.length < 8) { PC.toast('Password must be at least 8 characters', 'error'); return; }
+  if (ref && !PC.findUserByReferral(ref)) { PC.toast('Invalid referral code', 'error'); return; }
+  const res = PC.signup(name, email, pw, ref);
+  if (!res.ok) { PC.toast(res.msg, 'error'); return; }
+  PC.toast('Account created! Welcome, ' + name.split(' ')[0] + '! 🎉', 'success');
+  setTimeout(() => {
+    const redirect = sessionStorage.getItem('pc_redirect') || './';
+    sessionStorage.removeItem('pc_redirect');
+    window.location.href = redirect;
+  }, 700);
+}
+</script>
+</body>
+</html>

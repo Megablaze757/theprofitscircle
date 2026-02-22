@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trade Journal – The Profits Circle</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .journal-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+    @media(min-width:1024px) { .journal-layout { grid-template-columns: 340px 1fr; } }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .cal-nav-btn { width: 32px; height: 32px; background: var(--black5); border: 1px solid var(--border); border-radius: 8px; color: var(--white2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: all .2s; }
+    .cal-nav-btn:hover { background: var(--black4); color: var(--white); }
+    .day-label { text-align: center; font-size: .65rem; font-weight: 700; color: var(--white3); padding: .3rem 0; text-transform: uppercase; letter-spacing: .05em; }
+    .cal-selected-info { background: var(--black4); border: 1px solid var(--border2); border-radius: 12px; padding: 1rem; margin-top: 1rem; min-height: 80px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: .75rem; margin-bottom: 1.5rem; }
+    @media(min-width:600px) { .summary-grid { grid-template-columns: repeat(4,1fr); } }
+    .add-trade-form { background: var(--black3); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    @media(max-width:480px) { .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="./">
+    <span class="nav-brand">THE <span>PROFITS</span> CIRCLE</span>
+  </a>
+  <div class="nav-menu">
+    <a href="./" data-page="home">Home</a>
+    <a href="./journal.html" data-page="journal" class="active">Journal</a>
+    <a href="./calendar.html" data-page="calendar">Calendar</a>
+    <a href="./education.html" data-page="education">Academy</a>
+    <a href="./affiliate.html" data-page="affiliate">Affiliate</a>
+    <a href="./vip.html" data-page="vip">VIP</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-badge">Live</span>
+    <a href="https://t.me/theprofitscirclesupport" target="_blank" class="nav-cta">Join Free</a>
+    <a href="./login.html" class="nav-login-btn" id="navAuthBtn"><span id="navAuthLabel">Log In</span></a>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./">🏠 Home</a>
+  <a href="./journal.html" class="active">📖 Journal</a>
+  <a href="./calendar.html">📅 Calendar</a>
+  <a href="./education.html">🎓 Academy</a>
+  <a href="./affiliate.html">💰 Affiliate</a>
+  <a href="./vip.html">👑 VIP</a>
+  <div class="mobile-menu-actions">
+    <a href="./login.html" class="btn btn-gold btn-full">Log In / Sign Up</a>
+  </div>
+</div>
+
+<div class="page-content">
+<div class="section-pad">
+<div class="container">
+
+  <!-- LOCKED STATE -->
+  <div id="lockedState" class="hidden" style="text-align:center;padding:4rem 0;">
+    <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+    <h2 class="mb-1">Login Required</h2>
+    <p class="text-dim mb-3">Sign in to access your trade journal.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;">
+      <a href="./login.html" class="btn btn-gold btn-lg">Log In</a>
+      <a href="./vip.html" class="btn btn-ghost btn-lg">Get VIP Free</a>
+    </div>
+  </div>
+
+  <!-- JOURNAL CONTENT -->
+  <div id="journalMain">
+    <div class="flex items-center justify-between mb-3" style="flex-wrap:wrap;gap:1rem;">
+      <div>
+        <div class="section-eyebrow">📖 My Trades</div>
+        <h1 class="section-title" style="margin-bottom:0;">Trade <span class="text-gold">Journal</span></h1>
+      </div>
+      <button class="btn btn-gold" onclick="PC.openModal('addTradeModal')">+ Add Trade</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="summary-grid" id="statsGrid"></div>
+
+    <!-- LAYOUT: CALENDAR + TRADES -->
+    <div class="journal-layout">
+
+      <!-- LEFT: CALENDAR -->
+      <div>
+        <div class="card" style="padding:1.25rem;">
+          <div class="cal-header">
+            <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+            <span id="calMonthLabel" style="font-weight:700;font-size:.95rem;"></span>
+            <button class="cal-nav-btn" onclick="calNav(1)">›</button>
+          </div>
+          <div class="cal-grid" id="dayLabels" style="margin-bottom:4px;"></div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-selected-info" id="calInfo">
+            <p class="text-muted" style="font-size:.85rem;">Click a day to view trades</p>
+          </div>
+          <!-- Legend -->
+          <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem;font-size:.72rem;color:var(--white3);">
+            <span style="display:flex;align-items:center;gap:.35rem;"><span style="width:11px;height:11px;background:rgba(0,229,160,.15);border:1px solid var(--green-border);border-radius:3px;display:inline-block;"></span>Profit Day</span>
+            <span style="display:flex;align-items:center;gap:.35rem;"><span style="width:11px;height:11px;background:rgba(255,71,87,.12);border:1px solid var(--red-border);border-radius:3px;display:inline-block;"></span>Loss Day</span>
+            <span style="display:flex;align-items:center;gap:.35rem;"><span style="width:11px;height:11px;background:var(--gold);border-radius:3px;display:inline-block;"></span>Today</span>
+          </div>
+        </div>
+
+        <!-- Monthly Summary -->
+        <div class="card mt-2" id="monthlySummary" style="padding:1.25rem;"></div>
+      </div>
+
+      <!-- RIGHT: TRADE LIST -->
+      <div>
+        <div class="flex items-center justify-between mb-2" style="flex-wrap:wrap;gap:.75rem;">
+          <h3>All Trades</h3>
+          <div class="flex gap-1" style="flex-wrap:wrap;">
+            <div class="tabs">
+              <button class="tab-btn active" onclick="filterTrades('all',this)">All</button>
+              <button class="tab-btn" onclick="filterTrades('win',this)">Wins</button>
+              <button class="tab-btn" onclick="filterTrades('loss',this)">Losses</button>
+            </div>
+          </div>
+        </div>
+        <div id="tradeList" style="display:flex;flex-direction:column;gap:.875rem;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ADD TRADE MODAL -->
+<div class="modal-overlay" id="addTradeModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>+ Add Trade</h3>
+      <button class="modal-close" onclick="PC.closeModal('addTradeModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="tDate" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Direction</label>
+        <select class="form-select" id="tDir">
+          <option value="BUY">BUY</option>
+          <option value="SELL">SELL</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Entry Price</label>
+        <input type="number" class="form-input" id="tEntry" placeholder="3248.50" step="0.01" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Exit Price</label>
+        <input type="number" class="form-input" id="tExit" placeholder="3265.00" step="0.01" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Lot Size</label>
+        <input type="number" class="form-input" id="tLots" placeholder="1.0" step="0.01" min="0.01" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">P&L ($)</label>
+        <input type="number" class="form-input" id="tPnl" placeholder="1650" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Result</label>
+      <select class="form-select" id="tResult">
+        <option value="win">Win ✓</option>
+        <option value="loss">Loss ✗</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes (optional)</label>
+      <textarea class="form-textarea" id="tNotes" placeholder="Why you took this trade, what you learned..." style="min-height:80px;"></textarea>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+      <button class="btn btn-gold btn-full" onclick="saveTrade()">Save Trade</button>
+      <button class="btn btn-ghost" onclick="PC.closeModal('addTradeModal')" style="min-width:100px;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span class="footer-copy">© 2025 The Profits Circle. All rights reserved.</span>
+      <div class="footer-legal-links"><a href="./">Home</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+PC.initNav('journal');
+
+// Check auth
+if (!PC.isLoggedIn()) {
+  document.getElementById('lockedState').classList.remove('hidden');
+  document.getElementById('journalMain').classList.add('hidden');
+}
+
+// ---- CALENDAR ----
+let calYear, calMonth, selectedDate = null;
+
+function initCal() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  renderCal();
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCal();
+}
+
+function renderCal() {
+  const entries = PC.getJournal();
+  const now = new Date();
+  const today = now.getDate();
+  const isCurrentMonth = calYear === now.getFullYear() && calMonth === now.getMonth();
+  const monthName = new Date(calYear, calMonth, 1).toLocaleString('default', { month: 'long' });
+  document.getElementById('calMonthLabel').textContent = `${monthName} ${calYear}`;
+
+  // Build day labels
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('dayLabels').innerHTML = dayNames.map(d => `<div class="day-label">${d}</div>`).join('');
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+  // Build day pnl map
+  const dayMap = {};
+  entries.forEach(e => {
+    const d = new Date(e.date);
+    if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
+      const day = d.getDate();
+      dayMap[day] = (dayMap[day] || 0) + e.pnl;
+    }
+  });
+
+  let html = '';
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    let cls = 'cal-day';
+    if (isCurrentMonth && d === today) cls += ' today';
+    else if (dayMap[d] > 0) cls += ' profit';
+    else if (dayMap[d] < 0) cls += ' loss';
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    if (selectedDate === dateStr) cls += ' selected';
+    const amt = dayMap[d];
+    const label = amt ? `<div class="cal-amount">${amt > 0 ? '+' : ''}$${Math.round(Math.abs(amt)/100)*100 >= 1000 ? (Math.sign(amt) > 0 ? '' : '') + Math.abs(Math.round(amt/1000)) + 'K' : Math.abs(amt)}</div>` : '';
+    html += `<div class="${cls}" onclick="selectDay('${dateStr}', ${d})">${d}${label}</div>`;
+  }
+  document.getElementById('calGrid').innerHTML = html;
+  renderMonthlySummary(dayMap, daysInMonth);
+}
+
+function selectDay(dateStr, day) {
+  selectedDate = dateStr;
+  const entries = PC.getJournal().filter(e => e.date === dateStr);
+  const info = document.getElementById('calInfo');
+  if (entries.length === 0) {
+    info.innerHTML = `<p class="text-muted" style="font-size:.85rem;">No trades on this day.</p>`;
+  } else {
+    const pnl = entries.reduce((a,e) => a + e.pnl, 0);
+    info.innerHTML = `
+      <div style="font-weight:700;margin-bottom:.5rem;font-size:.9rem;">${dateStr}</div>
+      ${entries.map(e => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.82rem;">
+          <span>${e.dir === 'BUY' ? '🟢' : '🔴'} ${e.dir} @ $${e.entry}</span>
+          <span style="font-weight:700;color:${e.result==='win'?'var(--green)':'var(--red)'};">${e.result==='win'?'+':''}$${e.pnl.toLocaleString()}</span>
+        </div>
+      `).join('')}
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.5rem;font-size:.85rem;font-weight:700;">
+        <span>Day Total</span>
+        <span style="color:${pnl>=0?'var(--green)':'var(--red)'};">${pnl>=0?'+':''}$${pnl.toLocaleString()}</span>
+      </div>`;
+  }
+  renderCal();
+}
+
+function renderMonthlySummary(dayMap, daysInMonth) {
+  const entries = PC.getJournal().filter(e => {
+    const d = new Date(e.date);
+    return d.getFullYear() === calYear && d.getMonth() === calMonth;
+  });
+  const totalPnl = entries.reduce((a,e) => a + e.pnl, 0);
+  const wins = entries.filter(e => e.result === 'win').length;
+  const wr = entries.length ? Math.round(wins/entries.length*100) : 0;
+  const profitDays = Object.values(dayMap).filter(v => v > 0).length;
+  const lossDays = Object.values(dayMap).filter(v => v < 0).length;
+  document.getElementById('monthlySummary').innerHTML = `
+    <div style="font-weight:700;margin-bottom:.875rem;font-size:.9rem;">Month Summary</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+      <div style="text-align:center;padding:.75rem;background:var(--black4);border-radius:10px;">
+        <div style="font-weight:800;font-size:1.1rem;color:${totalPnl>=0?'var(--green)':'var(--red)'};">${totalPnl>=0?'+':''}$${Math.abs(totalPnl).toLocaleString()}</div>
+        <div style="font-size:.7rem;color:var(--white3);margin-top:.2rem;">Total P&L</div>
+      </div>
+      <div style="text-align:center;padding:.75rem;background:var(--black4);border-radius:10px;">
+        <div style="font-weight:800;font-size:1.1rem;color:var(--gold2);">${wr}%</div>
+        <div style="font-size:.7rem;color:var(--white3);margin-top:.2rem;">Win Rate</div>
+      </div>
+      <div style="text-align:center;padding:.75rem;background:var(--black4);border-radius:10px;">
+        <div style="font-weight:800;font-size:1.1rem;color:var(--green);">${profitDays}</div>
+        <div style="font-size:.7rem;color:var(--white3);margin-top:.2rem;">Profit Days</div>
+      </div>
+      <div style="text-align:center;padding:.75rem;background:var(--black4);border-radius:10px;">
+        <div style="font-weight:800;font-size:1.1rem;">${entries.length}</div>
+        <div style="font-size:.7rem;color:var(--white3);margin-top:.2rem;">Total Trades</div>
+      </div>
+    </div>`;
+}
+
+// ---- STATS ----
+function renderStats() {
+  const entries = PC.getJournal();
+  const totalPnl = entries.reduce((a,e) => a + e.pnl, 0);
+  const wins = entries.filter(e => e.result === 'win').length;
+  const wr = entries.length ? Math.round(wins/entries.length*100) : 0;
+  const bestTrade = entries.reduce((a,e) => e.pnl > (a?.pnl||0) ? e : a, null);
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-num" style="color:${totalPnl>=0?'var(--green)':'var(--red)'};">${totalPnl>=0?'+':''}$${Math.abs(totalPnl).toLocaleString()}</div><div class="stat-label">Total P&L</div></div>
+    <div class="stat-card"><div class="stat-num">${wr}%</div><div class="stat-label">Win Rate</div></div>
+    <div class="stat-card"><div class="stat-num">${entries.length}</div><div class="stat-label">Total Trades</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green);">${bestTrade ? '+$'+bestTrade.pnl.toLocaleString() : '$0'}</div><div class="stat-label">Best Trade</div></div>
+  `;
+}
+
+// ---- TRADE LIST ----
+let tradeFilter = 'all';
+function filterTrades(f, btn) {
+  tradeFilter = f;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderTradeList();
+}
+
+function renderTradeList() {
+  const all = PC.getJournal();
+  const entries = tradeFilter === 'all' ? all : all.filter(e => e.result === tradeFilter);
+  const list = document.getElementById('tradeList');
+  if (entries.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--white3);">No trades yet. Click "+ Add Trade" to get started.</div>`;
+    return;
+  }
+  list.innerHTML = entries.map(e => `
+    <div class="journal-entry ${e.result}">
+      <div class="flex items-center justify-between" style="flex-wrap:wrap;gap:.5rem;">
+        <div>
+          <div class="flex items-center gap-1 mb-1">
+            ${e.dir === 'BUY' ? '<span class="badge badge-buy">BUY</span>' : '<span class="badge badge-sell">SELL</span>'}
+            ${e.result === 'win' ? '<span class="badge badge-win">✓ WIN</span>' : '<span class="badge badge-loss">✗ LOSS</span>'}
+          </div>
+          <div style="font-weight:700;">XAUUSD &nbsp;·&nbsp; ${e.date}</div>
+          <div class="text-muted" style="font-size:.8rem;margin-top:.2rem;">Entry: $${e.entry} → Exit: $${e.exit} &nbsp;|&nbsp; ${e.lots} lot${e.lots!==1?'s':''}</div>
+          ${e.notes ? `<div style="font-size:.8rem;color:var(--white3);margin-top:.3rem;font-style:italic;">"${e.notes}"</div>` : ''}
+        </div>
+        <div class="text-right">
+          <div style="font-weight:800;font-size:1.15rem;color:${e.result==='win'?'var(--green)':'var(--red)'};">${e.result==='win'?'+':''}$${Math.abs(e.pnl).toLocaleString()}</div>
+          <button class="btn btn-sm btn-ghost mt-1" onclick="deleteTrade(${e.id})" style="font-size:.7rem;min-height:28px;padding:.3rem .6rem;color:var(--red);border-color:var(--red-border);">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function saveTrade() {
+  const date = document.getElementById('tDate').value;
+  const dir = document.getElementById('tDir').value;
+  const entry = parseFloat(document.getElementById('tEntry').value);
+  const exit = parseFloat(document.getElementById('tExit').value);
+  const lots = parseFloat(document.getElementById('tLots').value);
+  const pnl = parseFloat(document.getElementById('tPnl').value);
+  const result = document.getElementById('tResult').value;
+  const notes = document.getElementById('tNotes').value.trim();
+  if (!date || isNaN(entry) || isNaN(exit) || isNaN(lots) || isNaN(pnl)) {
+    PC.toast('Please fill in all required fields', 'error'); return;
+  }
+  const entries = PC.getJournal();
+  entries.unshift({ id: Date.now(), date, dir, entry, exit, lots, pnl, result, notes });
+  PC.saveJournal(entries);
+  PC.closeModal('addTradeModal');
+  PC.toast('Trade saved! ✓', 'success');
+  renderStats();
+  renderTradeList();
+  renderCal();
+  // Clear form
+  ['tDate','tEntry','tExit','tLots','tPnl','tNotes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteTrade(id) {
+  if (!confirm('Delete this trade?')) return;
+  const entries = PC.getJournal().filter(e => e.id !== id);
+  PC.saveJournal(entries);
+  PC.toast('Trade deleted');
+  renderStats();
+  renderTradeList();
+  renderCal();
+}
+
+// Set today as default date
+document.getElementById('tDate').valueAsDate = new Date();
+
+if (PC.isLoggedIn()) {
+  renderStats();
+  renderTradeList();
+  initCal();
+}
+</script>
+</body>
+</html>

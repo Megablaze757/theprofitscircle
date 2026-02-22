@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Profits Circle</title>
+  <script>
+    // GitHub Pages clean URL redirect trick
+    // Converts /journal → /journal.html, handles ?ref= params etc.
+    (function() {
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+      
+      // Strip leading slash, get segments
+      var seg = path.replace(/^\//, '').replace(/\/$/, '');
+      
+      // Map of clean paths to actual files
+      var routes = {
+        '': '',
+        'journal': 'journal.html',
+        'calendar': 'calendar.html',
+        'education': 'education.html',
+        'academy': 'education.html',
+        'affiliate': 'affiliate.html',
+        'vip': 'vip.html',
+        'login': 'login.html',
+        'admin': 'admin.html',
+        'signup': 'login.html',
+      };
+      
+      // Handle GitHub Pages repo subdirectory (e.g. /repo-name/journal)
+      // Try last segment
+      var parts = seg.split('/');
+      var last = parts[parts.length - 1];
+      var base = window.location.href.split(seg)[0];
+      
+      if (routes.hasOwnProperty(last)) {
+        var dest = routes[last];
+        var newUrl = base + (dest ? dest : '') + search + hash;
+        window.location.replace(newUrl);
+      } else {
+        // True 404 - show error page
+        document.documentElement.innerHTML = document.getElementById('notFoundTpl').innerHTML;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <template id="notFoundTpl">
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"/><title>404 – The Profits Circle</title>
+    <link rel="stylesheet" href="./assets/style.css"/>
+    </head>
+    <body style="min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:7rem;letter-spacing:4px;color:var(--gold);line-height:1;margin-bottom:1rem;">404</div>
+        <h2 style="margin-bottom:.75rem;">Page Not Found</h2>
+        <p style="color:var(--white2);margin-bottom:2rem;">The page you're looking for doesn't exist.</p>
+        <a href="./" style="background:var(--gold);color:var(--black);padding:.75rem 2rem;border-radius:10px;font-weight:700;text-decoration:none;">← Back to Home</a>
+      </div>
+    </body>
+    </html>
+  </template>
+</body>
+</html>
