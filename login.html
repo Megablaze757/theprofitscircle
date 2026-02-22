@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – The Profits Circle</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
 </head>
 <body style="background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,67,.07), transparent), var(--black);">
 
 <div class="login-container">
   <div class="login-box">
     <div class="login-logo">
-      <a href="./" style="text-decoration:none;">
+      <a href="/" style="text-decoration:none;">
         <h1>THE <span>PROFITS</span> CIRCLE</h1>
       </a>
       <p class="text-muted" style="font-size:.85rem;margin-top:.35rem;">Access your journal, calendar &amp; academy</p>
@@ -33,7 +33,6 @@
         <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
       </div>
       <button class="btn btn-gold btn-full mt-2" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
-      <p class="text-center text-muted mt-2" style="font-size:.78rem;">Demo login: admin@theprofitscircle.com / admin123</p>
     </div>
 
     <!-- SIGNUP FORM -->
@@ -61,25 +60,25 @@
         <span style="font-size:.75rem;color:var(--white3);">or get instant VIP</span>
         <div style="flex:1;height:1px;background:var(--border);"></div>
       </div>
-      <a href="./vip.html" class="btn btn-outline btn-full">Sign Up With Broker — VIP Free</a>
+      <a href="/vip" class="btn btn-outline btn-full">Sign Up With Broker — VIP Free</a>
     </div>
 
     <p class="text-center mt-3" style="font-size:.78rem;color:var(--white3);">
       By continuing you agree to our <a href="#" class="text-gold2">Terms</a> and <a href="#" class="text-gold2">Privacy Policy</a>
     </p>
     <div class="text-center mt-2">
-      <a href="./" style="font-size:.82rem;color:var(--white3);">← Back to Home</a>
+      <a href="/" style="font-size:.82rem;color:var(--white3);">← Back to Home</a>
     </div>
   </div>
 </div>
 
 <div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
 
-<script src="assets/app.js"></script>
+<script src="/assets/app.js"></script>
 <script>
 // Redirect if already logged in
 if (PC.isLoggedIn()) {
-  const r = sessionStorage.getItem('pc_redirect') || './';
+  const r = sessionStorage.getItem('pc_redirect') || '/';
   sessionStorage.removeItem('pc_redirect');
   window.location.href = r;
 }
@@ -125,7 +124,7 @@ function doLogin() {
   const user = PC.getUser();
   PC.toast('Welcome back, ' + user.name.split(' ')[0] + '! 👋', 'success');
   setTimeout(() => {
-    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? './admin.html' : './');
+    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : '/');
     sessionStorage.removeItem('pc_redirect');
     window.location.href = redirect;
   }, 700);
@@ -143,7 +142,7 @@ function doSignup() {
   if (!res.ok) { PC.toast(res.msg, 'error'); return; }
   PC.toast('Account created! Welcome, ' + name.split(' ')[0] + '! 🎉', 'success');
   setTimeout(() => {
-    const redirect = sessionStorage.getItem('pc_redirect') || './';
+    const redirect = sessionStorage.getItem('pc_redirect') || '/';
     sessionStorage.removeItem('pc_redirect');
     window.location.href = redirect;
   }, 700);
