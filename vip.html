@@ -2,293 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VIP Plans – The Profits Circle</title>
-  <link rel="stylesheet" href="assets/style.css" />
-  <style>
-    .plan-ribbon { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--black); font-size: .68rem; font-weight: 800; padding: .25rem 1rem; border-radius: 0 0 8px 8px; letter-spacing: 1px; white-space: nowrap; }
-    .plan-ribbon.red { background: var(--red); color: #fff; }
-    .compare-table { width: 100%; border-collapse: collapse; }
-    .compare-table th { background: var(--black4); padding: 1rem; text-align: center; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; border-bottom: 2px solid var(--border); }
-    .compare-table th:first-child { text-align: left; }
-    .compare-table td { padding: .875rem 1rem; border-bottom: 1px solid var(--border); font-size: .875rem; color: var(--white2); text-align: center; }
-    .compare-table td:first-child { text-align: left; font-weight: 500; color: var(--white); }
-    .compare-table tr:last-child td { border-bottom: none; }
-    .compare-table .check { color: var(--green); font-weight: 800; font-size: 1rem; }
-    .compare-table .cross { color: var(--white3); font-size: 1rem; }
-    .compare-table .highlight td { background: rgba(212,168,67,.03); }
-  </style>
+  <title>The Profits Circle</title>
+  <script>
+    // GitHub Pages clean URL redirect trick
+    // Converts /journal → /journal.html, handles ?ref= params etc.
+    (function() {
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+      
+      // Strip leading slash, get segments
+      var seg = path.replace(/^\//, '').replace(/\/$/, '');
+      
+      // Map of clean paths to actual files
+      var routes = {
+        '': '',
+        'journal': 'journal',
+        'calendar': 'calendar',
+        'education': 'education',
+        'academy': 'education',
+        'affiliate': 'affiliate',
+        'vip': 'vip',
+        'login': 'login',
+        'admin': 'admin',
+        'signup': 'login',
+      };
+      
+      // Handle GitHub Pages repo subdirectory (e.g. /repo-name/journal)
+      // Try last segment
+      var parts = seg.split('/');
+      var last = parts[parts.length - 1];
+      var base = window.location.href.split(seg)[0];
+      
+      if (routes.hasOwnProperty(last)) {
+        var dest = routes[last];
+        var newUrl = base + (dest ? dest : '') + search + hash;
+        window.location.replace(newUrl);
+      } else {
+        // True 404 - show error page
+        document.documentElement.innerHTML = document.getElementById('notFoundTpl').innerHTML;
+      }
+    })();
+  </script>
 </head>
 <body>
-
-<nav class="navbar">
-  <a class="nav-logo" href="./">
-    <img src="logo.png" alt="The Profits Circle" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
-    <span class="nav-brand" style="display:none;">THE <span>PROFITS</span> CIRCLE</span>
-  </a>
-  <div class="nav-menu">
-    <a href="./" data-page="home">Home</a>
-    <a href="./journal.html" data-page="journal">Journal</a>
-    <a href="./calendar.html" data-page="calendar">Calendar</a>
-    <a href="./education.html" data-page="education">Academy</a>
-    <a href="./affiliate.html" data-page="affiliate">Affiliate</a>
-    <a href="./vip.html" data-page="vip" class="active">VIP</a>
-  </div>
-  <div class="nav-right">
-    <span class="nav-badge">Live</span>
-    <a href="https://t.me/theprofitscirclesupport" target="_blank" class="nav-cta">Join Free</a>
-    <a href="./login.html" class="nav-login-btn" id="navAuthBtn"><span id="navAuthLabel">Log In</span></a>
-    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
-  </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="./">🏠 Home</a>
-  <a href="./journal.html">📖 Journal</a>
-  <a href="./calendar.html">📅 Calendar</a>
-  <a href="./education.html">🎓 Academy</a>
-  <a href="./affiliate.html">💰 Affiliate</a>
-  <a href="./vip.html" class="active">👑 VIP</a>
-  <div class="mobile-menu-actions">
-    <a href="./login.html" class="btn btn-gold btn-full">Log In / Sign Up</a>
-  </div>
-</div>
-
-<div class="page-content">
-<div class="section-pad">
-<div class="container">
-
-  <div class="text-center mb-3">
-    <div class="section-eyebrow">👑 Choose Your Plan</div>
-    <h1 class="section-title">Simple, <span class="text-gold">Transparent Pricing</span></h1>
-    <p class="section-sub" style="margin:0 auto;">Join free, go VIP via broker, or subscribe to our paid plan for instant full access with no broker requirement.</p>
-  </div>
-
-  <div class="accent-line" style="margin-bottom:2.5rem;"><div class="al-diamond"></div></div>
-
-  <!-- PLANS GRID -->
-  <div class="grid-4 mb-3" style="gap:1.25rem;align-items:start;">
-
-    <!-- Free -->
-    <div class="plan-card">
-      <span class="badge badge-free mb-2">Community</span>
-      <h3 style="margin-bottom:.2rem;">Free</h3>
-      <p class="text-muted" style="font-size:.82rem;margin-bottom:.875rem;">No account needed</p>
-      <div style="margin-bottom:1.25rem;">
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:1px;color:var(--green);">FREE</span>
-        <div style="font-size:.78rem;color:var(--white3);margin-top:.2rem;">Always free</div>
-      </div>
-      <ul class="plan-features" style="margin-bottom:1.5rem;">
-        <li>Telegram community</li>
-        <li>1 signal per week</li>
-        <li>Market commentary</li>
-        <li>Content previews</li>
-      </ul>
-      <a href="https://t.me/theprofitscirclesupport" target="_blank" class="btn btn-ghost btn-full">Join Free →</a>
-    </div>
-
-    <!-- Paid Plan -->
-    <div class="plan-card" style="border-color:var(--red-border);background:linear-gradient(135deg,rgba(255,71,87,.04),var(--black3));position:relative;">
-      <div class="plan-ribbon red">INSTANT ACCESS</div>
-      <span class="badge" style="background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);margin-bottom:.5rem;margin-top:.4rem;">⚡ Paid</span>
-      <h3 style="margin-bottom:.2rem;">Pro Monthly</h3>
-      <p class="text-muted" style="font-size:.82rem;margin-bottom:.875rem;">No broker required</p>
-      <div style="margin-bottom:1.25rem;">
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:1px;color:var(--white);">$45</span>
-        <span style="color:var(--white3);font-size:.85rem;">/month</span>
-        <div style="font-size:.78rem;color:var(--white3);margin-top:.2rem;">Cancel any time</div>
-      </div>
-      <ul class="plan-features" style="margin-bottom:1.5rem;">
-        <li>All live daily signals</li>
-        <li>Full trading academy</li>
-        <li>Economic calendar</li>
-        <li>Personal trade journal</li>
-        <li>VIP Telegram channel</li>
-        <li>Priority notifications</li>
-      </ul>
-      <button class="btn btn-full" style="background:var(--red);color:#fff;min-height:44px;font-weight:700;" onclick="openPayModal()">Subscribe — $45/mo</button>
-    </div>
-
-    <!-- VIP Gold — featured -->
-    <div class="plan-card featured" style="position:relative;">
-      <div class="plan-ribbon">MOST POPULAR</div>
-      <span class="badge badge-vip" style="margin-bottom:.5rem;margin-top:.4rem;">👑 VIP Gold</span>
-      <h3 style="margin-bottom:.2rem;">VIP Gold</h3>
-      <p class="text-muted" style="font-size:.82rem;margin-bottom:.875rem;">Sign up via our broker</p>
-      <div style="margin-bottom:1.25rem;">
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:1px;color:var(--gold);">FREE</span>
-        <div style="margin-top:.35rem;"><span class="badge badge-green" style="font-size:.7rem;">No monthly fee — ever</span></div>
-        <div style="font-size:.75rem;color:var(--white3);margin-top:.3rem;">Open & fund broker account</div>
-      </div>
-      <ul class="plan-features" style="margin-bottom:1.5rem;">
-        <li>Everything in Pro Monthly</li>
-        <li>1-on-1 trade review sessions</li>
-        <li>Affiliate program access</li>
-        <li>Exclusive VIP community</li>
-        <li>Early access to features</li>
-      </ul>
-      <button class="btn btn-gold btn-full" onclick="PC.openModal('vipModal')">Unlock VIP Free →</button>
-    </div>
-
-    <!-- Elite -->
-    <div class="plan-card">
-      <span class="badge badge-gold mb-2">⚡ Elite</span>
-      <h3 style="margin-bottom:.2rem;">Elite Pro</h3>
-      <p class="text-muted" style="font-size:.82rem;margin-bottom:.875rem;">Higher broker deposit</p>
-      <div style="margin-bottom:1.25rem;">
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:1px;color:var(--gold2);">FREE</span>
-        <div style="font-size:.78rem;color:var(--white3);margin-top:.2rem;">Contact us to upgrade</div>
-      </div>
-      <ul class="plan-features" style="margin-bottom:1.5rem;">
-        <li>Everything in VIP Gold</li>
-        <li>Personal account manager</li>
-        <li>Exclusive elite signals</li>
-        <li>Weekly live sessions</li>
-        <li>Custom trade analysis</li>
-        <li>Elite affiliate rates</li>
-      </ul>
-      <a href="https://t.me/theprofitscirclesupport" target="_blank" class="btn btn-outline btn-full">Contact Us →</a>
-    </div>
-  </div>
-
-  <!-- COMPARISON TABLE -->
-  <div class="card mb-3" style="padding:0;overflow:hidden;">
-    <div style="padding:1.5rem 1.5rem .75rem;border-bottom:1px solid var(--border);">
-      <h3>Full <span class="text-gold">Feature Comparison</span></h3>
-    </div>
-    <div style="overflow-x:auto;">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th style="min-width:180px;">Feature</th>
-            <th>Free</th>
-            <th style="background:rgba(255,71,87,.05);">Pro $45/mo</th>
-            <th style="background:rgba(212,168,67,.05);">VIP Gold</th>
-            <th>Elite</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Telegram community</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr class="highlight"><td>Live daily signals</td><td class="cross">1/week</td><td class="check">✓ All</td><td class="check">✓ All</td><td class="check">✓ All</td></tr>
-          <tr><td>Trading academy (9 lessons)</td><td class="cross">Preview</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr class="highlight"><td>Economic calendar</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td>Trade journal</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr class="highlight"><td>VIP Telegram channel</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td>1-on-1 trade reviews</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr class="highlight"><td>Affiliate program</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td>Personal account manager</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
-          <tr class="highlight"><td>Exclusive elite signals</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
-          <tr><td>Live trading sessions</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
-          <tr class="highlight">
-            <td>Price</td>
-            <td style="color:var(--green);font-weight:700;">Free</td>
-            <td style="color:var(--white);font-weight:700;">$45/mo</td>
-            <td style="color:var(--gold);font-weight:700;">Free*</td>
-            <td style="color:var(--gold2);font-weight:700;">Free*</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="padding:.75rem 1.5rem;border-top:1px solid var(--border);font-size:.78rem;color:var(--white3);">*Free with broker account signup. Broker compensates us — no cost to you.</div>
-  </div>
-
-  <!-- HOW TO GET VIP -->
-  <div class="card mb-3" style="border-color:var(--gold-border);background:linear-gradient(135deg,rgba(212,168,67,.05),var(--black3));">
-    <h3 class="text-gold mb-3">🚀 How to Get VIP Free (3 Steps)</h3>
-    <div style="display:flex;flex-direction:column;gap:1.25rem;">
-      <div class="aff-step"><div class="aff-step-num">1</div><div><b>Open your broker account</b><br><span class="text-dim" style="font-size:.9rem;">Sign up through our trusted regulated broker partner. Takes 5–10 minutes and is completely free.</span></div></div>
-      <div class="aff-step"><div class="aff-step-num">2</div><div><b>Fund your account</b><br><span class="text-dim" style="font-size:.9rem;">Deposit to activate your live account. Message us on Telegram for the recommended minimum for your goals.</span></div></div>
-      <div class="aff-step"><div class="aff-step-num">3</div><div><b>Send us your confirmation</b><br><span class="text-dim" style="font-size:.9rem;">Message your account ID to our Telegram support. We activate full VIP access within 24 hours.</span></div></div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.75rem;">
-      <button class="btn btn-gold btn-lg" onclick="PC.openModal('vipModal')">Unlock VIP — Free</button>
-      <a href="https://t.me/theprofitscirclesupport" target="_blank" class="btn btn-tg btn-lg">💬 Ask on Telegram</a>
-    </div>
-  </div>
-
-  <!-- FAQ -->
-  <h2 class="section-title mb-2">Common <span class="text-gold">Questions</span></h2>
-  <div style="display:flex;flex-direction:column;gap:.75rem;">
-    <div class="card card-hover"><h4 style="margin-bottom:.5rem;">What's the difference between Paid and VIP?</h4><p class="text-dim" style="font-size:.9rem;">The Pro Monthly plan ($45/mo) gives you instant access to all core features with no broker requirement — just pay and start. VIP Gold is free but requires opening a live account with our broker partner. VIP also includes additional perks like 1-on-1 reviews and affiliate access.</p></div>
-    <div class="card card-hover"><h4 style="margin-bottom:.5rem;">Can I cancel the paid plan?</h4><p class="text-dim" style="font-size:.9rem;">Yes, you can cancel any time. Contact us on Telegram to cancel and your access continues until the end of your billing period.</p></div>
-    <div class="card card-hover"><h4 style="margin-bottom:.5rem;">Why is VIP free?</h4><p class="text-dim" style="font-size:.9rem;">We earn a commission from our broker partner when you trade through them. This means the broker compensates us — not you. You trade on a regulated platform you'd be using anyway, and we cover your membership cost.</p></div>
-    <div class="card card-hover"><h4 style="margin-bottom:.5rem;">Is my broker money safe?</h4><p class="text-dim" style="font-size:.9rem;">Yes. Our partner is a regulated broker that holds client funds in segregated accounts. We encourage you to do your own research. We only partner with brokers we personally use and trust.</p></div>
-  </div>
-
-</div>
-</div>
-</div>
-
-<!-- VIP MODAL -->
-<div class="modal-overlay" id="vipModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>👑 Unlock VIP — Free</h3>
-      <button class="modal-close" onclick="PC.closeModal('vipModal')">✕</button>
-    </div>
-    <p class="text-dim mb-3">3 easy steps to get full VIP access at zero cost:</p>
-    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;">
-      <div class="aff-step"><div class="aff-step-num">1</div><div><b>Open broker account</b><br><span class="text-dim" style="font-size:.85rem;">Click below — our broker signup takes 5–10 minutes.</span></div></div>
-      <div class="aff-step"><div class="aff-step-num">2</div><div><b>Fund your account</b><br><span class="text-dim" style="font-size:.85rem;">Deposit to activate live trading. Contact us for guidance on amounts.</span></div></div>
-      <div class="aff-step"><div class="aff-step-num">3</div><div><b>Message us on Telegram</b><br><span class="text-dim" style="font-size:.85rem;">Send your account ID — we activate VIP within 24 hours.</span></div></div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:.75rem;">
-      <a href="https://t.me/theprofitscirclesupport" target="_blank" class="btn btn-gold btn-full btn-lg" onclick="PC.closeModal('vipModal')">Contact Us on Telegram →</a>
-      <button class="btn btn-ghost btn-full" onclick="PC.closeModal('vipModal')">Maybe later</button>
-    </div>
-  </div>
-</div>
-
-<!-- PAY MODAL -->
-<div class="modal-overlay" id="payModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>⚡ Subscribe — Pro Monthly</h3>
-      <button class="modal-close" onclick="PC.closeModal('payModal')">✕</button>
-    </div>
-    <div class="card" style="background:var(--black4);border-color:var(--red-border);margin-bottom:1.25rem;padding:1rem 1.25rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;">
-        <div>
-          <div style="font-weight:700;">Pro Monthly Plan</div>
-          <div class="text-muted" style="font-size:.82rem;">Full access · Cancel any time</div>
-        </div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.75rem;color:var(--white);">$45<span style="font-size:1rem;color:var(--white3);">/mo</span></div>
-      </div>
-    </div>
-    <p class="text-dim mb-3" style="font-size:.9rem;">To subscribe, message us on Telegram. We'll set up your account and send payment instructions. We accept card, bank transfer, and crypto.</p>
-    <div style="display:flex;flex-direction:column;gap:.75rem;">
-      <a href="https://t.me/theprofitscirclesupport" target="_blank" class="btn btn-full btn-lg" style="background:var(--red);color:#fff;" onclick="PC.closeModal('payModal')">Subscribe via Telegram →</a>
-      <button class="btn btn-ghost btn-full" onclick="PC.closeModal('payModal')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
-
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
+  <template id="notFoundTpl">
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"/><title>404 – The Profits Circle</title>
+    <link rel="stylesheet" href="/assets/style.css"/>
+    </head>
+    <body style="min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;">
       <div>
-        <div class="footer-brand">THE <span class="text-gold">PROFITS</span> CIRCLE</div>
-        <p class="footer-desc">The most complete XAUUSD trading platform.</p>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:7rem;letter-spacing:4px;color:var(--gold);line-height:1;margin-bottom:1rem;">404</div>
+        <h2 style="margin-bottom:.75rem;">Page Not Found</h2>
+        <p style="color:var(--white2);margin-bottom:2rem;">The page you're looking for doesn't exist.</p>
+        <a href="/" style="background:var(--gold);color:var(--black);padding:.75rem 2rem;border-radius:10px;font-weight:700;text-decoration:none;">← Back to Home</a>
       </div>
-      <div>
-        <div class="footer-col-title">Platform</div>
-        <div class="footer-links"><a href="./">Home</a><a href="./journal.html">Journal</a><a href="./affiliate.html">Affiliate</a></div>
-      </div>
-      <div>
-        <div class="footer-col-title">Legal</div>
-        <div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Risk Disclosure</a></div>
-      </div>
-    </div>
-    <div class="footer-bottom"><span class="footer-copy">© 2025 The Profits Circle. All rights reserved.</span></div>
-  </div>
-</footer>
-<div class="risk-bar"><div class="container"><p class="risk-text">⚠️ Trading involves significant risk. Past performance is not indicative of future results.</p></div></div>
-
-<script src="assets/app.js"></script>
-<script>
-  PC.initNav('vip');
-  function openPayModal() { PC.openModal('payModal'); }
-</script>
+    </body>
+    </html>
+  </template>
 </body>
 </html>
