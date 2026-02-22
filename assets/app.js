@@ -1,9 +1,26 @@
 // ============================================================
-// THE PROFITS CIRCLE — SHARED JS
+// THE PROFITS CIRCLE — SHARED JS  v5
+// Multi-device login via GitHub-hosted users.json
+// Passwords hashed with SHA-256 (Web Crypto API)
 // ============================================================
 
 const PC = {
-  // --- AUTH ---
+
+  // ─── GITHUB CONFIG ──────────────────────────────────────
+  // UPDATE THIS after deploying — replace with your raw GitHub URL:
+  // https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/users.json
+  USERS_JSON_URL: 'https://raw.githubusercontent.com/theprofitscircle/theprofitscircle.co.uk/main/users.json',
+
+  // ─── HASHING ────────────────────────────────────────────
+  async hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  },
+
+  // ─── SESSION AUTH ───────────────────────────────────────
   getUser() {
     try { return JSON.parse(sessionStorage.getItem('pc_user') || 'null'); } catch { return null; }
   },
@@ -21,59 +38,92 @@ const PC = {
     return true;
   },
 
-  // --- URL HELPER (clean URLs for GitHub Pages) ---
-  // All internal links use .html but we strip it via the 404 redirect trick
+  // ─── URL HELPER ─────────────────────────────────────────
   url(page) {
-    if (page === 'home' || page === 'index') return './';
-    return './' + page + '.html';
+    if (page === 'home' || page === 'index') return '/';
+    return '/' + page;
   },
 
-  // --- USER STORE ---
+  // ─── REMOTE USER STORE ──────────────────────────────────
+  async fetchUsers() {
+    try {
+      const r = await fetch(this.USERS_JSON_URL + '?cb=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('fetch failed');
+      const data = await r.json();
+      const users = data.users || [];
+      localStorage.setItem('pc_users_cache', JSON.stringify({ users, ts: Date.now() }));
+      return users;
+    } catch {
+      try {
+        const cached = localStorage.getItem('pc_users_cache');
+        if (cached) return JSON.parse(cached).users || [];
+      } catch {}
+      return [];
+    }
+  },
+
   getUsers() {
     try {
-      const raw = localStorage.getItem('pc_users');
-      if (raw) return JSON.parse(raw);
+      const cached = localStorage.getItem('pc_users_cache');
+      if (cached) return JSON.parse(cached).users || [];
     } catch {}
-    const defaults = [
-      { id: 1, name: 'Admin', email: 'admin@theprofitscircle.com', password: 'admin123', role: 'admin', plan: 'vip', vip: true, status: 'active', joined: '2024-01-01', affiliate: false, referralCode: '', referredBy: '', earnings: 0 },
-      { id: 2, name: 'James Collins', email: 'james@example.com', password: 'demo123', role: 'user', plan: 'vip', vip: true, status: 'active', joined: '2024-11-14', affiliate: true, referralCode: 'JAMES22', referredBy: '', earnings: 1200 },
-      { id: 3, name: 'Sarah Walsh', email: 'sarah@example.com', password: 'demo123', role: 'user', plan: 'free', vip: false, status: 'active', joined: '2025-01-22', affiliate: false, referralCode: '', referredBy: 'JAMES22', earnings: 0 },
-      { id: 4, name: 'Mike Torres', email: 'mike@example.com', password: 'demo123', role: 'user', plan: 'paid', vip: true, status: 'active', joined: '2025-02-01', affiliate: true, referralCode: 'MIKE99', referredBy: '', earnings: 400 },
-    ];
-    localStorage.setItem('pc_users', JSON.stringify(defaults));
-    return defaults;
+    return [];
   },
-  saveUsers(users) { localStorage.setItem('pc_users', JSON.stringify(users)); },
+
+  saveUsers(users) {
+    localStorage.setItem('pc_users_cache', JSON.stringify({ users, ts: Date.now() }));
+    localStorage.setItem('pc_users_pending', JSON.stringify({ users }));
+  },
+
+  // Admin downloads updated users.json to commit to GitHub
+  downloadUsersJson() {
+    const pendingRaw = localStorage.getItem('pc_users_pending') || localStorage.getItem('pc_users_cache');
+    if (!pendingRaw) { this.toast('No user data to export', 'error'); return; }
+    const data = JSON.parse(pendingRaw);
+    const exportData = { users: data.users || [] };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'users.json';
+    a.click();
+    this.toast('users.json downloaded — commit this file to your GitHub repo to sync logins across all devices', 'success');
+  },
+
   findUser(email) { return this.getUsers().find(u => u.email.toLowerCase() === email.toLowerCase()); },
   findUserByReferral(code) { return this.getUsers().find(u => u.referralCode && u.referralCode.toUpperCase() === code.toUpperCase()); },
 
-  login(email, password) {
+  // ─── LOGIN ───────────────────────────────────────────────
+  async login(email, password) {
+    await this.fetchUsers();
     const u = this.findUser(email);
     if (!u) return { ok: false, msg: 'No account found with that email.' };
-    if (u.password !== password) return { ok: false, msg: 'Incorrect password.' };
+    const hash = await this.hashPassword(password);
+    if (u.passwordHash !== hash) return { ok: false, msg: 'Incorrect password.' };
     if (u.status === 'suspended') return { ok: false, msg: 'Your account has been suspended. Contact support.' };
     this.setUser({ id: u.id, name: u.name, email: u.email, role: u.role, plan: u.plan || 'free', vip: u.vip, affiliate: u.affiliate || false, referralCode: u.referralCode || '' });
     return { ok: true };
   },
 
-  signup(name, email, password, referralCode) {
+  // ─── SIGNUP ──────────────────────────────────────────────
+  async signup(name, email, password, referralCode) {
+    await this.fetchUsers();
     const existing = this.findUser(email);
     if (existing) return { ok: false, msg: 'An account with that email already exists.' };
     const users = this.getUsers();
+    const hash = await this.hashPassword(password);
     const newUser = {
-      id: Date.now(), name, email, password, role: 'user', plan: 'free', vip: false,
-      status: 'active', joined: new Date().toISOString().slice(0,10),
+      id: Date.now(), name, email, passwordHash: hash, role: 'user', plan: 'free', vip: false,
+      status: 'active', joined: new Date().toISOString().slice(0, 10),
       affiliate: false, referralCode: '', referredBy: referralCode || '', earnings: 0
     };
     users.push(newUser);
     this.saveUsers(users);
     this.setUser({ id: newUser.id, name, email, role: 'user', plan: 'free', vip: false, affiliate: false, referralCode: '' });
-    return { ok: true };
+    return { ok: true, needsSync: true };
   },
 
   logout() { this.clearUser(); window.location.href = PC.url('home'); },
 
-  // plan helpers
   hasPlan(plan) {
     const u = this.getUser();
     if (!u) return false;
@@ -84,7 +134,7 @@ const PC = {
     return false;
   },
 
-  // --- NAV ---
+  // ─── NAV ────────────────────────────────────────────────
   initNav(activePageId) {
     const user = this.getUser();
     const authBtn = document.getElementById('navAuthBtn');
@@ -94,11 +144,9 @@ const PC = {
         authLabel.textContent = user.name.split(' ')[0];
         if (user.role === 'admin') {
           authBtn.setAttribute('href', PC.url('admin'));
-          authBtn.title = 'Go to Admin';
         } else {
           authBtn.setAttribute('href', '#');
           authBtn.onclick = (e) => { e.preventDefault(); PC.logout(); };
-          authBtn.title = 'Log Out';
         }
       } else {
         authLabel.textContent = 'Log In';
@@ -113,24 +161,17 @@ const PC = {
     const ham = document.getElementById('hamburger');
     const mob = document.getElementById('mobileMenu');
     if (ham && mob) ham.onclick = () => mob.classList.toggle('open');
-
-    // Close mobile menu on outside click
     document.addEventListener('click', (e) => {
-      if (mob && !mob.contains(e.target) && ham && !ham.contains(e.target)) {
-        mob.classList.remove('open');
-      }
+      if (mob && !mob.contains(e.target) && ham && !ham.contains(e.target)) mob.classList.remove('open');
     });
   },
 
-  // --- TOAST ---
+  // ─── TOAST ──────────────────────────────────────────────
   toast(msg, type = 'default') {
     let t = document.getElementById('siteToast');
     if (!t) {
-      t = document.createElement('div');
-      t.id = 'siteToast';
-      t.className = 'toast';
-      t.innerHTML = '<span id="siteToastMsg"></span>';
-      document.body.appendChild(t);
+      t = document.createElement('div'); t.id = 'siteToast'; t.className = 'toast';
+      t.innerHTML = '<span id="siteToastMsg"></span>'; document.body.appendChild(t);
     }
     t.className = 'toast ' + type;
     document.getElementById('siteToastMsg').textContent = msg;
@@ -139,21 +180,18 @@ const PC = {
     t._timer = setTimeout(() => t.classList.remove('show'), 3200);
   },
 
-  // --- MODAL ---
   openModal(id) { document.getElementById(id)?.classList.add('open'); },
   closeModal(id) { document.getElementById(id)?.classList.remove('open'); },
 
-  // --- JOURNAL ---
   getJournal() {
-    try { const r = localStorage.getItem('pc_journal'); if(r) return JSON.parse(r); } catch {}
-    return []; // No dummy data — users add their own trades
+    try { const r = localStorage.getItem('pc_journal'); if (r) return JSON.parse(r); } catch {}
+    return [];
   },
   saveJournal(entries) { localStorage.setItem('pc_journal', JSON.stringify(entries)); },
 
-  // --- SIGNALS ---
   getSignals() {
-    try { const r = localStorage.getItem('pc_signals'); if(r) return JSON.parse(r); } catch {}
-    return []; // No dummy data — admin adds real signals
+    try { const r = localStorage.getItem('pc_signals'); if (r) return JSON.parse(r); } catch {}
+    return [];
   },
   saveSignals(s) { localStorage.setItem('pc_signals', JSON.stringify(s)); },
 };

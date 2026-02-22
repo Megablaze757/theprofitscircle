@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin – The Profits Circle</title>
-  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="stylesheet" href="assets/style.css" />
   <style>
     body { overflow-x: hidden; }
     .admin-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(10,10,10,.98); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; gap:1rem; }
@@ -39,7 +39,10 @@
 
 <!-- TOP BAR -->
 <div class="admin-topbar">
-  <div class="admin-topbar-brand">THE <span>PROFITS</span> CIRCLE <span style="color:var(--white3);font-size:.75rem;"> · ADMIN</span></div>
+  <div class="admin-topbar-brand" style="display:flex;align-items:center;gap:.6rem;">
+    <img src="logo.png" alt="The Profits Circle" style="height:30px;width:auto;" onerror="this.style.display='none';" />
+    <span>THE <span>PROFITS</span> CIRCLE <span style="color:var(--white3);font-size:.75rem;"> · ADMIN</span></span>
+  </div>
   <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0;">
     <span id="adminUserLabel" style="font-size:.82rem;color:var(--white3);"></span>
     <a href="/" class="btn btn-ghost btn-sm">View Site</a>
@@ -89,6 +92,16 @@
     <!-- ========== DASHBOARD ========== -->
     <div class="admin-section active" id="section-dashboard">
       <h2 class="mb-3">Dashboard <span class="text-gold">Overview</span></h2>
+
+      <!-- Multi-device sync banner -->
+      <div style="background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
+        <div>
+          <div style="font-weight:700;color:var(--gold2);font-size:.9rem;margin-bottom:.2rem;">🔄 Multi-Device Sync</div>
+          <div style="font-size:.8rem;color:var(--white2);">After adding/editing users, download the updated <code style="font-family:monospace;color:var(--gold2);">users.json</code> and commit it to your GitHub repo to sync logins across all devices.</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="PC.downloadUsersJson()" style="white-space:nowrap;">⬇ Download users.json</button>
+      </div>
+
       <div class="grid-4 mb-3" id="dashStats"></div>
       <div class="grid-2">
         <div class="card">
@@ -106,7 +119,10 @@
     <div class="admin-section" id="section-users">
       <div class="flex items-center justify-between mb-3" style="flex-wrap:wrap;gap:1rem;">
         <h2>User <span class="text-gold">Management</span></h2>
-        <button class="btn btn-gold" onclick="showSection('adduser')">➕ Add User</button>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm" onclick="PC.downloadUsersJson()" title="Download users.json to commit to GitHub">⬇ Sync JSON</button>
+          <button class="btn btn-gold" onclick="showSection('adduser')">➕ Add User</button>
+        </div>
       </div>
       <div class="search-row">
         <input type="text" class="form-input" id="userSearch" placeholder="Search name or email..." oninput="renderUserTable()" />
@@ -321,7 +337,7 @@
 
 <div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
 
-<script src="/assets/app.js"></script>
+<script src="assets/app.js"></script>
 <script>
 // Auth guard
 (function() {
@@ -332,29 +348,14 @@
   }
 })();
 
-// Clear any existing dummy data on first load of admin
-(function() {
-  const users = PC.getUsers();
-  // Check if we have the default dummy users and clear them
-  const hasDummyData = users.some(u => 
-    u.email === 'admin@theprofitscircle.com' && u.name === 'Admin User'
-  );
-  if (hasDummyData && users.length <= 2) {
-    // Clear all users except admin
-    const admin = users.find(u => u.role === 'admin');
-    if (admin) {
-      PC.saveUsers([admin]);
-    } else {
-      PC.saveUsers([]);
-    }
-  }
-})();
-
 const adminUser = PC.getUser();
 if (adminUser) document.getElementById('adminUserLabel').textContent = adminUser.name;
 document.getElementById('as_date').valueAsDate = new Date();
 
-const SITE_BASE = window.location.origin + window.location.pathname.replace(/admin\.html.*$/, '');
+const SITE_BASE = window.location.origin + window.location.origin + '/';
+
+// Load users from GitHub on page load
+PC.fetchUsers().then(() => { renderDashboard(); }).catch(() => { renderDashboard(); });
 
 // ---- HELPERS ----
 function planBadge(plan) {
@@ -679,7 +680,7 @@ function deleteSignal(id) {
   renderSignalTable();
 }
 
-renderDashboard();
+// init handled above
 </script>
 </body>
 </html>

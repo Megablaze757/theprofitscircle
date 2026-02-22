@@ -4,15 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – The Profits Circle</title>
-  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body style="background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,67,.07), transparent), var(--black);">
 
 <div class="login-container">
   <div class="login-box">
     <div class="login-logo">
-      <a href="/" style="text-decoration:none;">
-        <h1>THE <span>PROFITS</span> CIRCLE</h1>
+      <a href="/" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:.5rem;">
+        <img src="logo.png" alt="The Profits Circle" style="height:80px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+        <h1 style="display:none;">THE <span>PROFITS</span> CIRCLE</h1>
       </a>
       <p class="text-muted" style="font-size:.85rem;margin-top:.35rem;">Access your journal, calendar &amp; academy</p>
     </div>
@@ -32,7 +33,7 @@
         <label class="form-label">Password</label>
         <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
       </div>
-      <button class="btn btn-gold btn-full mt-2" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
+      <button class="btn btn-gold btn-full mt-2" id="loginBtn" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
     </div>
 
     <!-- SIGNUP FORM -->
@@ -54,7 +55,7 @@
         <input type="text" class="form-input" id="signupReferral" placeholder="e.g. JAMES22" style="text-transform:uppercase;" id="signupReferral" />
         <div id="referralStatus" style="font-size:.78rem;margin-top:.35rem;min-height:1.1rem;"></div>
       </div>
-      <button class="btn btn-gold btn-full mt-1" onclick="doSignup()" style="min-height:50px;font-size:1rem;font-weight:700;">Create Account →</button>
+      <button class="btn btn-gold btn-full mt-1" id="signupBtn" onclick="doSignup()" style="min-height:50px;font-size:1rem;font-weight:700;">Create Account →</button>
       <div style="display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;">
         <div style="flex:1;height:1px;background:var(--border);"></div>
         <span style="font-size:.75rem;color:var(--white3);">or get instant VIP</span>
@@ -74,14 +75,17 @@
 
 <div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
 
-<script src="/assets/app.js"></script>
+<script src="assets/app.js"></script>
 <script>
 // Redirect if already logged in
 if (PC.isLoggedIn()) {
-  const r = sessionStorage.getItem('pc_redirect') || '/';
+  const r = sessionStorage.getItem('pc_redirect') || './';
   sessionStorage.removeItem('pc_redirect');
   window.location.href = r;
 }
+
+// Pre-load users for referral validation
+PC.fetchUsers().catch(()=>{});
 
 // Pre-fill referral code from URL ?ref=CODE
 const urlParams = new URLSearchParams(window.location.search);
@@ -115,22 +119,26 @@ document.getElementById('signupReferral').addEventListener('input', function() {
   validateReferral(this.value);
 });
 
-function doLogin() {
+async function doLogin() {
+  const btn = document.getElementById('loginBtn');
   const email = document.getElementById('loginEmail').value.trim();
   const pw = document.getElementById('loginPassword').value;
   if (!email || !pw) { PC.toast('Please fill in all fields', 'error'); return; }
-  const res = PC.login(email, pw);
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  const res = await PC.login(email, pw);
+  btn.disabled = false; btn.textContent = 'Log In →';
   if (!res.ok) { PC.toast(res.msg, 'error'); return; }
   const user = PC.getUser();
   PC.toast('Welcome back, ' + user.name.split(' ')[0] + '! 👋', 'success');
   setTimeout(() => {
-    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : '/');
+    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : './');
     sessionStorage.removeItem('pc_redirect');
     window.location.href = redirect;
   }, 700);
 }
 
-function doSignup() {
+async function doSignup() {
+  const btn = document.getElementById('signupBtn');
   const name = document.getElementById('signupName').value.trim();
   const email = document.getElementById('signupEmail').value.trim();
   const pw = document.getElementById('signupPassword').value;
@@ -138,14 +146,17 @@ function doSignup() {
   if (!name || !email || !pw) { PC.toast('Please fill in all fields', 'error'); return; }
   if (pw.length < 8) { PC.toast('Password must be at least 8 characters', 'error'); return; }
   if (ref && !PC.findUserByReferral(ref)) { PC.toast('Invalid referral code', 'error'); return; }
-  const res = PC.signup(name, email, pw, ref);
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  const res = await PC.signup(name, email, pw, ref);
+  btn.disabled = false; btn.textContent = 'Create Account →';
   if (!res.ok) { PC.toast(res.msg, 'error'); return; }
-  PC.toast('Account created! Welcome, ' + name.split(' ')[0] + '! 🎉', 'success');
+  if (res.needsSync) { PC.toast('Account created! Download users.json from Admin to sync across devices. 🎉', 'success'); }
+  else { PC.toast('Account created! Welcome, ' + name.split(' ')[0] + '! 🎉', 'success'); }
   setTimeout(() => {
-    const redirect = sessionStorage.getItem('pc_redirect') || '/';
+    const redirect = sessionStorage.getItem('pc_redirect') || './';
     sessionStorage.removeItem('pc_redirect');
     window.location.href = redirect;
-  }, 700);
+  }, 900);
 }
 </script>
 </body>
