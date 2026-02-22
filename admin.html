@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin – The Profits Circle</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
   <style>
     body { overflow-x: hidden; }
     .admin-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 60px; background: rgba(10,10,10,.98); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; gap:1rem; }
@@ -42,7 +42,7 @@
   <div class="admin-topbar-brand">THE <span>PROFITS</span> CIRCLE <span style="color:var(--white3);font-size:.75rem;"> · ADMIN</span></div>
   <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0;">
     <span id="adminUserLabel" style="font-size:.82rem;color:var(--white3);"></span>
-    <a href="./" class="btn btn-ghost btn-sm">View Site</a>
+    <a href="/" class="btn btn-ghost btn-sm">View Site</a>
     <button class="btn btn-danger btn-sm" onclick="PC.logout()">Log Out</button>
   </div>
 </div>
@@ -67,7 +67,7 @@
 
     <div style="flex:1;"></div>
     <div style="border-top:1px solid var(--border);padding-top:.75rem;margin-top:.75rem;">
-      <a href="./" class="admin-nav-link" style="text-decoration:none;">🌐 View Site</a>
+      <a href="/" class="admin-nav-link" style="text-decoration:none;">🌐 View Site</a>
       <button class="admin-nav-link" style="color:var(--red);" onclick="PC.logout()">🚪 Log Out</button>
     </div>
   </div>
@@ -321,14 +321,32 @@
 
 <div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
 
-<script src="assets/app.js"></script>
+<script src="/assets/app.js"></script>
 <script>
 // Auth guard
 (function() {
   const u = PC.getUser();
   if (!u || u.role !== 'admin') {
-    sessionStorage.setItem('pc_redirect', './admin.html');
-    window.location.href = './login.html';
+    sessionStorage.setItem('pc_redirect', '/admin');
+    window.location.href = '/login';
+  }
+})();
+
+// Clear any existing dummy data on first load of admin
+(function() {
+  const users = PC.getUsers();
+  // Check if we have the default dummy users and clear them
+  const hasDummyData = users.some(u => 
+    u.email === 'admin@theprofitscircle.com' && u.name === 'Admin User'
+  );
+  if (hasDummyData && users.length <= 2) {
+    // Clear all users except admin
+    const admin = users.find(u => u.role === 'admin');
+    if (admin) {
+      PC.saveUsers([admin]);
+    } else {
+      PC.saveUsers([]);
+    }
   }
 })();
 
@@ -422,7 +440,7 @@ function renderUserTable() {
       <td style="font-weight:600;color:var(--white);">${u.name}</td>
       <td style="color:var(--white2);font-size:.82rem;">${u.email}</td>
       <td>${planBadge(u.plan)}</td>
-      <td>${u.affiliate ? `<span class="aff-code-box" style="padding:.2rem .6rem;font-size:.72rem;" onclick="copyText('${SITE_BASE}login.html?ref=${u.referralCode}')">${u.referralCode}</span>` : '<span style="color:var(--white3);font-size:.82rem;">—</span>'}</td>
+      <td>${u.affiliate ? `<span class="aff-code-box" style="padding:.2rem .6rem;font-size:.72rem;" onclick="copyText('${SITE_BASE}login?ref=${u.referralCode}')">${u.referralCode}</span>` : '<span style="color:var(--white3);font-size:.82rem;">—</span>'}</td>
       <td><span style="font-size:.8rem;font-weight:700;color:${u.status==='active'?'var(--green)':'var(--red)'};">${u.status}</span></td>
       <td style="font-size:.82rem;color:var(--white3);">${u.referredBy || '—'}</td>
       <td style="font-size:.78rem;color:var(--white3);">${u.joined||'—'}</td>
@@ -527,7 +545,7 @@ function renderAffiliates() {
   referred.forEach(u => { if(u.referredBy) refCountMap[u.referredBy] = (refCountMap[u.referredBy]||0)+1; });
 
   document.getElementById('affiliateTableBody').innerHTML = affiliates.map(u => {
-    const link = SITE_BASE + 'login.html?ref=' + u.referralCode;
+    const link = SITE_BASE + 'login?ref=' + u.referralCode;
     const refCount = refCountMap[u.referralCode] || 0;
     return `<tr>
       <td style="font-weight:600;color:var(--white);">${u.name}<br><span style="font-size:.75rem;color:var(--white3);">${u.email}</span></td>
@@ -603,7 +621,7 @@ document.addEventListener('input', function(e) { if (e.target.id === 'aff_code')
 function updateAffPreview() {
   const code = document.getElementById('aff_code').value.toUpperCase();
   const preview = document.getElementById('affLinkPreviewUrl');
-  if (code) preview.textContent = SITE_BASE + 'login.html?ref=' + code;
+  if (code) preview.textContent = SITE_BASE + 'login?ref=' + code;
 }
 
 function makeAffiliate() {
