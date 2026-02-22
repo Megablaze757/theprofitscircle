@@ -61,6 +61,7 @@ h1,h2,h3,h4,h5 { font-family: Inter, sans-serif; font-weight: 800; line-height: 
   border-bottom: 1px solid var(--border);
 }
 .nav-logo { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; text-decoration: none; }
+.nav-logo-img { height: 36px; width: auto; display: block; }
 .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: 2px; color: var(--white); }
 .nav-brand span { color: var(--gold); }
 .nav-menu { display: none; align-items: center; gap: .25rem; }

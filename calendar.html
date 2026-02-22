@@ -38,7 +38,8 @@
 
 <nav class="navbar">
   <a class="nav-logo" href="./">
-    <span class="nav-brand">THE <span>PROFITS</span> CIRCLE</span>
+    <img src="logo.png" alt="The Profits Circle" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+    <span class="nav-brand" style="display:none;">THE <span>PROFITS</span> CIRCLE</span>
   </a>
   <div class="nav-menu">
     <a href="./" data-page="home">Home</a>
@@ -94,9 +95,8 @@
     <!-- INFO BAR -->
     <div class="filter-bar">
       <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;">
-        <span class="impact-dot" style="background:var(--red);"></span> High Impact
-        <span class="impact-dot" style="background:var(--gold);margin-left:.5rem;"></span> Medium
-        <span class="impact-dot" style="background:var(--white3);margin-left:.5rem;"></span> Low
+        <span class="impact-dot" style="background:var(--red);"></span> High Impact Only
+        <span style="color:var(--white3);font-weight:400;margin-left:.25rem;">· 🇺🇸 United States events</span>
       </div>
       <div style="margin-left:auto;font-size:.8rem;color:var(--white3);">Data via TradingView · Updates in real-time</div>
     </div>
@@ -113,8 +113,8 @@
           "width": "100%",
           "height": "700",
           "locale": "en",
-          "importanceFilter": "-1,0,1",
-          "countryFilter": "us,eu,gb,ca,au,nz,ch,jp,cn"
+          "importanceFilter": "1",
+          "countryFilter": "us"
         }
         </script>
       </div>
@@ -126,7 +126,7 @@
       <h3 class="text-gold mb-2">🥇 Key Events That Move XAUUSD</h3>
       <div class="grid-3" style="gap:1rem;">
         <div>
-          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">🔴 Very High Impact</div>
+          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">🔴 Very High Impact (US)</div>
           <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--white2);">
             <li>• US Non-Farm Payrolls (NFP)</li>
             <li>• FOMC Interest Rate Decision</li>
@@ -136,13 +136,13 @@
           </ul>
         </div>
         <div>
-          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">🟡 High Impact</div>
+          <div style="font-weight:700;margin-bottom:.4rem;font-size:.9rem;">🟡 High Impact (US)</div>
           <ul style="list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--white2);">
             <li>• Core PCE Price Index</li>
             <li>• US Initial Jobless Claims</li>
-            <li>• ISM Manufacturing PMI</li>
+            <li>• ISM Manufacturing / Services PMI</li>
             <li>• US Durable Goods Orders</li>
-            <li>• ECB Rate Decision</li>
+            <li>• US Retail Sales</li>
           </ul>
         </div>
         <div>

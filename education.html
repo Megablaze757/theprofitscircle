@@ -10,13 +10,18 @@
     .lesson-modal-content p { color: var(--white2); line-height: 1.8; margin-bottom: 1rem; font-size: .95rem; }
     .lesson-modal-content h4 { color: var(--gold2); margin-bottom: .5rem; margin-top: 1.25rem; font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; }
     .lesson-modal-content ul { padding-left: 1.25rem; color: var(--white2); font-size: .9rem; line-height: 1.8; }
+    .track-tabs { display: flex; gap: .5rem; background: var(--black3); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: .375rem; margin-bottom: 2rem; }
+    .track-tab { flex: 1; padding: .65rem 1rem; border-radius: 10px; font-size: .875rem; font-weight: 700; text-align: center; cursor: pointer; border: none; background: none; color: var(--white3); transition: all .2s; }
+    .track-tab.active { background: var(--gold); color: var(--black); }
+    .track-tab:not(.active):hover { background: var(--black4); color: var(--white); }
   </style>
 </head>
 <body>
 
 <nav class="navbar">
   <a class="nav-logo" href="./">
-    <span class="nav-brand">THE <span>PROFITS</span> CIRCLE</span>
+    <img src="logo.png" alt="The Profits Circle" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+    <span class="nav-brand" style="display:none;">THE <span>PROFITS</span> CIRCLE</span>
   </a>
   <div class="nav-menu">
     <a href="./" data-page="home">Home</a>
@@ -49,56 +54,83 @@
 <div class="section-pad">
 <div class="container">
 
-  <!-- LOCKED STATE -->
+  <!-- LOCKED -->
   <div id="lockedState" class="hidden" style="text-align:center;padding:4rem 0;">
     <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
     <h2 class="mb-1">Login Required</h2>
-    <p class="text-dim mb-3">Sign in to access all 9 trading lessons.</p>
+    <p class="text-dim mb-3">Sign in to access all 40 lessons across both tracks.</p>
     <div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;">
       <a href="./login.html" class="btn btn-gold btn-lg">Log In</a>
       <a href="./vip.html" class="btn btn-ghost btn-lg">Get VIP Free</a>
     </div>
-    <!-- Show free preview lessons when not logged in -->
-    <div id="freePreview" style="margin-top:3rem;text-align:left;"></div>
   </div>
 
-  <!-- ACADEMY CONTENT -->
+  <!-- MAIN -->
   <div id="academyMain">
     <div class="text-center mb-3">
-      <div class="section-eyebrow">🎓 Learn to Trade</div>
+      <div class="section-eyebrow">🎓 Learn & Earn</div>
       <h1 class="section-title">Trading <span class="text-gold">Academy</span></h1>
-      <p class="section-sub" style="margin:0 auto 1.5rem;">From beginner to professional. 9 structured lessons covering everything from XAUUSD basics to advanced institutional strategies.</p>
-      <div style="max-width:400px;margin:0 auto 1rem;">
+      <p class="section-sub" style="margin:0 auto 1.5rem;">40 lessons across two complete tracks — 20 lessons to master XAUUSD trading, and 20 lessons to build a serious affiliate income.</p>
+      <div style="max-width:420px;margin:0 auto 1rem;">
         <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width:0%;"></div></div>
-        <p style="font-size:.8rem;color:var(--white3);margin-top:.4rem;" id="progressLabel">0 of 9 lessons completed</p>
+        <p style="font-size:.8rem;color:var(--white3);margin-top:.4rem;" id="progressLabel">0 of 40 lessons completed</p>
       </div>
     </div>
 
-    <!-- BEGINNER -->
-    <div class="mb-3">
-      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
-        <span class="badge badge-green">Beginner</span>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-      </div>
-      <div class="grid-3" id="beginnerGrid"></div>
+    <!-- TRACK SWITCHER -->
+    <div class="track-tabs">
+      <button class="track-tab active" onclick="switchTrack('trader',this)">📈 Trader Track — 20 Lessons</button>
+      <button class="track-tab" onclick="switchTrack('affiliate',this)">💰 Affiliate Track — 20 Lessons</button>
     </div>
 
-    <!-- INTERMEDIATE -->
-    <div class="mb-3">
-      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
-        <span class="badge badge-gold">Intermediate</span>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
+    <!-- TRADER TRACK -->
+    <div id="traderTrack">
+      <div class="mb-3">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+          <span class="badge badge-green">Beginner</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="grid-3" id="traderBeginnerGrid"></div>
       </div>
-      <div class="grid-3" id="intermediateGrid"></div>
+      <div class="mb-3">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+          <span class="badge badge-gold">Intermediate</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="grid-3" id="traderIntermediateGrid"></div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+          <span class="badge" style="background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);">Advanced</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="grid-3" id="traderAdvancedGrid"></div>
+      </div>
     </div>
 
-    <!-- ADVANCED -->
-    <div>
-      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
-        <span class="badge" style="background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);">Advanced</span>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
+    <!-- AFFILIATE TRACK -->
+    <div id="affiliateTrack" style="display:none;">
+      <div class="mb-3">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+          <span class="badge badge-green">Foundation</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="grid-3" id="affFoundationGrid"></div>
       </div>
-      <div class="grid-3" id="advancedGrid"></div>
+      <div class="mb-3">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+          <span class="badge badge-gold">Growth</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="grid-3" id="affGrowthGrid"></div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+          <span class="badge" style="background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);">Scale</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div class="grid-3" id="affScaleGrid"></div>
+      </div>
     </div>
 
   </div>
@@ -140,166 +172,457 @@
 <script>
 PC.initNav('education');
 
-const lessons = [
-  {
-    id: 1, level: 'Beginner', emoji: '📊', title: 'Understanding Gold (XAUUSD)', duration: '15 min',
-    body: `<p>Gold, traded as XAUUSD, is one of the most liquid instruments in the world. The pair represents the price of one troy ounce of gold in US dollars.</p>
-<h4>Why Does Gold Move?</h4>
-<ul><li>US Dollar strength — gold moves inversely to DXY</li><li>Inflation expectations — gold is a traditional inflation hedge</li><li>Geopolitical uncertainty — safe haven demand drives prices up</li><li>Federal Reserve policy — interest rate changes heavily influence gold</li><li>Central bank buying — large-scale accumulation impacts price</li></ul>
-<h4>Key Characteristics</h4>
-<p>XAUUSD is active nearly 24/5. The most liquid trading sessions are London (8am-5pm GMT) and New York (1pm-10pm GMT). The overlap period (1pm-5pm GMT) typically sees the highest volatility.</p>
-<h4>Why We Trade Gold</h4>
-<p>Gold offers clear technical levels, responds predictably to macroeconomic data, and provides excellent volatility for scalping, day trading, and swing trading strategies.</p>`
-  },
-  {
-    id: 2, level: 'Beginner', emoji: '📈', title: 'Reading Candlestick Charts', duration: '20 min',
-    body: `<p>Candlestick charts are the most powerful and widely used price visualization tool. Each candle represents a specific time period and shows four key prices.</p>
+// ─── TRADER TRACK — 20 LESSONS ──────────────────────────────────────────────
+const traderLessons = [
+  // BEGINNER (1-7)
+  { id:1, track:'trader', level:'Beginner', emoji:'🥇', title:'What Is XAUUSD?', duration:'15 min',
+    body:`<p>XAUUSD is the forex symbol for Gold priced in US Dollars. XAU comes from the Latin "aurum" (gold) and USD is the US Dollar. When you trade XAUUSD, you are speculating on whether the price of one troy ounce of gold will rise or fall against the dollar.</p>
+<h4>Why Trade Gold?</h4>
+<p>Gold is one of the most liquid and widely-traded assets in the world. It moves with clear technical patterns, has strong reactions to economic news, and is heavily influenced by the US Dollar. Unlike stocks, it trades nearly 24 hours a day, 5 days a week.</p>
+<h4>What Moves the Gold Price?</h4>
+<ul><li><strong>US Dollar strength:</strong> Gold and USD are inversely correlated — when USD rises, gold typically falls</li><li><strong>Interest rates:</strong> Higher rates increase the opportunity cost of holding gold (it pays no yield)</li><li><strong>Inflation:</strong> Gold is a traditional inflation hedge — higher inflation = higher gold demand</li><li><strong>Geopolitical risk:</strong> Gold rises during uncertainty and crisis as a safe haven</li><li><strong>Central bank buying:</strong> Large purchases from China, Russia, India move the price significantly</li></ul>
+<h4>Gold vs Other Instruments</h4>
+<p>Compared to forex pairs, XAUUSD moves in larger point increments (often $10-50+ per candle) and is more trend-driven. This makes it excellent for swing and intraday trading — but the volatility requires proper risk management.</p>` },
+  { id:2, track:'trader', level:'Beginner', emoji:'📊', title:'Reading Candlestick Charts', duration:'20 min',
+    body:`<p>Candlestick charts are the foundation of technical analysis. Each candle represents price action over a specific time period — showing where price opened, closed, and the high and low of the period.</p>
 <h4>Anatomy of a Candle</h4>
-<ul><li><strong>Open</strong> — The price at the start of the period</li><li><strong>Close</strong> — The price at the end of the period</li><li><strong>High</strong> — The highest price reached during the period</li><li><strong>Low</strong> — The lowest price reached during the period</li></ul>
-<h4>Key Patterns to Know</h4>
-<ul><li><strong>Doji</strong> — Open and close are nearly equal; signals indecision</li><li><strong>Hammer</strong> — Long lower wick; signals potential bullish reversal</li><li><strong>Shooting Star</strong> — Long upper wick; signals potential bearish reversal</li><li><strong>Engulfing</strong> — One candle completely engulfs the prior candle; strong reversal signal</li><li><strong>Pin Bar</strong> — Long wick rejecting a key level; one of the most reliable setups</li></ul>
-<h4>Timeframes</h4>
-<p>For XAUUSD, use the 4H and Daily charts for bias and key levels, then drop down to the 15M or 1H for precise entries. Never trade against the higher timeframe trend.</p>`
-  },
-  {
-    id: 3, level: 'Beginner', emoji: '🔑', title: 'Support & Resistance Basics', duration: '18 min',
-    body: `<p>Support and resistance are the most fundamental concepts in all of technical analysis. Master these and you have an enormous edge.</p>
-<h4>What is Support?</h4>
-<p>Support is a price level where buyers have historically stepped in and reversed a downward move. Think of it as the floor under price. When price approaches support, look for BUY opportunities.</p>
-<h4>What is Resistance?</h4>
-<p>Resistance is a price level where sellers have historically pushed price back down. Think of it as the ceiling above price. When price approaches resistance, look for SELL opportunities.</p>
-<h4>How to Draw Key Levels</h4>
-<ul><li>Use the weekly and daily charts to find the most significant levels</li><li>Draw at areas where price has repeatedly reacted — not single wicks</li><li>Zones are more powerful than exact lines — price rarely hits the same pip twice</li><li>Levels that have been tested multiple times are stronger</li></ul>
-<h4>Role Reversal</h4>
-<p>When a support level breaks, it often becomes resistance, and vice versa. This is called role reversal and provides excellent entry opportunities on the retest.</p>`
-  },
-  {
-    id: 4, level: 'Intermediate', emoji: '⚡', title: 'Entry & Exit Strategies', duration: '25 min',
-    body: `<p>Knowing WHEN to enter and WHERE to exit is what separates profitable traders from those who lose. Having a plan before entering every trade is non-negotiable.</p>
-<h4>Entry Confirmation</h4>
-<ul><li>Always wait for a candlestick close to confirm your entry signal</li><li>Look for confluence — multiple reasons to enter at the same level</li><li>Volume increase at a key level strengthens the signal</li><li>The best entries come after a pullback, not during a spike</li></ul>
-<h4>Setting Your Stop Loss</h4>
-<ul><li>Place SL beyond the structural level you're trading from</li><li>Never use a random pip value — base it on market structure</li><li>Account for spread and slippage — give price room to breathe</li></ul>
-<h4>Take Profit Strategy</h4>
-<ul><li>Target the next significant support/resistance level</li><li>Aim for a minimum 1:2 risk-reward ratio on every trade</li><li>Consider taking partial profits at 1:1 and moving SL to breakeven</li><li>Never close a trade early out of fear if your setup is intact</li></ul>`
-  },
-  {
-    id: 5, level: 'Intermediate', emoji: '🧠', title: 'Trading Psychology', duration: '22 min',
-    body: `<p>Statistics show that 80% of retail traders lose money — but it's not because of bad strategies. It's because of psychology. Mastering your mind is the ultimate edge.</p>
-<h4>The Emotional Trading Cycle</h4>
-<p>Fear causes you to miss entries or close trades early. Greed causes you to over-leverage and hold losers too long. FOMO causes you to chase entries. All three destroy accounts.</p>
-<h4>The Solution: A Written Trading Plan</h4>
-<ul><li>Write down your setup criteria before the market opens</li><li>Define your max daily loss limit — stop trading when you hit it</li><li>Never deviate from your plan during a trade</li><li>Review your journal weekly — patterns in your mistakes will become clear</li></ul>
-<h4>Dealing with Losing Streaks</h4>
-<p>Even the best traders have losing streaks. A 3-trade losing streak is normal. If you experience 5 consecutive losses, step away for 24 hours. Come back fresh. Don't revenge trade — it destroys accounts.</p>
-<h4>Mindset Shift</h4>
-<p>Think in probabilities, not certainties. No setup has a 100% win rate. Focus on executing your plan perfectly, not on the outcome of any individual trade.</p>`
-  },
-  {
-    id: 6, level: 'Intermediate', emoji: '📉', title: 'Risk Management Masterclass', duration: '30 min',
-    body: `<p>Risk management is the only thing that guarantees you stay in the game long enough to become profitable. Without it, even the best strategy will eventually blow your account.</p>
-<h4>The Golden Rule: 1-2% Risk Per Trade</h4>
-<p>Never risk more than 1-2% of your account on a single trade. This means a 10-trade losing streak only takes 10-20% of your account, which is recoverable. At 5% per trade, 10 losses wipes 50% — much harder to come back from.</p>
-<h4>Position Sizing Formula</h4>
-<p>Lot Size = (Account Size × Risk %) ÷ (SL in Pips × Pip Value)</p>
-<ul><li>Example: $10,000 account, 1% risk, 20 pip SL on XAUUSD</li><li>Risk amount = $100</li><li>Pip value on 1 lot XAUUSD ≈ $10</li><li>Lot size = $100 ÷ (20 × $10) = 0.5 lots</li></ul>
-<h4>Risk-to-Reward</h4>
-<p>Always aim for at least 1:2 R:R. At a 50% win rate with 1:2 R:R, you are profitable. At 60% win rate and 1:2 R:R, you build serious wealth over time.</p>
-<h4>Max Daily & Weekly Drawdown</h4>
-<p>Set a max daily loss of 3% and max weekly loss of 5%. When you hit these limits, stop trading. This prevents emotional spirals that destroy accounts in a single session.</p>`
-  },
-  {
-    id: 7, level: 'Advanced', emoji: '🏆', title: 'Advanced Gold Analysis', duration: '35 min',
-    body: `<p>To trade like an institution, you need to understand how institutions trade. Smart money doesn't buy at resistance or sell at support — they manipulate retail traders to do the opposite.</p>
-<h4>Liquidity Grabs</h4>
-<p>Institutions need liquidity to fill their massive orders. They hunt stop losses placed above recent highs and below recent lows. When you see a sharp wick through a key level that immediately reverses, that's a liquidity grab — and often an excellent entry in the opposite direction.</p>
+<ul><li><strong>Body:</strong> The thick part — distance between open and close</li><li><strong>Wick (shadow):</strong> Thin lines above and below the body — the high and low</li><li><strong>Green/White candle:</strong> Closed higher than it opened (bullish)</li><li><strong>Red/Black candle:</strong> Closed lower than it opened (bearish)</li></ul>
+<h4>Key Reversal Patterns</h4>
+<p><strong>Hammer:</strong> Small body, long lower wick — buyers pushed price back up from lows. Bullish at support.<br><strong>Shooting Star:</strong> Small body, long upper wick — sellers pushed price back down from highs. Bearish at resistance.<br><strong>Doji:</strong> Open and close nearly equal — indecision in the market, often precedes a move.<br><strong>Engulfing:</strong> A candle that completely engulfs the previous candle — strong reversal signal.</p>
+<h4>Continuation Patterns</h4>
+<p><strong>Three white soldiers / three black crows:</strong> Three consecutive bullish or bearish candles — strong trend continuation.<br><strong>Inside bar:</strong> A candle whose range is completely within the previous candle — compression before a breakout.</p>` },
+  { id:3, track:'trader', level:'Beginner', emoji:'📐', title:'Support & Resistance', duration:'20 min',
+    body:`<p>Support and resistance are the most fundamental concepts in technical analysis. They represent price levels where buying or selling pressure has historically been strong enough to reverse or stall the market.</p>
+<h4>What Is Support?</h4>
+<p>Support is a price level where buyers outnumber sellers, causing price to "bounce" upward. It forms at previous lows, round numbers ($3,000, $3,100, $3,200), and areas of previous consolidation. The more times a level has been tested and held, the stronger it becomes.</p>
+<h4>What Is Resistance?</h4>
+<p>Resistance is a price level where sellers outnumber buyers, causing price to "cap out" and reverse downward. It forms at previous highs, round numbers, and the same consolidation areas as support (role reversal). Once broken, resistance typically becomes support.</p>
+<h4>How to Draw Levels on XAUUSD</h4>
+<ul><li>Start with the Daily chart — this gives you the major levels</li><li>Look for areas where price reversed multiple times</li><li>Round numbers ($3,050, $3,100, etc.) are always relevant</li><li>Draw zones, not exact lines — price rarely respects a single pip</li><li>Mark the most recent levels more heavily than older ones</li></ul>
+<h4>Trading the Level</h4>
+<p>Don't buy just because price hits support. Wait for confirmation: a rejection wick, a bullish engulfing candle, or a bounce with strong momentum. The entry should be as close to the level as possible with a tight stop just below it.</p>` },
+  { id:4, track:'trader', level:'Beginner', emoji:'📈', title:'Trend Analysis & Market Bias', duration:'18 min',
+    body:`<p>Trading with the trend is one of the most reliable edges in trading. The trend is your best friend — but only if you can correctly identify it and stay on the right side of it.</p>
+<h4>Identifying Trend Direction</h4>
+<p><strong>Uptrend:</strong> Higher Highs (HH) and Higher Lows (HL). Each rally reaches a new high, each pullback holds above the previous low.<br><strong>Downtrend:</strong> Lower Highs (LH) and Lower Lows (LL). Each rally fails below the previous high, each decline makes a new low.<br><strong>Ranging market:</strong> Price oscillating between defined support and resistance without clear direction.</p>
+<h4>Multi-Timeframe Analysis</h4>
+<p>Always check the trend on multiple timeframes. The hierarchy: Weekly → Daily → 4H → 1H → 15M. If the Daily is bullish, only look for buy setups on the 1H and 15M. Trading against the higher timeframe trend is the single biggest mistake most traders make.</p>
+<h4>The 20 EMA Trend Filter</h4>
+<p>Add a 20-period Exponential Moving Average to your chart. When price is above the 20 EMA and the EMA is sloping up, you have an uptrend. Below and sloping down = downtrend. This simple filter eliminates many bad trades.</p>` },
+  { id:5, track:'trader', level:'Beginner', emoji:'🎯', title:'Entry & Exit Strategies', duration:'22 min',
+    body:`<p>Knowing when to enter and exit is what separates profitable traders from the rest. A great entry dramatically reduces your risk and increases your reward-to-risk ratio.</p>
+<h4>Types of Entries</h4>
+<p><strong>Market order:</strong> Enter immediately at the current price. Used when momentum is strong and you don't want to miss the move. Risk: worse entry price.<br><strong>Limit order:</strong> Pre-placed order to enter at a specific price level. Used to enter at support/resistance without watching the screen. Risk: the trade may not trigger.<br><strong>Stop order:</strong> Enter when price breaks a level with momentum. Used for breakout trading.</p>
+<h4>The Ideal Entry on XAUUSD</h4>
+<ul><li>Price pulls back to a key level (support in uptrend, resistance in downtrend)</li><li>Confirmation candle forms — bullish at support, bearish at resistance</li><li>Enter on the close of the confirmation candle, or the retest of the level</li><li>Stop loss placed just beyond the key level</li><li>Take profit at the next key level or a minimum 1:2 R:R</li></ul>
+<h4>Taking Profits</h4>
+<p>Consider scaling out: take 50% at 1:1 risk-reward, move stop to break-even, let the remainder run. This locks in profit while giving the trade room to extend. Alternatively, use a trailing stop to ride strong trends.</p>` },
+  { id:6, track:'trader', level:'Beginner', emoji:'🛡️', title:'Stop Losses & Risk Per Trade', duration:'20 min',
+    body:`<p>A stop loss is not optional. Every single trade must have a stop loss. This is not negotiable. A stop loss defines exactly how much you are willing to lose on a trade — and more importantly, it keeps you in the game to trade another day.</p>
+<h4>Where to Place Your Stop Loss</h4>
+<p>Your stop must be placed at a level that proves your trade idea wrong. For a long trade at support, your stop goes just below that support. For a short at resistance, just above. Never place a stop at an arbitrary distance — it must make technical sense.</p>
+<h4>How Much to Risk Per Trade</h4>
+<p>The golden rule: never risk more than 1-2% of your account on a single trade. On a £1,000 account, that's £10-20 per trade. This may feel small, but it means you can survive 50 consecutive losses and still have capital to recover.</p>
+<h4>Calculating Lot Size</h4>
+<p>Formula: Lot Size = (Account × Risk%) ÷ (Stop in pips × pip value)<br>Example: £10,000 account, 1% risk (£100), 15 pip stop on XAUUSD (pip value = ~$10 per 0.1 lot):<br>£100 ÷ (15 × $1 per 0.01 lot) = 0.67 lots ≈ 0.5 lots to be safe.</p>
+<h4>The Cost of Not Using a Stop</h4>
+<p>Without a stop, one bad trade can wipe days or weeks of profit. Trading without stops is not trading — it is gambling. Professionals always define their maximum loss before entering.</p>` },
+  { id:7, track:'trader', level:'Beginner', emoji:'⚖️', title:'Risk-to-Reward Ratios', duration:'15 min',
+    body:`<p>The risk-to-reward ratio (R:R) is the single most important concept for long-term profitability. A trader with a 40% win rate can be highly profitable if they maintain the right R:R.</p>
+<h4>Understanding R:R</h4>
+<p>A 1:2 R:R means you risk $1 to potentially make $2. If you win 50% of trades with 1:2 R:R: 10 trades, 5 wins ($100 each), 5 losses ($50 each) = $500 profit - $250 loss = $250 net profit.</p>
+<h4>The Math at Different Win Rates</h4>
+<ul><li>1:1 R:R needs >50% win rate to be profitable</li><li>1:2 R:R needs >33% win rate to be profitable</li><li>1:3 R:R needs >25% win rate to be profitable</li></ul>
+<p>Always aim for a minimum 1:2 R:R. This means your take profit should be at least twice your stop loss distance.</p>
+<h4>Why Most Traders Fail Here</h4>
+<p>They take profits too early (1:1 or less) and let losses run. Do the opposite: cut losses quickly, let winners run. Using the academy's approach at The Profits Circle, we consistently aim for 1:2 to 1:4 R:R setups.</p>` },
+
+  // INTERMEDIATE (8-14)
+  { id:8, track:'trader', level:'Intermediate', emoji:'🔧', title:'Technical Indicators for Gold', duration:'25 min',
+    body:`<p>While price action is the foundation, indicators can provide additional confirmation and context. Used correctly, they add value. Used as a replacement for price action, they create confusion.</p>
+<h4>The Best Indicators for XAUUSD</h4>
+<p><strong>RSI (Relative Strength Index):</strong> Measures momentum. Above 70 = overbought (potential reversal down). Below 30 = oversold (potential reversal up). Divergence between RSI and price is a powerful signal.<br><strong>MACD:</strong> Shows trend direction and momentum. Crossovers signal potential trend changes. Best used on 4H and Daily.<br><strong>Bollinger Bands:</strong> Show volatility. Price touching the upper band in an uptrend = momentum. Price outside the bands often reverts to the mean.</p>
+<h4>Moving Averages</h4>
+<p>The 50 EMA and 200 EMA are watched by institutional traders worldwide. When the 50 crosses above the 200 (Golden Cross), it signals a long-term bull market. Below (Death Cross) = bear market. Price bouncing off these EMAs creates high-probability entries.</p>
+<h4>The Right Way to Use Indicators</h4>
+<p>Indicators should confirm what price action is already telling you, not substitute for it. If price is at support AND RSI is oversold AND MACD is turning up — that's a high-conviction buy. Any single indicator alone is insufficient.</p>` },
+  { id:9, track:'trader', level:'Intermediate', emoji:'📉', title:'Fibonacci Retracements', duration:'22 min',
+    body:`<p>Fibonacci retracements are one of the most reliable tools for identifying where a pullback will end and the trend will resume. They are widely used by institutional traders and often become self-fulfilling — because so many traders watch the same levels.</p>
+<h4>The Key Fibonacci Levels</h4>
+<ul><li><strong>0.236 (23.6%):</strong> Shallow retracement — strong trend</li><li><strong>0.382 (38.2%):</strong> Common pullback in strong trends</li><li><strong>0.500 (50%):</strong> Not a Fibonacci number but widely respected</li><li><strong>0.618 (61.8%):</strong> The "golden ratio" — most important level. High-probability reversal zone</li><li><strong>0.786 (78.6%):</strong> Deep retracement — last chance before invalidation</li></ul>
+<h4>How to Apply on XAUUSD</h4>
+<p>Identify a significant swing (from a major low to a major high in an uptrend, or high to low in a downtrend). Draw the Fibonacci from the start of the move to the end. Price pulling back to the 61.8% in an uptrend = high-probability long setup, especially if it coincides with a support level.</p>
+<h4>Fibonacci Extensions for Targets</h4>
+<p>Use 1.272 and 1.618 extensions to project take profit targets. If price bounces from the 61.8% retracement, the 1.618 extension of the original move is a realistic target.</p>` },
+  { id:10, track:'trader', level:'Intermediate', emoji:'🕯️', title:'Chart Patterns That Work', duration:'28 min',
+    body:`<p>Certain price patterns repeat throughout market history because human psychology doesn't change. Learning to identify these patterns gives you a clear setup with defined entry, stop, and target.</p>
+<h4>Head & Shoulders (Reversal)</h4>
+<p>Three peaks: left shoulder, higher head, right shoulder. Neckline connects the two lows. When price breaks below the neckline, target is the distance from the head to the neckline projected downward. Extremely reliable on XAUUSD 4H and Daily charts.</p>
+<h4>Double Top & Double Bottom</h4>
+<p>Two equal highs (double top) or two equal lows (double bottom). The second touch that fails at the same level as the first is confirmation. Enter on the break of the middle "valley" or "peak". Target: the distance from the double top/bottom to the middle point.</p>
+<h4>Bull Flag & Bear Flag (Continuation)</h4>
+<p>After a strong impulsive move (the "pole"), price consolidates in a tight range (the "flag"). The breakout from the flag in the original direction projects a move equal to the pole. This is one of the highest-probability setups in trading.</p>
+<h4>Wedges</h4>
+<p>Rising wedge (bearish) and falling wedge (bullish). Both are characterised by price moving between two converging trendlines. The breakout from the wedge is the trade entry.</p>` },
+  { id:11, track:'trader', level:'Intermediate', emoji:'📰', title:'Trading the Economic Calendar', duration:'25 min',
+    body:`<p>Fundamental events create the biggest moves in XAUUSD. Understanding which events matter and how to trade them separates professional traders from amateurs.</p>
+<h4>The Hierarchy of US Events (Gold Impact)</h4>
+<p><strong>Tier 1 — Extreme impact:</strong> NFP (Non-Farm Payrolls), FOMC Rate Decision, CPI Inflation. These can move gold $20-60+ within minutes.<br><strong>Tier 2 — High impact:</strong> Core PCE, GDP, Initial Jobless Claims, Fed Chair speeches. These regularly create $10-30 moves.<br><strong>Tier 3 — Medium impact:</strong> ISM PMI, Durable Goods, Retail Sales. Useful for context, less reliable for timing trades.</p>
+<h4>Gold's Reaction to Events</h4>
+<ul><li>Strong NFP (more jobs than expected) → USD rises → Gold falls</li><li>Weak NFP (fewer jobs) → USD weakens → Gold rises</li><li>Rate hike surprise → Gold falls (higher yield makes USD attractive)</li><li>Rate cut or dovish Fed → Gold rises (lower opportunity cost)</li><li>Higher CPI → Initially USD strengthens → But gold often rises as inflation hedge</li></ul>
+<h4>The Professional Approach</h4>
+<p>30 minutes before high-impact events: close all open trades or move stops to break-even. After the release: wait for the initial spike to complete (usually 1-5 minutes), then look for the "retest" entry as price returns to a key level. The best trades often come 15-30 minutes after the news, not during it.</p>` },
+  { id:12, track:'trader', level:'Intermediate', emoji:'🧠', title:'Trading Psychology', duration:'30 min',
+    body:`<p>90% of traders lose money, and the majority of failures are psychological, not technical. The market is a psychological battleground — your biggest enemy is yourself.</p>
+<h4>The Four Destroyers</h4>
+<p><strong>Fear of missing out (FOMO):</strong> Chasing trades after the move has already happened. Cure: have a watchlist and wait for price to come to you. If you miss a trade, another one is always coming.<br><strong>Revenge trading:</strong> Immediately entering a new trade after a loss to "win it back." Cure: mandatory 30-minute break after any loss. Walk away from the screen.<br><strong>Overtrading:</strong> Taking setups that don't meet your criteria because you "need" to trade. Cure: write your criteria on a sticky note and check before every entry.<br><strong>Moving your stop:</strong> Widening your stop because you can't accept the loss. This turns small losses into account-destroying losses. Never, ever move your stop away from your entry.</p>
+<h4>Building a Winning Routine</h4>
+<ul><li>Pre-session: Review charts, mark key levels, note economic events, set alerts</li><li>During session: Execute your plan, nothing more</li><li>Post-session: Journal every trade, note emotions, review decisions</li><li>Weekly: Review all trades, calculate win rate, R:R, adjust if needed</li></ul>
+<h4>The Professional Mindset</h4>
+<p>Think in probabilities over large sample sizes. No single trade matters. Your edge plays out over 100+ trades. A losing trade executed perfectly is a good trade. A winning trade that broke your rules is a bad trade.</p>` },
+  { id:13, track:'trader', level:'Intermediate', emoji:'⏰', title:'Session Timing for XAUUSD', duration:'20 min',
+    body:`<p>Not all hours are equal in the gold market. Understanding session timing dramatically improves your trade quality by ensuring you only trade during high-liquidity, high-movement windows.</p>
+<h4>The Three Key Sessions</h4>
+<p><strong>London Session (8am-5pm GMT):</strong> The most important session for XAUUSD. European banks and hedge funds are most active. The first 2 hours (8am-10am GMT) often set the day's direction with strong momentum moves.<br><strong>New York Session (1pm-6pm GMT):</strong> The second most important. Overlaps with London from 1pm-5pm GMT — this is the highest liquidity window of the day. Most major moves and news reactions happen here.<br><strong>Asian Session (12am-8am GMT):</strong> Generally quieter for gold. Price often ranges. Useful for identifying accumulation zones but not ideal for momentum trading.</p>
+<h4>The Best Times to Trade Gold (UK Time)</h4>
+<ul><li>8:00-10:00 GMT — London open, high momentum</li><li>13:30-16:00 GMT — New York open, US news, maximum liquidity</li><li>Avoid 10am-1pm GMT (pre-New York doldrums) and after 6pm GMT</li></ul>
+<h4>Day of Week Patterns</h4>
+<p>Tuesday, Wednesday, Thursday are typically the highest quality trading days. Monday opens can be volatile. Friday afternoons (post-NFP) are often low quality. Structure your trading week accordingly.</p>` },
+  { id:14, track:'trader', level:'Intermediate', emoji:'📓', title:'Building Your Trade Journal', duration:'18 min',
+    body:`<p>A trade journal is the single most powerful tool for improving as a trader. Professional traders keep detailed records of every trade. Without a journal, you are flying blind and making the same mistakes repeatedly without realising it.</p>
+<h4>What to Record for Every Trade</h4>
+<ul><li>Date, time, and session (London/NY/Asian)</li><li>Direction (Buy/Sell), entry price, exit price</li><li>Stop loss and take profit at entry</li><li>Lot size and risk amount ($)</li><li>Result (win/loss), P&L ($)</li><li>The reason for the trade (setup type)</li><li>Screenshot of the chart at entry and exit</li><li>Emotional state during the trade (1-10 scale)</li></ul>
+<h4>Weekly Review Questions</h4>
+<p>Which setups performed best? Were there patterns in my losing trades? Was I following my rules? What was my average R:R this week? Did any emotional state correlate with worse decisions?</p>
+<h4>Using The Profits Circle Journal</h4>
+<p>Our built-in trade journal (accessible from the Journal tab) automatically calculates your statistics, shows your P&L calendar, and tracks win rates — making the review process effortless. Use it for every trade.</p>` },
+
+  // ADVANCED (15-20)
+  { id:15, track:'trader', level:'Advanced', emoji:'🏦', title:'Institutional Trading Concepts', duration:'35 min',
+    body:`<p>Retail traders lose because they trade against institutions. Institutional traders (banks, hedge funds) move $billions and cannot fill their orders at a single price — they need large pools of liquidity. Understanding how they operate gives you a significant edge.</p>
+<h4>Liquidity Sweeps</h4>
+<p>Institutions need liquidity to fill their large orders. They deliberately drive price to areas where retail stop losses cluster — above obvious resistance levels (buy stops) and below obvious support levels (sell stops). When you see price spike through a clear level and immediately reverse, that's a liquidity sweep. The real move follows.</p>
 <h4>Order Blocks</h4>
-<p>An order block is the last bullish or bearish candle before a significant move. Price often returns to these zones to rebalance before continuing the original direction. These are high-probability entry zones.</p>
-<h4>Market Structure</h4>
-<ul><li>Uptrend: Higher Highs (HH) and Higher Lows (HL)</li><li>Downtrend: Lower Highs (LH) and Lower Lows (LL)</li><li>A Break of Structure (BOS) signals a potential trend change</li><li>Change of Character (CHoCH) is the earliest signal of reversal</li></ul>
-<h4>Premium & Discount Zones</h4>
-<p>Using Fibonacci, price above the 50% retracement of a move is Premium (look to sell), price below the 50% is Discount (look to buy). This filters entries to only take trades with institutional alignment.</p>`
-  },
-  {
-    id: 8, level: 'Advanced', emoji: '🔍', title: 'News Trading & NFP Strategy', duration: '28 min',
-    body: `<p>High-impact economic events create the biggest moves in XAUUSD. Learning to trade these events can generate significant profits — but they require a specific approach.</p>
-<h4>Before the News</h4>
-<ul><li>Mark key support/resistance levels on the daily and 4H charts</li><li>Note the market's current bias (trend direction)</li><li>Check the forecast vs previous reading — the deviation matters more than the number itself</li><li>Avoid entering new positions 30 minutes before high-impact events</li></ul>
-<h4>The NFP Strategy</h4>
-<p>Non-Farm Payrolls is released the first Friday of every month at 8:30am EST. For XAUUSD:</p>
-<ul><li>Strong NFP (more jobs than expected) = USD strong = XAUUSD drops</li><li>Weak NFP (fewer jobs than expected) = USD weak = XAUUSD rises</li><li>Wait for the initial volatility to settle (5-10 min candle close)</li><li>Enter on the retest of the breakout level, not the initial spike</li></ul>
-<h4>Post-News Trading</h4>
-<p>The best trades are often 15-30 minutes after the news release, once the fake-out moves have cleared and the real direction is established. Patience is key.</p>`
-  },
-  {
-    id: 9, level: 'Advanced', emoji: '💡', title: 'Building a Trading System', duration: '40 min',
-    body: `<p>A trading system is a set of rules you follow consistently on every trade. Without a system, you are gambling. With a tested system and proper risk management, trading becomes a business.</p>
-<h4>The 5 Elements of a Trading System</h4>
-<ul><li><strong>1. Market Selection</strong> — Focus on XAUUSD exclusively until mastery</li><li><strong>2. Timeframe</strong> — 4H bias, 1H entry confirmation, 15M precision entry</li><li><strong>3. Setup Criteria</strong> — What exact conditions must be met to enter?</li><li><strong>4. Risk Rules</strong> — Max 1% per trade, max 3% daily loss, 1:2 minimum R:R</li><li><strong>5. Trade Management</strong> — When to move SL, when to take partial profits</li></ul>
-<h4>Backtesting</h4>
-<p>Before trading live with any system, backtest it on at least 3-6 months of historical data. Look for: win rate, average R:R, max consecutive losses, and maximum drawdown.</p>
-<h4>Forward Testing (Paper Trading)</h4>
-<p>After backtesting, paper trade for at least 20-30 trades before going live. This builds confidence and reveals issues you didn't see in backtesting.</p>
-<h4>The Edge</h4>
-<p>Your edge comes from combining: high-probability technical setups at key levels, news awareness to avoid bad entries, strict risk management, and consistent execution. Our signals at The Profits Circle embody exactly this approach.</p>`
-  }
+<p>An order block is the last bearish candle before a significant bullish move (bullish order block) or the last bullish candle before a significant bearish move (bearish order block). Institutions leave unfilled orders at these zones, so price often returns to them. High-probability entry areas.</p>
+<h4>Fair Value Gaps (FVG)</h4>
+<p>A Fair Value Gap occurs when price moves so aggressively that there is an imbalance — a gap between the high of one candle and the low of two candles later. Price frequently returns to "fill" these gaps before continuing. Mark FVGs on your 1H and 15M charts for precision entries.</p>
+<h4>Change of Character (CHoCH) and Break of Structure (BOS)</h4>
+<p>CHoCH: The market makes its first higher high in a downtrend, or first lower low in an uptrend — the earliest signal of reversal. BOS: A clear break of a significant swing high or low, confirming the new direction. Trade in the direction after BOS, look for entries at CHoCH.</p>` },
+  { id:16, track:'trader', level:'Advanced', emoji:'🎯', title:'ICT & SMC Strategy for Gold', duration:'40 min',
+    body:`<p>Inner Circle Trader (ICT) and Smart Money Concepts (SMC) have become the dominant frameworks for serious XAUUSD traders. They explain price action through the lens of institutional activity rather than retail indicators.</p>
+<h4>The Daily Bias</h4>
+<p>Every trading day, determine the daily bias: bullish or bearish. Use the higher timeframe (Daily, 4H) structure. If Daily is making higher highs and higher lows, the daily bias is bullish — only look for buy setups on lower timeframes.</p>
+<h4>Premium & Discount Arrays</h4>
+<p>Using the Fibonacci at 50%, price above 50% of a range is "Premium" (expensive — look to sell). Price below 50% is "Discount" (cheap — look to buy). Institutional traders buy in discount and sell in premium. This is why breakout buys at all-time highs often fail.</p>
+<h4>IPDA (Interbank Price Delivery Algorithm)</h4>
+<p>Price seeks liquidity. Before making a move, price will often reach for the nearest pool of liquidity (stop clusters above highs or below lows). Once liquidity is taken, the real move begins. Identify where retail stops are clustering and expect price to hunt them.</p>
+<h4>The Killzone Strategy</h4>
+<p>High-probability setups form during the London Killzone (8-10am GMT) and New York Killzone (1:30-3:30pm GMT). In the killzone: wait for a liquidity sweep of a previous high/low, look for a Market Structure Shift (MSS) on the 1M-5M chart, then enter with a tight stop on the retest. Target: next liquidity pool.</p>` },
+  { id:17, track:'trader', level:'Advanced', emoji:'📊', title:'Multi-Timeframe Analysis Mastery', duration:'32 min',
+    body:`<p>Mastery of multi-timeframe analysis (MTA) is what separates consistently profitable traders from those who are occasionally lucky. Every professional trader uses at least 3 timeframes for every trade decision.</p>
+<h4>The Top-Down Approach</h4>
+<p>Always start from the highest timeframe and work down:<br><strong>Weekly:</strong> Identify the major trend, key levels, and overall bias. These levels hold for months.<br><strong>Daily:</strong> Identify the current trend phase, swing highs/lows, key support/resistance zones. These levels hold for weeks.<br><strong>4H:</strong> Identify the trade direction and context. Where in the daily range is price? Is it at a key level?<br><strong>1H:</strong> Identify the specific setup — the pattern, the entry zone.<br><strong>15M/5M:</strong> Precision entry. The trigger candle, the exact stop placement.</p>
+<h4>Alignment = High Probability</h4>
+<p>The best trades have alignment across all timeframes: Weekly bullish → Daily bullish → 4H at support → 1H forming reversal pattern → 15M entry signal. When all timeframes agree, your win rate on that trade is significantly higher.</p>
+<h4>When Timeframes Conflict</h4>
+<p>If the Daily is bullish but the 4H just broke a major structure to the downside, wait for clarity. Conflicting timeframes mean reduced edge. Either wait for alignment or reduce your position size significantly.</p>` },
+  { id:18, track:'trader', level:'Advanced', emoji:'📈', title:'Swing Trading Gold', duration:'28 min',
+    body:`<p>Swing trading holds positions for 1-5 days, capturing the larger moves that unfold over multiple sessions. It requires patience but offers some of the best risk-reward opportunities in XAUUSD.</p>
+<h4>The Swing Trade Setup</h4>
+<p>Ideal swing trades occur at major Daily chart levels after a clear pullback. The setup requires: (1) Higher timeframe trend identified, (2) Price pulling back to a significant Fibonacci level or previous structure, (3) Daily or 4H reversal pattern forming, (4) Confirmation on 1H with a clear entry.</p>
+<h4>Position Sizing for Swings</h4>
+<p>Swing trades often have wider stops (30-80 pips on XAUUSD). Reduce position size to maintain 1-2% account risk. A $3,000 account at 1% risk = $30 per trade. With a 50 pip stop, you can trade 0.06 lots (micro lots). This is fine — preservation of capital is paramount.</p>
+<h4>Managing Swing Trades Overnight</h4>
+<p>Gold gaps at the weekly open (Sunday 10pm GMT) and around major news. Before holding a trade overnight: ensure your stop is set, your risk is defined, and there are no major economic events overnight that could spike against you. Check the economic calendar every time before a hold.</p>
+<h4>Taking Profits on Swings</h4>
+<p>Scale out: 50% at 1:2 R:R, move stop to break-even, let the other 50% target the next major structure level. Some swing trades on gold can extend 100-200+ pips — let winners run once protected.</p>` },
+  { id:19, track:'trader', level:'Advanced', emoji:'⚡', title:'News Trading & NFP Mastery', duration:'30 min',
+    body:`<p>NFP (Non-Farm Payrolls), released the first Friday of each month at 8:30am EST (1:30pm GMT), is the single most important event for XAUUSD traders. Understanding how to trade it can generate significant monthly profits.</p>
+<h4>Pre-NFP Preparation</h4>
+<ul><li>Mark the key Daily support/resistance levels the night before</li><li>Note the forecast number and previous reading</li><li>Close all open trades or move stops to break-even by 1:15pm GMT</li><li>Have two scenarios ready: strong NFP (gold drops) and weak NFP (gold rises)</li><li>Place conditional orders if using a platform that supports it</li></ul>
+<h4>The NFP Playbook</h4>
+<p><strong>If NFP beats forecast significantly (200K+ vs 150K expected):</strong> USD strengthens, gold drops. Wait for the initial spike and fake-out, then look for short at the nearest resistance on the 5M chart after a bearish engulfing.<br><strong>If NFP misses forecast significantly (80K vs 150K expected):</strong> USD weakens, gold surges. Same process: wait for the initial panic move, then look for a long at the nearest support after a bullish engulfing on 5M.</p>
+<h4>Why Most NFP Trades Fail</h4>
+<p>Traders enter on the initial spike. This is the worst entry — it's the fake-out. The real move begins 5-15 minutes after the release when the dust settles. Patience is the entire edge here.</p>
+<h4>Other Key Events</h4>
+<p>FOMC rate decisions (8 times per year, 7pm GMT), CPI data (monthly, 1:30pm GMT), Core PCE (monthly). All follow the same principle: wait for the initial move, trade the retest.</p>` },
+  { id:20, track:'trader', level:'Advanced', emoji:'🏆', title:'Building a Complete Trading System', duration:'40 min',
+    body:`<p>A complete trading system is a set of rules you follow consistently on every single trade. Without a documented system, you are not trading — you are reacting. A system transforms trading from an emotional rollercoaster into a repeatable business process.</p>
+<h4>The 6 Elements of Your System</h4>
+<ul><li><strong>1. Universe:</strong> XAUUSD exclusively until you achieve consistent profitability</li><li><strong>2. Timeframes:</strong> Daily bias, 4H context, 1H entry confirmation, 15M precision</li><li><strong>3. Setup criteria:</strong> Exactly what conditions must exist for you to take a trade? Write these out. If a trade doesn't meet all criteria, don't take it.</li><li><strong>4. Risk rules:</strong> Max 1% per trade, max 3% daily, 1:2 minimum R:R, always stop loss</li><li><strong>5. Trade management:</strong> When to move SL to break-even, when to scale out, when to close early</li><li><strong>6. Review process:</strong> Weekly journal review, monthly statistics, quarterly strategy assessment</li></ul>
+<h4>Backtesting Your System</h4>
+<p>Before trading live, scroll back through 6+ months of historical XAUUSD data and manually apply your system. Record every trade. Aim for: >50% win rate, >1:1.5 average R:R, max 8 consecutive losses. If you can't find 50+ valid setups in 6 months of data, the system is too restrictive.</p>
+<h4>The Compounding Effect</h4>
+<p>At 3% monthly return (conservative and achievable), a £10,000 account grows to £43,000 in 5 years, £186,000 in 10 years. Trading is a marathon. Consistency over years, not months, is what creates life-changing wealth. Join The Profits Circle, follow the system, journal every trade, stay patient.</p>` },
 ];
 
+// ─── AFFILIATE TRACK — 20 LESSONS ────────────────────────────────────────────
+const affiliateLessons = [
+  // FOUNDATION (1-7)
+  { id:101, track:'affiliate', level:'Foundation', emoji:'🤝', title:'How the Affiliate Programme Works', duration:'12 min',
+    body:`<p>Welcome to the Affiliate Academy. This track teaches you everything you need to turn your network into a consistent income stream — earning $5 for every lot traded by every client you refer.</p>
+<h4>The Business Model</h4>
+<p>You refer traders to our broker partner. They open a live account and start trading XAUUSD. Every lot they trade, you earn $5. If a client trades 20 lots per day (standard for active traders), you earn $100 every single day from that one client — with zero additional effort after the initial referral.</p>
+<h4>Why This Is Powerful</h4>
+<ul><li>Recurring income — you earn as long as your client is trading</li><li>No deposit tiers or thresholds — every lot counts from trade one</li><li>No cap — refer as many clients as you want</li><li>Paid weekly — every Monday</li><li>Passive after acquisition — you don't need to manage anything</li></ul>
+<h4>Getting Started</h4>
+<p>Step 1: Message us on Telegram to get your unique referral link. Step 2: Start referring. Step 3: Track your earnings in the admin dashboard. This academy will teach you exactly how to find and convert high-quality referrals efficiently.</p>` },
+  { id:102, track:'affiliate', level:'Foundation', emoji:'🎯', title:'Who Is Your Ideal Referral?', duration:'15 min',
+    body:`<p>Not all referrals are equal. A client who trades 1 lot per month earns you $5. A client who trades 20 lots per day earns you $2,200 per month. Understanding who to target makes your marketing 10x more effective.</p>
+<h4>Profile of a High-Value Referral</h4>
+<ul><li>Already interested in trading gold or forex</li><li>Has some disposable income to fund a trading account (£500-£5,000+)</li><li>Has time to trade actively (even 30-60 minutes per day is enough)</li><li>Motivated by financial independence or extra income</li><li>Open to learning — will engage with The Profits Circle community</li></ul>
+<h4>Who to Avoid</h4>
+<p>Don't waste time on people who are completely opposed to risk, have no disposable income, or have no interest in financial markets. A reluctant referral who funds a small account, trades twice, and then stops earns you very little.</p>
+<h4>Where to Find Them</h4>
+<p>Forex/gold communities on Telegram, Discord, Reddit, Facebook Groups. People searching YouTube for "how to trade gold." Friends and colleagues who've mentioned interest in investing. Finance-related Instagram/TikTok audiences. The next lessons in this track will cover each channel in detail.</p>` },
+  { id:103, track:'affiliate', level:'Foundation', emoji:'💬', title:'Your Referral Message Framework', duration:'18 min',
+    body:`<p>What you say determines whether people click your link. This lesson gives you a proven framework for crafting messages that convert without feeling pushy or salesy.</p>
+<h4>The Core Message</h4>
+<p>Your message must answer three questions in the first 5 seconds: (1) What is it? (2) Why should I care? (3) What do I do next? Keep it simple, honest, and specific.</p>
+<h4>Example Outreach Messages (Telegram/DM)</h4>
+<p><em>Short version:</em> "Hey, I'm part of a gold trading community that gives daily signals, a full academy, and tools for free when you trade through their broker. I thought you might find it useful — here's the link: [YOUR LINK]"</p>
+<p><em>Value-first version:</em> "I've been using The Profits Circle for [X] time. They give live XAUUSD signals, a 40-lesson trading academy, and economic calendar — completely free just for using their broker. If you're interested in trading gold, worth a look: [YOUR LINK]"</p>
+<h4>What NOT to Say</h4>
+<ul><li>Never promise specific returns or profits</li><li>Never say "guaranteed income" or "risk-free"</li><li>Never spam — one message per person, respect the response</li><li>Don't oversell — let the platform speak for itself</li></ul>
+<h4>The Follow-Up</h4>
+<p>If no response after 3-5 days, one gentle follow-up: "Did you get a chance to look at that link? Happy to answer any questions." After that, let it go. Forced referrals churn quickly.</p>` },
+  { id:104, track:'affiliate', level:'Foundation', emoji:'📱', title:'Social Media for Affiliates — Overview', duration:'20 min',
+    body:`<p>Social media is the highest-leverage channel for affiliate marketing because content works for you 24/7 long after you've posted it. This lesson covers which platforms work best and the overall strategy.</p>
+<h4>Platform Rankings for Trading Content</h4>
+<p><strong>YouTube (highest value, slowest to build):</strong> Videos rank in search for years. One well-titled video ("How to Trade Gold for Beginners") can generate referrals indefinitely. Best for in-depth content.<br><strong>TikTok/Instagram Reels (fastest growth, shorter lifespan):</strong> Short educational content can go viral. Good for audience building quickly. Shorter shelf life per post.<br><strong>Telegram (highest conversion rate):</strong> Building your own Telegram channel/group filled with trading content naturally leads to referrals. Members are self-selected as interested in trading.<br><strong>Twitter/X (good for engagement):</strong> Good for sharing market commentary, signals, and positioning yourself as knowledgeable. Builds credibility over time.</p>
+<h4>The Content Strategy That Works</h4>
+<p>80% education/value, 20% promotion. Never lead with your link. Lead with value (tips, analysis, commentary), then occasionally mention The Profits Circle as the platform you use, with your referral link in bio or description. People buy from people they trust and learn from.</p>
+<h4>Consistency Over Intensity</h4>
+<p>Posting every day for a week then going quiet for a month doesn't work. Commit to a sustainable schedule: 3-5 posts per week on TikTok/Instagram, 1 video per week on YouTube, daily brief posts on Telegram or Twitter. Show up consistently for 90 days minimum before evaluating results.</p>` },
+  { id:105, track:'affiliate', level:'Foundation', emoji:'📹', title:'Creating Content Without Showing Your Face', duration:'22 min',
+    body:`<p>Many successful trading affiliates have built substantial audiences without ever appearing on camera. This lesson covers proven formats that work without a face-cam.</p>
+<h4>Screen Recording Content</h4>
+<p>The simplest format: record your trading platform showing a chart, narrate your analysis. "Here's why I think gold is about to move higher today..." This content is highly searchable, educational, and positions you as knowledgeable. Tools: OBS (free), Loom (free), iPhone screen recording.</p>
+<h4>Chart Analysis Posts</h4>
+<p>Screenshot a gold chart with annotations (support/resistance lines, drawn patterns), add text overlay explaining what you see, post on TikTok/Instagram/Twitter. Takes 5-10 minutes to produce, can get thousands of views. Always mention your signal community (The Profits Circle) in the caption with your link.</p>
+<h4>Educational Text/Carousel Posts</h4>
+<p>Canva (free) lets you create multi-slide educational posts: "5 Ways to Know When Gold Will Drop." Each slide covers one point. These perform excellently on Instagram and LinkedIn. End with a CTA: "Get free XAUUSD signals at [LINK]."</p>
+<h4>Telegram Channel Posts</h4>
+<p>Daily brief posts: a market comment, a chart screenshot, a trading tip. No face required — just text and images. Build subscribers by posting your channel link in relevant groups (with permission/context). As you post value, members naturally ask about how to get started — that's your referral opportunity.</p>` },
+  { id:106, track:'affiliate', level:'Foundation', emoji:'🎨', title:'Canva Templates for Trading Content', duration:'15 min',
+    body:`<p>Canva is a free design tool that lets you create professional-looking trading content in minutes. Having a consistent visual style builds brand recognition and makes your content look credible.</p>
+<h4>Setting Up Your Brand</h4>
+<p>Choose 2-3 colours (suggestion: black, gold, white — aligns with The Profits Circle brand), one heading font (Bebas Neue is free on Canva), one body font (Inter). Save these as your Canva brand kit so every post matches.</p>
+<h4>Essential Templates to Create</h4>
+<ul><li><strong>Trade alert post:</strong> "XAUUSD BUY Signal — Entry $X, TP $X, SL $X" with your channel logo</li><li><strong>Educational tip post:</strong> "Trading Tip #47: [Tip here]" in a 1:1 square format</li><li><strong>Result post:</strong> "Win ✓ — +$X on XAUUSD today" (when applicable) — social proof</li><li><strong>Quote post:</strong> A relevant trading or mindset quote with your channel branding</li><li><strong>CTA post:</strong> "Want free gold signals? Link in bio" with a visually compelling design</li></ul>
+<h4>Content Calendar</h4>
+<p>Sunday: Create 5-7 posts for the week in Canva (30-45 minutes). Schedule via Later, Buffer, or Meta Business Suite. This means your content goes out consistently even on days you're busy trading. Batch creation is the key to sustainable content output.</p>` },
+  { id:107, track:'affiliate', level:'Foundation', emoji:'📊', title:'Understanding Your Earnings Dashboard', duration:'12 min',
+    body:`<p>Once you have active referrals, your affiliate dashboard in the admin section of The Profits Circle shows you your referral code, referral link, how many people have used it, and your total earnings. Understanding these numbers helps you optimise your efforts.</p>
+<h4>Key Metrics to Track</h4>
+<ul><li><strong>Click-through rate:</strong> How many people clicked your referral link vs. how many saw it. If low, improve your CTA.</li><li><strong>Sign-up rate:</strong> How many clicks converted to account creations. If low, the landing page may need context — consider warming up your audience more.</li><li><strong>Deposit rate:</strong> How many sign-ups deposited. This is where most drop-off happens. Follow up personally on Telegram to guide them through the process.</li><li><strong>Earnings per referral:</strong> Total earnings ÷ deposited referrals. Tells you how actively each client is trading.</li></ul>
+<h4>The Follow-Up Sequence</h4>
+<p>When someone signs up via your link, follow up within 24 hours: "Hey, just wanted to make sure everything went smoothly — let me know if you need any help getting started. The Profits Circle Telegram is the best place for questions: [link]." Getting them into the community increases retention dramatically.</p>` },
+
+  // GROWTH (8-14)
+  { id:108, track:'affiliate', level:'Growth', emoji:'📣', title:'Building a Telegram Channel', duration:'25 min',
+    body:`<p>A Telegram channel is the highest-converting affiliate channel for trading. Members are self-selected as interested in trading, trust your analysis, and will naturally follow your referral recommendations.</p>
+<h4>Setting Up Your Channel</h4>
+<p>Channel name: something clear and searchable. "Gold Trading Signals UK" or "[YourName] FX Signals" work well. Description: "Free XAUUSD analysis, signals and tips. Follow The Profits Circle for full VIP access [your link]." Profile photo: professional logo (use Canva). Enable comments if you want engagement.</p>
+<h4>Content Schedule for Telegram</h4>
+<ul><li>Morning: Brief market outlook (2-3 sentences) — what's XAUUSD doing and why</li><li>Midday: Chart screenshot with brief analysis or key level to watch</li><li>Evening: Day recap — what happened, what to watch tomorrow</li><li>Weekly: A mini lesson (can share directly from The Profits Circle academy)</li></ul>
+<h4>Growing Your Subscriber Count</h4>
+<p>Cross-promote your channel on all your other social platforms. Post in relevant Telegram groups (with permission): "I share free gold analysis in my channel: [link]." Engage with other trading channels and comment meaningfully — people will click your profile. Run a "giveaway" — "$25 crypto to a random member this Friday" — promotes sharing.</p>
+<h4>When to Mention The Profits Circle</h4>
+<p>2-3 times per week, naturally: "I'm using The Profits Circle signals today — they called this setup perfectly. If you want the full signals and academy, here's the link: [your ref link]." Never force it — social proof from genuine use converts far better than hard selling.</p>` },
+  { id:109, track:'affiliate', level:'Growth', emoji:'🎬', title:'YouTube for Trading Affiliates', duration:'30 min',
+    body:`<p>YouTube is the highest long-term ROI channel for affiliates. A single well-optimised video can generate referrals for years. This lesson covers how to create videos that rank and convert.</p>
+<h4>Video Formats That Work</h4>
+<ul><li>"How to Trade Gold (XAUUSD) for Beginners" — evergreen, high search volume</li><li>"XAUUSD Analysis [This Week] — Gold Forecast [Month Year]" — recurring weekly video, builds subscribers</li><li>"I Made £X Trading Gold This Week — Here's How" — personal results (genuine only)</li><li>"The XAUUSD Strategy I Use Every Day" — educational, positions you as expert</li><li>"Best FREE Platform for Gold Signals [Review]" — review format, naturally includes your referral link</li></ul>
+<h4>SEO for Trading Videos</h4>
+<p>Title: include "XAUUSD" and the month/year for weekly content. Tags: xauusd, gold trading, how to trade gold, gold signals, forex gold. Description: first 2-3 lines should contain your keywords and your referral link — this is crucial for conversions since most viewers never read past the first line. Thumbnail: bold text, clear contrast, a chart in the background.</p>
+<h4>Equipment You Actually Need</h4>
+<p>Nothing special: your phone, OBS Free (screen recording), a decent headset microphone (£20-40). Start immediately with what you have. A mediocre video today is better than a perfect video next month. Production quality improves with practice and you can upgrade equipment once you're earning.</p>` },
+  { id:110, track:'affiliate', level:'Growth', emoji:'📸', title:'Instagram & TikTok Strategy', duration:'25 min',
+    body:`<p>Short-form video on TikTok and Instagram Reels offers the fastest path to a large audience for trading content. The algorithm actively promotes content to non-followers — unlike Telegram or YouTube where you need to find your audience.</p>
+<h4>Content That Goes Viral in Trading</h4>
+<ul><li>"I Risked £100 on Gold and Made X" — personal trading result (use paper trades while learning)</li><li>"3 Signs Gold is About to Drop" — listicle format with chart overlays</li><li>"What Banks Don't Want You to Know About Gold" — curiosity hook</li><li>"Watching Gold in Real Time 📊" — screen recording of a live trade</li><li>Day-in-the-life as a trader — lifestyle content with trading woven in</li></ul>
+<h4>The Hook Is Everything</h4>
+<p>The first 2 seconds determine if people keep watching. Start with the most interesting part: the result, the surprising fact, the provocative statement. Never start with "Hey guys, welcome back to my channel." Start with the payoff.</p>
+<h4>Posting Frequency and Timing</h4>
+<p>TikTok: post 1-2 times daily for maximum growth. Instagram Reels: 1 daily. Best times: 7-9am, 12-2pm, 7-9pm (your audience's timezone). Use trending audio on TikTok — it dramatically increases reach even on non-viral content. Add your referral link to your bio on both platforms — it's the only clickable link.</p>
+<h4>Link in Bio Strategy</h4>
+<p>Use Linktree (free) to create a landing page with multiple links: Telegram channel, The Profits Circle referral link, YouTube channel. Direct all social audiences there. Every video CTA: "Link in bio to get free signals."</p>` },
+  { id:111, track:'affiliate', level:'Growth', emoji:'✉️', title:'Direct Outreach That Converts', duration:'20 min',
+    body:`<p>Warm outreach — reaching out personally to people in your network who might be interested — is often the fastest way to get your first referrals. This lesson covers how to do it effectively and respectfully.</p>
+<h4>Building Your Target List</h4>
+<p>Go through your phone contacts, Telegram contacts, LinkedIn, and Facebook. Note people who have ever mentioned: interest in making money, curiosity about investing/trading, questions about gold or crypto, or financial concerns. These are your warm leads — people who already have the mindset.</p>
+<h4>The 3-Step Outreach Sequence</h4>
+<p><strong>Step 1 — Warm up (Day 0):</strong> Re-engage naturally. Comment on their recent post, reply to their story, or send a genuine check-in message that's unrelated to trading. This is not manipulation — it's simply being a good contact.<br><strong>Step 2 — Share value (Day 2-3):</strong> Share something useful without a link: "I've been learning about gold trading and it's genuinely interesting — the signals I've been getting are surprisingly accurate." Let curiosity build naturally.<br><strong>Step 3 — The referral (Day 5-7 if they engaged):</strong> "If you're curious, I found a community that gives free signals and a full trading academy. Here's my referral link — it's free to sign up."</p>
+<h4>When Someone Says No</h4>
+<p>Thank them and move on. Never push. Respecting a no is what makes future opportunities possible — and preserves the relationship for non-trading conversations. Your reputation is worth more than any single referral.</p>` },
+  { id:112, track:'affiliate', level:'Growth', emoji:'🔄', title:'Retention — Keeping Referrals Active', duration:'22 min',
+    body:`<p>Getting a referral to deposit is only half the battle. The real recurring income comes from clients who stay active for months and years. Retention is where long-term affiliate income is built.</p>
+<h4>Why Referrals Churn</h4>
+<ul><li>They deposited but never received proper onboarding</li><li>They had a few early losses and gave up</li><li>They didn't know the community existed and felt alone</li><li>They had technical difficulties and no support</li><li>They got distracted — life got busy</li></ul>
+<h4>The 48-Hour Onboarding</h4>
+<p>When a referral signs up, within 48 hours: (1) Send them a personal welcome message on Telegram, (2) Invite them to The Profits Circle Telegram channel, (3) Point them to the Academy — specifically Lesson 1, (4) Show them how to use the Journal. This 4-step process dramatically increases the chance they're still active in 30 days.</p>
+<h4>Monthly Check-Ins</h4>
+<p>Once a month, personally message your active referrals: "How's the trading going? Any questions?" This takes 5 minutes and meaningfully increases long-term retention. People who feel supported don't churn.</p>
+<h4>Reactivation</h4>
+<p>If a referral has gone quiet: "Hey, I noticed you haven't been trading much lately — everything okay? There've been some great signals recently." A genuine check-in reactivates far more clients than you'd expect.</p>` },
+  { id:113, track:'affiliate', level:'Growth', emoji:'💰', title:'Paid Advertising Basics', duration:'28 min',
+    body:`<p>Once you understand organic traffic, paid advertising can dramatically accelerate your results. Even a small budget ($5-20/day) can generate a consistent flow of new referrals if set up correctly.</p>
+<h4>Which Platforms to Advertise On</h4>
+<p><strong>Facebook/Instagram Ads:</strong> Best targeting for financial interests. Can target people interested in forex, gold, investing, financial independence. Minimum effective budget: £5/day.<br><strong>Google Ads:</strong> Target people actively searching "how to trade gold" or "gold trading signals." Higher intent = higher conversion. Minimum effective budget: £10/day.<br><strong>TikTok Ads:</strong> Lower cost per click, growing finance audience. Good for awareness campaigns.</p>
+<h4>The Landing Page Problem</h4>
+<p>Sending paid traffic directly to a signup page works poorly. Better: send traffic to a valuable piece of content first (your YouTube video, a Telegram channel, a landing page you've created), then let the platform funnel them to The Profits Circle. Warm traffic converts at 5-10x the rate of cold traffic.</p>
+<h4>Tracking ROI</h4>
+<p>If you spend £100 on ads and get 5 referrals who each trade 15 lots/day for a month: 5 × 15 × 22 × $5 = $8,250. Your ROI is 82x. Track every campaign. Scale what works, cut what doesn't.</p>
+<h4>Important Compliance Note</h4>
+<p>Never advertise with guaranteed returns, specific profit claims, or misleading performance claims. Always include a risk warning in ad copy: "Trading involves risk. Past performance is not indicative of future results." Failure to include these can get your ads banned.</p>` },
+  { id:114, track:'affiliate', level:'Growth', emoji:'🌐', title:'Building a Simple Affiliate Website', duration:'25 min',
+    body:`<p>A website acts as a 24/7 referral machine — it ranks in Google, collects email subscribers, and converts visitors into referrals long after you've stopped actively promoting. This lesson shows you the simplest possible setup.</p>
+<h4>What Your Site Needs (Minimum Viable)</h4>
+<ul><li>Home page: What the site is about, CTA to your referral link</li><li>About page: Who you are and why you trade gold</li><li>Blog/articles: "Best Gold Trading Signals," "How to Trade XAUUSD," "The Profits Circle Review" — SEO content</li><li>Contact page: Simple form</li></ul>
+<h4>Free/Cheap Setup</h4>
+<p>WordPress.com (free tier), Blogger (free), or Substack (free) are sufficient to start. Get a domain: [YourName]trading.com or goldtradingsignals.co.uk — around £10/year. Add your referral link prominently in the header, in every article, and in a sidebar widget.</p>
+<h4>SEO Content That Works</h4>
+<p>Write articles targeting searches your audience makes: "Is The Profits Circle legit?", "Best free gold trading signals", "How to earn $5 per lot forex affiliate". Long-tail keyword content ranks faster than broad terms. One well-written article per week, consistently, compounds significantly over 6-12 months.</p>` },
+
+  // SCALE (15-20)
+  { id:115, track:'affiliate', level:'Scale', emoji:'📈', title:'Scaling from 5 to 50 Referrals', duration:'30 min',
+    body:`<p>Getting your first 5 referrals proves the model works. Scaling to 50 is about systems — automating and delegating the parts that don't require your personal touch.</p>
+<h4>The Leverage Points</h4>
+<p><strong>Content leverage:</strong> Every piece of content you create works while you sleep. One YouTube video or blog post can generate referrals for 3-5 years. Create more high-quality content, especially evergreen educational pieces.<br><strong>Channel leverage:</strong> A Telegram channel with 1,000 subscribers is not 10x harder than a channel with 100 — but it generates approximately 10x more referrals when you post the same content.<br><strong>Network leverage:</strong> Each happy referral is a potential referrer themselves. Ask satisfied clients if they know anyone who'd benefit from The Profits Circle. Word of mouth from clients converts at 3-5x the rate of cold traffic.</p>
+<h4>Delegating the Work</h4>
+<p>At scale, you can hire a virtual assistant (VA) for £5-10/hour to: edit your YouTube videos, schedule social media posts, research content ideas. This frees your time for relationship-building and strategy — the highest-leverage activities.</p>
+<h4>The 90-Day Scaling Plan</h4>
+<p>Days 1-30: Establish your primary content channel (Telegram + one social platform). Days 31-60: Double posting frequency, add a second social platform. Days 61-90: Launch paid ads to amplify organic content, add a website/blog. By day 90, you should have 5-15 active referrals and a clear growth trajectory.</p>` },
+  { id:116, track:'affiliate', level:'Scale', emoji:'🤖', title:'Automation Tools for Affiliates', duration:'22 min',
+    body:`<p>Automation removes you from the equation for repetitive tasks, allowing you to earn passive income that is truly passive. This lesson covers the tools and workflows that save 5-10 hours per week.</p>
+<h4>Content Scheduling</h4>
+<p><strong>Buffer or Later (free tier):</strong> Schedule Instagram, Twitter, LinkedIn posts in advance. Batch-create a week of content in one Sunday session, schedule it all, and forget about it.<br><strong>ManyChat (free tier):</strong> Automatically respond to Instagram/Facebook DMs with your referral link when someone comments a trigger word ("SIGNALS", "INFO", etc.).<br><strong>Zapier (free tier):</strong> Connect platforms — e.g., when you post on Telegram, automatically share to Twitter. Saves manual cross-posting.</p>
+<h4>Automated Email Follow-Up</h4>
+<p>If you build an email list (via a lead magnet on your website), use Mailchimp (free up to 500 contacts) to send an automated welcome sequence: Day 0: Welcome + referral link. Day 3: Educational content. Day 7: Success story. Day 14: "Have you tried The Profits Circle yet?" This automation converts cold subscribers into warm referrals over time.</p>
+<h4>Reporting & Analytics</h4>
+<p>Google Analytics (free) on your website, native analytics on each social platform, and your Profits Circle affiliate dashboard. Review numbers weekly: which content drove the most clicks? Which platform converts best? Double down on what works.</p>` },
+  { id:117, track:'affiliate', level:'Scale', emoji:'👥', title:'Building a Sub-Affiliate Network', duration:'25 min',
+    body:`<p>The next level of affiliate income involves turning your best referrals into affiliates themselves. This creates a network effect where your income compounds beyond what you could generate alone.</p>
+<h4>Identifying Potential Sub-Affiliates</h4>
+<p>Look for referrals who: are active and engaged in The Profits Circle community, have a social media presence or network, have mentioned interest in making additional income, and are enthusiastic advocates who already refer people informally.</p>
+<h4>The Conversation</h4>
+<p>"I noticed you've mentioned The Profits Circle to a few people — have you thought about formally joining the affiliate programme? You'd earn $5 per lot on every client you refer. I can help you get set up and show you what's worked for me." Peer referral is far more natural than a cold pitch.</p>
+<h4>Supporting Your Sub-Affiliates</h4>
+<p>Share your best content templates, your Canva designs, and your message scripts. Run a monthly group call for your affiliates to share what's working. The more successful they are, the more credible your network becomes — and the more new affiliates you attract.</p>
+<h4>Long-Term Network Value</h4>
+<p>With 10 sub-affiliates who each have 5 active referrals trading 15 lots/day: 10 × 5 × 15 × 22 × $5 = $82,500/month. This is not overnight — it takes 12-24 months to build. But it is achievable and the compounding is extraordinary.</p>` },
+  { id:118, track:'affiliate', level:'Scale', emoji:'⚖️', title:'Legal & Compliance for Affiliates', duration:'18 min',
+    body:`<p>As your affiliate income grows, understanding the legal and regulatory landscape protects you and ensures long-term sustainability. This is not legal advice — consult a professional for your specific situation.</p>
+<h4>FCA Regulations (UK)</h4>
+<p>In the UK, promoting financial services including forex/CFD brokers requires care. As an affiliate who refers clients but does not manage their money or give personalised advice, you are generally not required to be FCA authorised. However, you must: not make specific profit claims, not give personalised investment advice, include risk warnings, and not mislead clients about the nature of the product.</p>
+<h4>Tax on Affiliate Earnings</h4>
+<p>Affiliate commission is taxable income in the UK. If your total income (including affiliate earnings) exceeds the personal allowance (£12,570 in 2024/25), you must register as self-employed with HMRC and complete a Self Assessment tax return. Keep records of all earnings and relevant expenses (content creation costs, advertising spend, equipment).</p>
+<h4>Disclosures</h4>
+<p>When promoting The Profits Circle, you must disclose if you have a financial relationship (i.e., that you earn commission). ASA guidelines require this for social media content. A simple "#ad" or "affiliate link" disclosure is sufficient and builds trust rather than undermining it.</p>
+<h4>Data Protection (GDPR)</h4>
+<p>If you collect email addresses or personal data (e.g., via a website form), you must have a privacy policy and ensure proper data handling under GDPR. Free GDPR-compliant privacy policy generators are available online.</p>` },
+  { id:119, track:'affiliate', level:'Scale', emoji:'📉', title:'When Referrals Stop Trading — Solutions', duration:'15 min',
+    body:`<p>Churn is inevitable — some referrals will stop trading for reasons entirely outside your control. This lesson covers how to minimise churn and what to do when it happens.</p>
+<h4>Common Reasons Clients Stop Trading</h4>
+<ul><li>Had a run of losses and lost confidence</li><li>Life circumstances changed (job, family, finances)</li><li>Lost interest or found something else</li><li>Technical issue with their broker account</li><li>Forgot about it — life got busy</li></ul>
+<h4>Minimising Preventable Churn</h4>
+<p>The first 30 days are critical. Clients who: join the Telegram community, complete at least 5 academy lessons, and make their first profitable trade — have dramatically higher long-term retention than those who don't. Your onboarding process (Lesson 112) is your most important churn-reduction tool.</p>
+<h4>Reactivation Campaigns</h4>
+<p>Every 60-90 days, message inactive referrals: "Hey, gold has been making some incredible moves this month — there have been some great signals if you want to dip back in." Don't pressure — just inform. 20-30% of dormant clients reactivate with a simple, relevant message.</p>
+<h4>Diversifying Your Referral Base</h4>
+<p>Never rely on one or two large referrals for the majority of income. Spreading across 20-30+ active clients means the churn of any individual has minimal impact. This is the same risk management principle as trading: diversification reduces volatility.</p>` },
+  { id:120, track:'affiliate', level:'Scale', emoji:'🏆', title:'Your 12-Month Affiliate Roadmap', duration:'20 min',
+    body:`<p>Everything you've learned in this track comes together in a clear, actionable 12-month plan. This is what success looks like when built intentionally and consistently.</p>
+<h4>Month 1-2: Foundation</h4>
+<p>Get your referral link. Complete all 20 Affiliate Academy lessons. Set up your primary channel (Telegram + one social). Create your first 10 pieces of content. Do warm outreach to 20-30 contacts. Target: 2-5 first referrals who deposit.</p>
+<h4>Month 3-4: Consistency</h4>
+<p>Post daily on your primary channel. Launch a second social platform. Onboard referrals carefully into The Profits Circle community. Start a simple blog or YouTube channel. Target: 8-15 active referrals, $400-$1,500/month earnings.</p>
+<h4>Month 5-6: Growth</h4>
+<p>Introduce paid advertising at £5-10/day on your best-performing organic content. Start building email list via website. Identify 2-3 best referrals to approach about becoming sub-affiliates. Target: 20-30 active referrals, $2,000-$5,000/month earnings.</p>
+<h4>Month 7-12: Scale</h4>
+<p>Implement automation for content scheduling. Scale ad spend as ROI becomes clear. Support and grow your sub-affiliate network. Hire a VA for content production. Target: 40-80+ active referrals, $8,000-$20,000+/month earnings.</p>
+<h4>Final Message</h4>
+<p>These numbers are achievable — but only with consistent, patient effort over the full 12 months. Most people quit in month 2 or 3 when results are still small. The compounding happens in months 6-12. Show up every day, create value, support your referrals, and the results will come. The Profits Circle team is here to support you every step of the way. Message us on Telegram anytime.</p>` },
+];
+
+const allLessons = [...traderLessons, ...affiliateLessons];
 let completedLessons = JSON.parse(localStorage.getItem('pc_completed') || '[]');
 let currentLessonId = null;
 
-function renderLessons() {
-  const byLevel = { Beginner: [], Intermediate: [], Advanced: [] };
-  lessons.forEach(l => byLevel[l.level].push(l));
-  ['Beginner','Intermediate','Advanced'].forEach(level => {
-    const gridId = level.toLowerCase() + 'Grid';
-    document.getElementById(gridId).innerHTML = byLevel[level].map(l => {
-      const done = completedLessons.includes(l.id);
-      return `
-        <div class="lesson-card" style="${done ? 'opacity:.7;' : ''}">
-          <div class="lesson-thumb" style="background:linear-gradient(135deg,var(--black4),var(--black3));">
-            <span style="font-size:2.75rem;">${l.emoji}</span>
-            ${done ? `<div style="position:absolute;top:.5rem;right:.5rem;background:var(--green);color:var(--black);font-size:.65rem;font-weight:800;padding:.2rem .5rem;border-radius:50px;">✓ DONE</div>` : ''}
+function switchTrack(track, btn) {
+  document.getElementById('traderTrack').style.display = track === 'trader' ? 'block' : 'none';
+  document.getElementById('affiliateTrack').style.display = track === 'affiliate' ? 'block' : 'none';
+  document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function levelStyle(level, track) {
+  if (track === 'affiliate') {
+    if (level === 'Foundation') return 'background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);';
+    if (level === 'Growth') return 'background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold2);';
+    if (level === 'Scale') return 'background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);';
+  } else {
+    if (level === 'Beginner') return 'background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);';
+    if (level === 'Intermediate') return 'background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold2);';
+    if (level === 'Advanced') return 'background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);';
+  }
+  return '';
+}
+
+function renderGrid(gridId, lessons) {
+  document.getElementById(gridId).innerHTML = lessons.map(l => {
+    const done = completedLessons.includes(l.id);
+    return `
+      <div class="lesson-card" style="${done?'opacity:.75;':''}">
+        <div class="lesson-thumb" style="background:linear-gradient(135deg,var(--black4),var(--black3));">
+          <span style="font-size:2.75rem;">${l.emoji}</span>
+          ${done ? `<div style="position:absolute;top:.5rem;right:.5rem;background:var(--green);color:var(--black);font-size:.65rem;font-weight:800;padding:.2rem .5rem;border-radius:50px;">✓ DONE</div>` : ''}
+        </div>
+        <div class="lesson-body">
+          <div class="flex items-center justify-between mb-1">
+            <span class="badge" style="font-size:.65rem;${levelStyle(l.level, l.track)}">${l.level}</span>
+            <span class="text-muted" style="font-size:.75rem;">⏱ ${l.duration}</span>
           </div>
-          <div class="lesson-body">
-            <div class="flex items-center justify-between mb-1">
-              <span class="badge" style="font-size:.65rem;${level==='Beginner'?'background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);':level==='Intermediate'?'background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold2);':'background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);'}">${level}</span>
-              <span class="text-muted" style="font-size:.75rem;">⏱ ${l.duration}</span>
-            </div>
-            <h4 style="margin-bottom:.4rem;font-size:.95rem;">${l.title}</h4>
-            <button class="btn btn-ghost btn-full btn-sm mt-1" onclick="openLesson(${l.id})" style="margin-top:.75rem;">
-              ${done ? '📖 Review' : '▶ Start Lesson'}
-            </button>
-          </div>
-        </div>`;
-    }).join('');
-  });
+          <h4 style="margin-bottom:.4rem;font-size:.93rem;">${l.title}</h4>
+          <button class="btn btn-ghost btn-full btn-sm" onclick="openLesson(${l.id})" style="margin-top:.75rem;">
+            ${done ? '📖 Review' : '▶ Start Lesson'}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderAllLessons() {
+  // Trader track
+  renderGrid('traderBeginnerGrid', traderLessons.filter(l => l.level === 'Beginner'));
+  renderGrid('traderIntermediateGrid', traderLessons.filter(l => l.level === 'Intermediate'));
+  renderGrid('traderAdvancedGrid', traderLessons.filter(l => l.level === 'Advanced'));
+  // Affiliate track
+  renderGrid('affFoundationGrid', affiliateLessons.filter(l => l.level === 'Foundation'));
+  renderGrid('affGrowthGrid', affiliateLessons.filter(l => l.level === 'Growth'));
+  renderGrid('affScaleGrid', affiliateLessons.filter(l => l.level === 'Scale'));
   updateProgress();
 }
 
 function updateProgress() {
-  const pct = Math.round(completedLessons.length / lessons.length * 100);
+  const pct = Math.round(completedLessons.length / allLessons.length * 100);
   document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `${completedLessons.length} of ${lessons.length} lessons completed`;
+  document.getElementById('progressLabel').textContent = `${completedLessons.length} of ${allLessons.length} lessons completed`;
 }
 
 function openLesson(id) {
-  const l = lessons.find(x => x.id === id);
+  const l = allLessons.find(x => x.id === id);
+  if (!l) return;
   currentLessonId = id;
   document.getElementById('lessonModalTitle').textContent = l.emoji + ' ' + l.title;
-  document.getElementById('lessonModalMeta').textContent = l.level + ' · ' + l.duration;
+  document.getElementById('lessonModalMeta').textContent = l.level + ' · ' + l.duration + (l.track === 'affiliate' ? ' · Affiliate Track' : ' · Trader Track');
   document.getElementById('lessonModalBody').innerHTML = l.body;
   const btn = document.getElementById('lessonCompleteBtn');
   if (completedLessons.includes(id)) {
-    btn.textContent = '✓ Completed';
-    btn.classList.remove('btn-gold');
-    btn.classList.add('btn-ghost');
-    btn.disabled = true;
+    btn.textContent = '✓ Completed'; btn.classList.replace('btn-gold','btn-ghost'); btn.disabled = true;
   } else {
-    btn.textContent = 'Mark as Complete ✓';
-    btn.classList.add('btn-gold');
-    btn.classList.remove('btn-ghost');
-    btn.disabled = false;
+    btn.textContent = 'Mark as Complete ✓'; btn.classList.replace('btn-ghost','btn-gold'); btn.disabled = false;
   }
   PC.openModal('lessonModal');
 }
@@ -309,28 +632,16 @@ function markComplete() {
     completedLessons.push(currentLessonId);
     localStorage.setItem('pc_completed', JSON.stringify(completedLessons));
     PC.toast('Lesson complete! 🎉', 'success');
-    renderLessons();
+    renderAllLessons();
     PC.closeModal('lessonModal');
   }
 }
 
 if (PC.isLoggedIn()) {
-  renderLessons();
+  renderAllLessons();
 } else {
   document.getElementById('lockedState').classList.remove('hidden');
   document.getElementById('academyMain').classList.add('hidden');
-  // Show 3 free preview lessons
-  const freeEl = document.getElementById('freePreview');
-  freeEl.innerHTML = `<h3 style="margin-bottom:1rem;" class="text-center">Free Preview Lessons</h3><div class="grid-3">` +
-    lessons.slice(0,3).map(l => `
-      <div class="lesson-card">
-        <div class="lesson-thumb"><span style="font-size:2.5rem;">${l.emoji}</span></div>
-        <div class="lesson-body">
-          <span class="badge badge-free" style="font-size:.65rem;margin-bottom:.5rem;">Free</span>
-          <h4 style="margin-bottom:.4rem;font-size:.9rem;">${l.title}</h4>
-          <a href="./login.html" class="btn btn-gold btn-full btn-sm" style="margin-top:.75rem;">Log In to Access</a>
-        </div>
-      </div>`).join('') + `</div>`;
 }
 </script>
 </body>

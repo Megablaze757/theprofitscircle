@@ -146,30 +146,14 @@ const PC = {
   // --- JOURNAL ---
   getJournal() {
     try { const r = localStorage.getItem('pc_journal'); if(r) return JSON.parse(r); } catch {}
-    return [
-      { id: 1, date: '2025-02-22', dir: 'BUY', entry: 3248.50, exit: 3265.00, lots: 1.0, pnl: 1650, result: 'win', notes: 'Strong support at 3240, clean breakout' },
-      { id: 2, date: '2025-02-21', dir: 'SELL', entry: 3260.00, exit: 3235.00, lots: 0.5, pnl: 1250, result: 'win', notes: 'Resistance held, NFP anticipation' },
-      { id: 3, date: '2025-02-20', dir: 'BUY', entry: 3235.80, exit: 3224.00, lots: 1.0, pnl: -1180, result: 'loss', notes: 'False breakout — stop hit' },
-      { id: 4, date: '2025-02-19', dir: 'SELL', entry: 3285.00, exit: 3245.00, lots: 0.5, pnl: 2000, result: 'win', notes: 'Overextended rally, perfect reversal' },
-      { id: 5, date: '2025-02-18', dir: 'BUY', entry: 3198.00, exit: 3235.00, lots: 1.0, pnl: 3700, result: 'win', notes: 'Weekly low bounce, gold demand zone' },
-      { id: 6, date: '2025-02-14', dir: 'BUY', entry: 3185.50, exit: 3178.00, lots: 0.5, pnl: -750, result: 'loss', notes: 'Cut early, news event spike' },
-      { id: 7, date: '2025-02-12', dir: 'SELL', entry: 3245.00, exit: 3215.00, lots: 1.0, pnl: 3000, result: 'win', notes: 'Perfect H&S pattern on 4H' },
-    ];
+    return []; // No dummy data — users add their own trades
   },
   saveJournal(entries) { localStorage.setItem('pc_journal', JSON.stringify(entries)); },
 
   // --- SIGNALS ---
   getSignals() {
     try { const r = localStorage.getItem('pc_signals'); if(r) return JSON.parse(r); } catch {}
-    const defaults = [
-      { id:1, date:'2025-02-22', dir:'BUY', entry:3248.50, tp:3285.00, sl:3228.00, status:'active', result:'', pnl:null, notes:'Strong demand zone' },
-      { id:2, date:'2025-02-22', dir:'BUY', entry:3235.00, tp:3265.00, sl:3218.00, status:'active', result:'', pnl:null, notes:'' },
-      { id:3, date:'2025-02-21', dir:'SELL', entry:3260.00, tp:3218.00, sl:3276.00, status:'closed', result:'win', pnl:1240, notes:'Resistance held' },
-      { id:4, date:'2025-02-18', dir:'BUY', entry:3198.00, tp:3235.00, sl:3182.00, status:'closed', result:'win', pnl:3700, notes:'Weekly low bounce' },
-      { id:5, date:'2025-02-20', dir:'BUY', entry:3235.80, tp:3268.00, sl:3224.00, status:'closed', result:'loss', pnl:-1180, notes:'False breakout' },
-    ];
-    localStorage.setItem('pc_signals', JSON.stringify(defaults));
-    return defaults;
+    return []; // No dummy data — admin adds real signals
   },
   saveSignals(s) { localStorage.setItem('pc_signals', JSON.stringify(s)); },
 };
