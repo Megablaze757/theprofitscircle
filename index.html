@@ -4,8 +4,72 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Profits Circle - Ultimate Trading Platform</title>
-    <script type="module" crossorigin src="./assets/index-DC7JZvjs.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: '#d4a843',
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- App CSS (custom classes) -->
     <link rel="stylesheet" crossorigin href="./assets/index-CW-EeghY.css">
+
+    <!-- Extra fixes -->
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+      }
+
+      /* Fix root */
+      #root { max-width: 100% !important; padding: 0 !important; text-align: left !important; }
+
+      /* Tailwind has trouble with custom var colors in dynamic classes, patch them */
+      .text-gold { color: var(--gold) !important; }
+      .text-gold2 { color: var(--gold2) !important; }
+      .text-green { color: var(--green) !important; }
+      .text-red { color: var(--red) !important; }
+      .text-blue { color: var(--blue) !important; }
+      .text-muted { color: var(--white3) !important; }
+      .text-dim { color: var(--white2) !important; }
+      .bg-gold { background-color: var(--gold) !important; }
+      .border-gold\/30 { border-color: rgba(212,168,67,0.3) !important; }
+      .border-gold\/50 { border-color: rgba(212,168,67,0.5) !important; }
+      .hover\:bg-gold\/10:hover { background-color: rgba(212,168,67,0.1) !important; }
+      .group:hover .group-hover\:bg-gold\/20 { background-color: rgba(212,168,67,0.2) !important; }
+      .bg-green\/20 { background-color: rgba(0,229,160,0.2) !important; }
+      .bg-red\/20 { background-color: rgba(255,71,87,0.2) !important; }
+      .text-green { color: var(--green) !important; }
+      .text-red { color: var(--red) !important; }
+      .border-green\/30 { border-color: rgba(0,229,160,0.3) !important; }
+      .border-red\/30 { border-color: rgba(255,71,87,0.3) !important; }
+      .scale-105 { transform: scale(1.05); }
+      .from-\[\#e8c068\] { --tw-gradient-from: #e8c068 var(--tw-gradient-from-position); --tw-gradient-to: rgba(232,192,104,0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+      .to-\[\#d4a843\] { --tw-gradient-to: #d4a843 var(--tw-gradient-to-position); }
+      .bg-\[\#00e5a0\] { background-color: #00e5a0 !important; }
+      .min-h-\[calc\(100vh-70px\)\] { min-height: calc(100vh - 70px); }
+    </style>
+
+    <!-- GitHub Pages: handle /admin URL -->
+    <script>
+      (function() {
+        var path = window.location.pathname;
+        if (/\/admin\/?$/.test(path)) {
+          var base = path.replace(/\/admin\/?$/, '/');
+          window.history.replaceState(null, '', base + '#admin-access');
+        }
+      })();
+    </script>
+
+    <script type="module" crossorigin src="./assets/index-DC7JZvjs.js"></script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // GitHub Pages SPA redirect
+      // Converts /admin -> /#admin-access, anything else -> /
+      (function() {
+        var path = window.location.pathname;
+        var repo = ''; // Change to '/your-repo-name' if deploying to a subdirectory
+        
+        if (/\/admin\/?$/.test(path)) {
+          window.location.replace(
+            window.location.origin + repo + '/#admin-access'
+          );
+        } else {
+          // For any other unknown route, redirect to home
+          window.location.replace(
+            window.location.origin + repo + '/'
+          );
+        }
+      })();
+    </script>
+    <title>The Profits Circle</title>
+  </head>
+  <body></body>
+</html>
