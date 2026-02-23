@@ -33,6 +33,9 @@
     .plan-badge-free { background: var(--green-dim); border: 1px solid var(--green-border); color: var(--green); }
     .plan-badge-paid { background: var(--red-dim); border: 1px solid var(--red-border); color: var(--red); }
     .plan-badge-vip { background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold); }
+    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--white3); border-radius: 50%; border-top-color: var(--gold); animation: spin 1s ease-in-out infinite; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-boundary { padding: 2rem; text-align: center; color: var(--red); background: var(--red-dim); border-radius: var(--radius-lg); margin: 1rem 0; }
   </style>
 </head>
 <body>
@@ -228,14 +231,14 @@
         <div class="form-row-2">
           <div class="form-group">
             <label class="form-label">Referral Code *</label>
-            <input type="text" class="form-input" id="aff_code" placeholder="e.g. SARAH10" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" />
+            <input type="text" class="form-input" id="aff_code" placeholder="e.g. SARAH10" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase(); updateAffPreview();" />
           </div>
           <div class="form-group">
             <label class="form-label">Initial Earnings ($)</label>
             <input type="number" class="form-input" id="aff_earnings" placeholder="0" value="0" />
           </div>
         </div>
-        <div style="background:var(--black4);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;" id="affLinkPreview" style="display:none;">
+        <div style="background:var(--black4);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;" id="affLinkPreview">
           <div style="font-size:.75rem;color:var(--white3);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;">Referral Link Preview</div>
           <div class="ref-link-box" id="affLinkPreviewUrl" onclick="copyText(this.textContent)"></div>
           <div style="font-size:.72rem;color:var(--white3);margin-top:.35rem;">Click to copy</div>
@@ -339,25 +342,88 @@
 
 <script src="assets/app.js"></script>
 <script>
-// Auth guard
+// ============================================
+// FIXED AUTH GUARD - PREVENTS REDIRECT LOOPS
+// ============================================
 (function() {
-  const u = PC.getUser();
-  if (!u || u.role !== 'admin') {
-    sessionStorage.setItem('pc_redirect', '/admin');
-    window.location.href = '/login';
+  // Check if we're already on the login page to prevent loops
+  if (window.location.pathname.includes('/login')) {
+    return; // Don't run auth guard on login page
+  }
+  
+  try {
+    // Add a small delay to ensure PC object is loaded
+    setTimeout(function() {
+      // Check if PC object exists
+      if (typeof PC === 'undefined') {
+        console.error('PC object not loaded yet');
+        return;
+      }
+      
+      const u = PC.getUser();
+      
+      // Check if user exists and is admin
+      if (!u) {
+        console.log('No user found, redirecting to login');
+        // Store the redirect URL
+        sessionStorage.setItem('pc_redirect', window.location.pathname);
+        window.location.href = '/login';
+        return;
+      }
+      
+      if (u.role !== 'admin') {
+        console.log('User is not admin, redirecting to home');
+        PC.toast('Admin access required', 'error');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+        return;
+      }
+      
+      // User is admin, update UI
+      const userLabel = document.getElementById('adminUserLabel');
+      if (userLabel) {
+        userLabel.textContent = u.name || 'Admin';
+      }
+      
+      // Load initial data
+      PC.fetchUsers().catch(() => {
+        console.log('Using local user data');
+      }).finally(() => {
+        renderDashboard();
+        renderUserTable();
+        renderAffiliates();
+        renderSignalTable();
+      });
+      
+    }, 100); // Small delay to ensure PC is loaded
+    
+  } catch (error) {
+    console.error('Auth error:', error);
+    // Don't redirect on error to prevent loops
   }
 })();
 
-const adminUser = PC.getUser();
-if (adminUser) document.getElementById('adminUserLabel').textContent = adminUser.name;
-document.getElementById('as_date').valueAsDate = new Date();
+// Make functions globally available
+window.showSection = showSection;
+window.copyText = copyText;
+window.openEditUser = openEditUser;
+window.saveEditUser = saveEditUser;
+window.toggleSuspend = toggleSuspend;
+window.deleteUser = deleteUser;
+window.addUser = addUser;
+window.updateEarnings = updateEarnings;
+window.removeAffiliate = removeAffiliate;
+window.prefillAffCode = prefillAffCode;
+window.updateAffPreview = updateAffPreview;
+window.makeAffiliate = makeAffiliate;
+window.addSignal = addSignal;
+window.deleteSignal = deleteSignal;
 
+// Global variables
 const SITE_BASE = window.location.origin + '/';
 
-// Load users from GitHub on page load
-PC.fetchUsers().then(() => { renderDashboard(); }).catch(() => { renderDashboard(); });
-
-// ---- HELPERS ----
+// ---- HELPER FUNCTIONS ----
 function planBadge(plan) {
   if (!plan || plan === 'free') return `<span class="badge plan-badge-free" style="font-size:.65rem;">Free</span>`;
   if (plan === 'paid') return `<span class="badge plan-badge-paid" style="font-size:.65rem;">Paid $45</span>`;
@@ -366,326 +432,545 @@ function planBadge(plan) {
 }
 
 function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => PC.toast('Copied! ✓', 'success'));
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    PC.toast('Copied! ✓', 'success');
+  }).catch(() => {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    PC.toast('Copied! ✓', 'success');
+  });
 }
 
-// ---- SECTION NAV ----
+// ---- SECTION NAVIGATION ----
 function showSection(id, btn) {
+  // Hide all sections
   document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.admin-nav-link').forEach(b => b.classList.remove('active'));
+  
+  // Show selected section
   const sec = document.getElementById('section-' + id);
   if (sec) sec.classList.add('active');
-  if (btn) btn.classList.add('active');
-  else document.querySelectorAll(`.admin-nav-link[data-section="${id}"]`).forEach(b => b.classList.add('active'));
-  // Refresh
-  if (id === 'dashboard') renderDashboard();
-  if (id === 'users') renderUserTable();
-  if (id === 'affiliates') renderAffiliates();
-  if (id === 'signals') renderSignalTable();
-  if (id === 'addaffiliate') populateAffUserSelect();
+  
+  // Update sidebar buttons
+  document.querySelectorAll('.admin-nav-link').forEach(b => b.classList.remove('active'));
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll(`.admin-nav-link[data-section="${id}"]`).forEach(b => b.classList.add('active'));
+  }
+  
+  // Refresh data based on section
+  try {
+    if (id === 'dashboard') renderDashboard();
+    if (id === 'users') renderUserTable();
+    if (id === 'affiliates') renderAffiliates();
+    if (id === 'signals') renderSignalTable();
+    if (id === 'addaffiliate') populateAffUserSelect();
+  } catch (error) {
+    console.error('Error rendering section:', error);
+  }
 }
 
 // ---- DASHBOARD ----
 function renderDashboard() {
-  const users = PC.getUsers();
-  const signals = PC.getSignals();
-  const affiliates = users.filter(u => u.affiliate);
-  const vipCount = users.filter(u => u.plan === 'vip').length;
-  const paidCount = users.filter(u => u.plan === 'paid').length;
-  const activeSignals = signals.filter(s => s.status === 'active').length;
-  const closedWins = signals.filter(s => s.result === 'win').length;
-  const totalClosed = signals.filter(s => s.status === 'closed').length;
-  const wr = totalClosed ? Math.round(closedWins/totalClosed*100) : 0;
-  const totalAffEarnings = affiliates.reduce((a,u) => a + (u.earnings||0), 0);
+  try {
+    const users = PC.getUsers() || [];
+    const signals = PC.getSignals() || [];
+    const affiliates = users.filter(u => u.affiliate);
+    const vipCount = users.filter(u => u.plan === 'vip').length;
+    const paidCount = users.filter(u => u.plan === 'paid').length;
+    const activeSignals = signals.filter(s => s.status === 'active').length;
+    const closedWins = signals.filter(s => s.result === 'win').length;
+    const totalClosed = signals.filter(s => s.status === 'closed').length;
+    const wr = totalClosed ? Math.round(closedWins/totalClosed*100) : 0;
+    const totalAffEarnings = affiliates.reduce((a,u) => a + (u.earnings||0), 0);
 
-  document.getElementById('dashStats').innerHTML = `
-    <div class="stat-card"><div class="stat-num">${users.length}</div><div class="stat-label">Total Users</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:var(--gold2);">${vipCount}</div><div class="stat-label">VIP Members</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:var(--red);">${paidCount}</div><div class="stat-label">Paid Members</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:var(--green);">${wr}%</div><div class="stat-label">Win Rate</div></div>
-  `;
+    document.getElementById('dashStats').innerHTML = `
+      <div class="stat-card"><div class="stat-num">${users.length}</div><div class="stat-label">Total Users</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--gold2);">${vipCount}</div><div class="stat-label">VIP Members</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--red);">${paidCount}</div><div class="stat-label">Paid Members</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--green);">${wr}%</div><div class="stat-label">Win Rate</div></div>
+    `;
 
-  document.getElementById('recentUsers').innerHTML = users.slice(-5).reverse().map(u => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;background:var(--black4);border-radius:10px;gap:.5rem;flex-wrap:wrap;">
-      <div>
-        <div style="font-size:.85rem;font-weight:600;">${u.name}</div>
-        <div style="font-size:.72rem;color:var(--white3);">${u.email}</div>
-      </div>
-      <div style="display:flex;gap:.3rem;align-items:center;flex-shrink:0;">${planBadge(u.plan)}</div>
-    </div>`).join('');
+    const recentUsers = document.getElementById('recentUsers');
+    if (recentUsers) {
+      recentUsers.innerHTML = users.slice(-5).reverse().map(u => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;background:var(--black4);border-radius:10px;gap:.5rem;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:.85rem;font-weight:600;">${u.name || ''}</div>
+            <div style="font-size:.72rem;color:var(--white3);">${u.email || ''}</div>
+          </div>
+          <div style="display:flex;gap:.3rem;align-items:center;flex-shrink:0;">${planBadge(u.plan)}</div>
+        </div>`).join('');
+    }
 
-  document.getElementById('topAffiliates').innerHTML = affiliates.length ? affiliates.sort((a,b) => (b.earnings||0)-(a.earnings||0)).slice(0,5).map(u => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;background:var(--black4);border-radius:10px;gap:.5rem;flex-wrap:wrap;">
-      <div>
-        <div style="font-size:.85rem;font-weight:600;">${u.name}</div>
-        <div class="aff-code-box" style="padding:.15rem .6rem;font-size:.72rem;cursor:default;" title="Referral code">${u.referralCode || '—'}</div>
-      </div>
-      <div style="font-weight:700;color:var(--green);font-size:.9rem;">$${(u.earnings||0).toLocaleString()}</div>
-    </div>`).join('') : `<p class="text-muted" style="font-size:.85rem;">No affiliates yet.</p>`;
+    const topAffiliates = document.getElementById('topAffiliates');
+    if (topAffiliates) {
+      topAffiliates.innerHTML = affiliates.length ? affiliates.sort((a,b) => (b.earnings||0)-(a.earnings||0)).slice(0,5).map(u => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;background:var(--black4);border-radius:10px;gap:.5rem;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:.85rem;font-weight:600;">${u.name || ''}</div>
+            <div class="aff-code-box" style="padding:.15rem .6rem;font-size:.72rem;cursor:default;" title="Referral code">${u.referralCode || '—'}</div>
+          </div>
+          <div style="font-weight:700;color:var(--green);font-size:.9rem;">$${(u.earnings||0).toLocaleString()}</div>
+        </div>`).join('') : `<p class="text-muted" style="font-size:.85rem;">No affiliates yet.</p>`;
+    }
+  } catch (error) {
+    console.error('Dashboard render error:', error);
+  }
 }
 
 // ---- USERS ----
 function renderUserTable() {
-  const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
-  const f = document.getElementById('userFilter')?.value || 'all';
-  let users = PC.getUsers();
-  if (q) users = users.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
-  if (f === 'vip') users = users.filter(u => u.plan === 'vip');
-  if (f === 'paid') users = users.filter(u => u.plan === 'paid');
-  if (f === 'free') users = users.filter(u => !u.plan || u.plan === 'free');
-  if (f === 'affiliate') users = users.filter(u => u.affiliate);
-  if (f === 'suspended') users = users.filter(u => u.status === 'suspended');
+  try {
+    const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
+    const f = document.getElementById('userFilter')?.value || 'all';
+    let users = PC.getUsers() || [];
+    
+    if (q) users = users.filter(u => (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q));
+    if (f === 'vip') users = users.filter(u => u.plan === 'vip');
+    if (f === 'paid') users = users.filter(u => u.plan === 'paid');
+    if (f === 'free') users = users.filter(u => !u.plan || u.plan === 'free');
+    if (f === 'affiliate') users = users.filter(u => u.affiliate);
+    if (f === 'suspended') users = users.filter(u => u.status === 'suspended');
 
-  document.getElementById('userTableBody').innerHTML = users.map(u => `
-    <tr>
-      <td style="font-weight:600;color:var(--white);">${u.name}</td>
-      <td style="color:var(--white2);font-size:.82rem;">${u.email}</td>
-      <td>${planBadge(u.plan)}</td>
-      <td>${u.affiliate ? `<span class="aff-code-box" style="padding:.2rem .6rem;font-size:.72rem;" onclick="copyText('${SITE_BASE}login?ref=${u.referralCode}')">${u.referralCode}</span>` : '<span style="color:var(--white3);font-size:.82rem;">—</span>'}</td>
-      <td><span style="font-size:.8rem;font-weight:700;color:${u.status==='active'?'var(--green)':'var(--red)'};">${u.status}</span></td>
-      <td style="font-size:.82rem;color:var(--white3);">${u.referredBy || '—'}</td>
-      <td style="font-size:.78rem;color:var(--white3);">${u.joined||'—'}</td>
-      <td>
-        <div style="display:flex;gap:.35rem;flex-wrap:nowrap;">
-          <button class="btn btn-sm btn-ghost" onclick="openEditUser(${u.id})" style="min-height:30px;font-size:.72rem;">Edit</button>
-          ${u.role !== 'admin' ? `
-          <button class="btn btn-sm" onclick="toggleSuspend(${u.id})" style="min-height:30px;font-size:.72rem;${u.status==='suspended'?'background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);':'background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);'}">${u.status==='suspended'?'Restore':'Suspend'}</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})" style="min-height:30px;font-size:.72rem;">✕</button>` : ''}
-        </div>
-      </td>
-    </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--white3);padding:2rem;">No users found</td></tr>`;
+    const tbody = document.getElementById('userTableBody');
+    if (tbody) {
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td style="font-weight:600;color:var(--white);">${u.name || ''}</td>
+          <td style="color:var(--white2);font-size:.82rem;">${u.email || ''}</td>
+          <td>${planBadge(u.plan)}</td>
+          <td>${u.affiliate ? `<span class="aff-code-box" style="padding:.2rem .6rem;font-size:.72rem;" onclick="copyText('${SITE_BASE}login?ref=${u.referralCode || ''}')">${u.referralCode || ''}</span>` : '<span style="color:var(--white3);font-size:.82rem;">—</span>'}</td>
+          <td><span style="font-size:.8rem;font-weight:700;color:${u.status==='active'?'var(--green)':'var(--red)'};">${u.status || 'active'}</span></td>
+          <td style="font-size:.82rem;color:var(--white3);">${u.referredBy || '—'}</td>
+          <td style="font-size:.78rem;color:var(--white3);">${u.joined || '—'}</td>
+          <td>
+            <div style="display:flex;gap:.35rem;flex-wrap:nowrap;">
+              <button class="btn btn-sm btn-ghost" onclick="openEditUser(${u.id})" style="min-height:30px;font-size:.72rem;">Edit</button>
+              ${u.role !== 'admin' ? `
+              <button class="btn btn-sm" onclick="toggleSuspend(${u.id})" style="min-height:30px;font-size:.72rem;${u.status==='suspended'?'background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);':'background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);'}">${u.status==='suspended'?'Restore':'Suspend'}</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})" style="min-height:30px;font-size:.72rem;">✕</button>` : ''}
+            </div>
+          </td>
+        </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--white3);padding:2rem;">No users found</td></tr>`;
+    }
+  } catch (error) {
+    console.error('User table render error:', error);
+  }
 }
 
 function openEditUser(id) {
-  const u = PC.getUsers().find(x => x.id === id);
-  if (!u) return;
-  document.getElementById('eu_id').value = u.id;
-  document.getElementById('eu_name').value = u.name;
-  document.getElementById('eu_email').value = u.email;
-  document.getElementById('eu_plan').value = u.plan || 'free';
-  document.getElementById('eu_status').value = u.status;
-  document.getElementById('eu_affiliate').value = String(u.affiliate || false);
-  document.getElementById('eu_refcode').value = u.referralCode || '';
-  PC.openModal('editUserModal');
+  try {
+    const u = PC.getUsers().find(x => x.id === id);
+    if (!u) return;
+    
+    document.getElementById('eu_id').value = u.id;
+    document.getElementById('eu_name').value = u.name || '';
+    document.getElementById('eu_email').value = u.email || '';
+    document.getElementById('eu_plan').value = u.plan || 'free';
+    document.getElementById('eu_status').value = u.status || 'active';
+    document.getElementById('eu_affiliate').value = String(u.affiliate || false);
+    document.getElementById('eu_refcode').value = u.referralCode || '';
+    
+    PC.openModal('editUserModal');
+  } catch (error) {
+    console.error('Open edit user error:', error);
+  }
 }
 
 function saveEditUser() {
-  const id = parseInt(document.getElementById('eu_id').value);
-  const users = PC.getUsers();
-  const idx = users.findIndex(u => u.id === id);
-  if (idx < 0) return;
-  const plan = document.getElementById('eu_plan').value;
-  users[idx].name = document.getElementById('eu_name').value.trim();
-  users[idx].email = document.getElementById('eu_email').value.trim();
-  users[idx].plan = plan;
-  users[idx].vip = (plan === 'vip');
-  users[idx].status = document.getElementById('eu_status').value;
-  users[idx].affiliate = document.getElementById('eu_affiliate').value === 'true';
-  users[idx].referralCode = document.getElementById('eu_refcode').value.toUpperCase().trim();
-  PC.saveUsers(users);
-  PC.closeModal('editUserModal');
-  PC.toast('User updated ✓', 'success');
-  renderUserTable();
+  try {
+    const id = parseInt(document.getElementById('eu_id').value);
+    const users = PC.getUsers();
+    const idx = users.findIndex(u => u.id === id);
+    if (idx < 0) return;
+    
+    const plan = document.getElementById('eu_plan').value;
+    users[idx].name = document.getElementById('eu_name').value.trim();
+    users[idx].email = document.getElementById('eu_email').value.trim();
+    users[idx].plan = plan;
+    users[idx].vip = (plan === 'vip');
+    users[idx].status = document.getElementById('eu_status').value;
+    users[idx].affiliate = document.getElementById('eu_affiliate').value === 'true';
+    users[idx].referralCode = document.getElementById('eu_refcode').value.toUpperCase().trim();
+    
+    PC.saveUsers(users);
+    PC.closeModal('editUserModal');
+    PC.toast('User updated ✓', 'success');
+    renderUserTable();
+  } catch (error) {
+    console.error('Save edit error:', error);
+    PC.toast('Error saving user', 'error');
+  }
 }
 
 function toggleSuspend(id) {
-  const users = PC.getUsers();
-  const u = users.find(x => x.id === id);
-  if (!u || u.role === 'admin') return;
-  u.status = u.status === 'suspended' ? 'active' : 'suspended';
-  PC.saveUsers(users);
-  PC.toast(`${u.name} ${u.status === 'suspended' ? 'suspended' : 'reactivated'}`, u.status === 'suspended' ? 'error' : 'success');
-  renderUserTable();
+  try {
+    const users = PC.getUsers();
+    const u = users.find(x => x.id === id);
+    if (!u || u.role === 'admin') return;
+    
+    u.status = u.status === 'suspended' ? 'active' : 'suspended';
+    PC.saveUsers(users);
+    PC.toast(`${u.name} ${u.status === 'suspended' ? 'suspended' : 'reactivated'}`, u.status === 'suspended' ? 'error' : 'success');
+    renderUserTable();
+  } catch (error) {
+    console.error('Toggle suspend error:', error);
+  }
 }
 
 function deleteUser(id) {
-  const u = PC.getUsers().find(x => x.id === id);
-  if (!u || u.role === 'admin') return;
-  if (!confirm(`Delete "${u.name}"? This cannot be undone.`)) return;
-  PC.saveUsers(PC.getUsers().filter(x => x.id !== id));
-  PC.toast(`${u.name} deleted`);
-  renderUserTable();
+  try {
+    const u = PC.getUsers().find(x => x.id === id);
+    if (!u || u.role === 'admin') return;
+    if (!confirm(`Delete "${u.name}"? This cannot be undone.`)) return;
+    
+    PC.saveUsers(PC.getUsers().filter(x => x.id !== id));
+    PC.toast(`${u.name} deleted`);
+    renderUserTable();
+  } catch (error) {
+    console.error('Delete user error:', error);
+  }
 }
 
 async function addUser() {
-  const btn = document.querySelector('#section-adduser .btn-gold');
-  const name = document.getElementById('au_name').value.trim();
-  const email = document.getElementById('au_email').value.trim();
-  const password = document.getElementById('au_password').value;
-  const role = document.getElementById('au_role').value;
-  const plan = document.getElementById('au_plan').value;
-  const status = document.getElementById('au_status').value;
-  const affiliate = document.getElementById('au_affiliate').value === 'true';
-  const referralCode = document.getElementById('au_refcode').value.toUpperCase().trim();
-  const referredBy = document.getElementById('au_referredby').value.toUpperCase().trim();
-  if (!name || !email || !password) { PC.toast('Please fill in required fields', 'error'); return; }
-  if (password.length < 6) { PC.toast('Password must be at least 6 characters', 'error'); return; }
-  if (PC.findUser(email)) { PC.toast('Email already exists', 'error'); return; }
-  if (affiliate && referralCode && PC.findUserByReferral(referralCode)) { PC.toast('Referral code already taken', 'error'); return; }
-  btn.disabled = true; btn.textContent = 'Creating…';
-  const passwordHash = await PC.hashPassword(password);
-  const users = PC.getUsers();
-  users.push({ id: Date.now(), name, email, passwordHash, role, plan, vip: plan === 'vip', status, joined: new Date().toISOString().slice(0,10), affiliate, referralCode: affiliate ? referralCode : '', referredBy, earnings: 0 });
-  PC.saveUsers(users);
-  btn.disabled = false; btn.textContent = 'Create User';
-  PC.toast(`✓ "${name}" created — download users.json to sync`, 'success');
-  ['au_name','au_email','au_password','au_refcode','au_referredby'].forEach(id => document.getElementById(id).value = '');
-  showSection('users');
+  try {
+    const btn = document.querySelector('#section-adduser .btn-gold');
+    const name = document.getElementById('au_name').value.trim();
+    const email = document.getElementById('au_email').value.trim();
+    const password = document.getElementById('au_password').value;
+    const role = document.getElementById('au_role').value;
+    const plan = document.getElementById('au_plan').value;
+    const status = document.getElementById('au_status').value;
+    const affiliate = document.getElementById('au_affiliate').value === 'true';
+    const referralCode = document.getElementById('au_refcode').value.toUpperCase().trim();
+    const referredBy = document.getElementById('au_referredby').value.toUpperCase().trim();
+    
+    if (!name || !email || !password) { 
+      PC.toast('Please fill in required fields', 'error'); 
+      return; 
+    }
+    if (password.length < 6) { 
+      PC.toast('Password must be at least 6 characters', 'error'); 
+      return; 
+    }
+    if (PC.findUser(email)) { 
+      PC.toast('Email already exists', 'error'); 
+      return; 
+    }
+    if (affiliate && referralCode && PC.findUserByReferral(referralCode)) { 
+      PC.toast('Referral code already taken', 'error'); 
+      return; 
+    }
+    
+    btn.disabled = true; 
+    btn.innerHTML = '<span class="loading-spinner"></span>Creating...';
+    
+    const passwordHash = await PC.hashPassword(password);
+    const users = PC.getUsers();
+    users.push({ 
+      id: Date.now(), 
+      name, 
+      email, 
+      passwordHash, 
+      role, 
+      plan, 
+      vip: plan === 'vip', 
+      status, 
+      joined: new Date().toISOString().slice(0,10), 
+      affiliate, 
+      referralCode: affiliate ? referralCode : '', 
+      referredBy, 
+      earnings: 0 
+    });
+    
+    PC.saveUsers(users);
+    
+    btn.disabled = false; 
+    btn.innerHTML = 'Create User';
+    PC.toast(`✓ "${name}" created — download users.json to sync`, 'success');
+    
+    ['au_name','au_email','au_password','au_refcode','au_referredby'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    
+    showSection('users');
+  } catch (error) {
+    console.error('Add user error:', error);
+    PC.toast('Error creating user', 'error');
+  }
 }
 
 // ---- AFFILIATES ----
 function renderAffiliates() {
-  const users = PC.getUsers();
-  const affiliates = users.filter(u => u.affiliate);
-  const referred = users.filter(u => u.referredBy);
-  const totalEarnings = affiliates.reduce((a,u) => a + (u.earnings||0), 0);
+  try {
+    const users = PC.getUsers() || [];
+    const affiliates = users.filter(u => u.affiliate);
+    const referred = users.filter(u => u.referredBy);
+    const totalEarnings = affiliates.reduce((a,u) => a + (u.earnings||0), 0);
 
-  document.getElementById('affStats').innerHTML = `
-    <div class="stat-card"><div class="stat-num" style="color:var(--gold2);">${affiliates.length}</div><div class="stat-label">Active Affiliates</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:var(--green);">${referred.length}</div><div class="stat-label">Total Referrals</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:var(--green);">$${totalEarnings.toLocaleString()}</div><div class="stat-label">Total Paid Out</div></div>
-    <div class="stat-card"><div class="stat-num">${affiliates.length ? Math.round(referred.length/affiliates.length*10)/10 : 0}</div><div class="stat-label">Avg. Referrals</div></div>
-  `;
+    const affStats = document.getElementById('affStats');
+    if (affStats) {
+      affStats.innerHTML = `
+        <div class="stat-card"><div class="stat-num" style="color:var(--gold2);">${affiliates.length}</div><div class="stat-label">Active Affiliates</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--green);">${referred.length}</div><div class="stat-label">Total Referrals</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--green);">$${totalEarnings.toLocaleString()}</div><div class="stat-label">Total Paid Out</div></div>
+        <div class="stat-card"><div class="stat-num">${affiliates.length ? Math.round(referred.length/affiliates.length*10)/10 : 0}</div><div class="stat-label">Avg. Referrals</div></div>
+      `;
+    }
 
-  const refCountMap = {};
-  referred.forEach(u => { if(u.referredBy) refCountMap[u.referredBy] = (refCountMap[u.referredBy]||0)+1; });
+    const refCountMap = {};
+    referred.forEach(u => { if(u.referredBy) refCountMap[u.referredBy] = (refCountMap[u.referredBy]||0)+1; });
 
-  document.getElementById('affiliateTableBody').innerHTML = affiliates.map(u => {
-    const link = SITE_BASE + 'login?ref=' + u.referralCode;
-    const refCount = refCountMap[u.referralCode] || 0;
-    return `<tr>
-      <td style="font-weight:600;color:var(--white);">${u.name}<br><span style="font-size:.75rem;color:var(--white3);">${u.email}</span></td>
-      <td><div class="aff-code-box" onclick="copyText('${u.referralCode}')" title="Click to copy code">${u.referralCode || '—'}</div></td>
-      <td><div class="ref-link-box" onclick="copyText('${link}')" title="Click to copy link">${link}</div></td>
-      <td style="font-weight:700;">${refCount}</td>
-      <td style="font-weight:700;color:var(--green);">$${(u.earnings||0).toLocaleString()}</td>
-      <td><span style="font-size:.8rem;font-weight:700;color:${u.status==='active'?'var(--green)':'var(--red)'};">${u.status}</span></td>
-      <td>
-        <div style="display:flex;gap:.35rem;flex-wrap:nowrap;">
-          <button class="btn btn-sm btn-ghost" onclick="openEditUser(${u.id})" style="min-height:30px;font-size:.72rem;">Edit</button>
-          <button class="btn btn-sm" onclick="updateEarnings(${u.id})" style="min-height:30px;font-size:.72rem;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);">+ Earnings</button>
-          <button class="btn btn-sm btn-danger" onclick="removeAffiliate(${u.id})" style="min-height:30px;font-size:.72rem;">Remove</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('') || `<tr><td colspan="7" style="text-align:center;color:var(--white3);padding:2rem;">No affiliates yet. <button class="btn btn-sm btn-gold" onclick="showSection('addaffiliate')" style="margin-left:.5rem;">Add one →</button></td></tr>`;
+    const affiliateTableBody = document.getElementById('affiliateTableBody');
+    if (affiliateTableBody) {
+      affiliateTableBody.innerHTML = affiliates.map(u => {
+        const link = SITE_BASE + 'login?ref=' + (u.referralCode || '');
+        const refCount = refCountMap[u.referralCode] || 0;
+        return `<tr>
+          <td style="font-weight:600;color:var(--white);">${u.name || ''}<br><span style="font-size:.75rem;color:var(--white3);">${u.email || ''}</span></td>
+          <td><div class="aff-code-box" onclick="copyText('${u.referralCode || ''}')" title="Click to copy code">${u.referralCode || '—'}</div></td>
+          <td><div class="ref-link-box" onclick="copyText('${link}')" title="Click to copy link">${link}</div></td>
+          <td style="font-weight:700;">${refCount}</td>
+          <td style="font-weight:700;color:var(--green);">$${(u.earnings||0).toLocaleString()}</td>
+          <td><span style="font-size:.8rem;font-weight:700;color:${u.status==='active'?'var(--green)':'var(--red)'};">${u.status || 'active'}</span></td>
+          <td>
+            <div style="display:flex;gap:.35rem;flex-wrap:nowrap;">
+              <button class="btn btn-sm btn-ghost" onclick="openEditUser(${u.id})" style="min-height:30px;font-size:.72rem;">Edit</button>
+              <button class="btn btn-sm" onclick="updateEarnings(${u.id})" style="min-height:30px;font-size:.72rem;background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);">+ Earnings</button>
+              <button class="btn btn-sm btn-danger" onclick="removeAffiliate(${u.id})" style="min-height:30px;font-size:.72rem;">Remove</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('') || `<tr><td colspan="7" style="text-align:center;color:var(--white3);padding:2rem;">No affiliates yet. <button class="btn btn-sm btn-gold" onclick="showSection('addaffiliate')" style="margin-left:.5rem;">Add one →</button></td></tr>`;
+    }
 
-  // Referral breakdown
-  document.getElementById('referralTableBody').innerHTML = referred.map(u => `
-    <tr>
-      <td style="font-weight:600;color:var(--white);">${u.name}</td>
-      <td style="font-size:.82rem;color:var(--white2);">${u.email}</td>
-      <td>${planBadge(u.plan)}</td>
-      <td><span class="aff-code-box" style="padding:.2rem .6rem;font-size:.72rem;cursor:default;">${u.referredBy}</span></td>
-      <td style="font-size:.78rem;color:var(--white3);">${u.joined||'—'}</td>
-    </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--white3);padding:1.5rem;">No referrals yet</td></tr>`;
+    // Referral breakdown
+    const referralTableBody = document.getElementById('referralTableBody');
+    if (referralTableBody) {
+      referralTableBody.innerHTML = referred.map(u => `
+        <tr>
+          <td style="font-weight:600;color:var(--white);">${u.name || ''}</td>
+          <td style="font-size:.82rem;color:var(--white2);">${u.email || ''}</td>
+          <td>${planBadge(u.plan)}</td>
+          <td><span class="aff-code-box" style="padding:.2rem .6rem;font-size:.72rem;cursor:default;">${u.referredBy || ''}</span></td>
+          <td style="font-size:.78rem;color:var(--white3);">${u.joined || '—'}</td>
+        </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--white3);padding:1.5rem;">No referrals yet</td></tr>`;
+    }
+  } catch (error) {
+    console.error('Affiliates render error:', error);
+  }
 }
 
 function updateEarnings(id) {
-  const amt = prompt('Add earnings amount ($):');
-  if (!amt || isNaN(parseFloat(amt))) return;
-  const users = PC.getUsers();
-  const u = users.find(x => x.id === id);
-  if (!u) return;
-  u.earnings = (u.earnings || 0) + parseFloat(amt);
-  PC.saveUsers(users);
-  PC.toast(`+$${parseFloat(amt)} added to ${u.name}`, 'success');
-  renderAffiliates();
+  try {
+    const amt = prompt('Add earnings amount ($):');
+    if (!amt || isNaN(parseFloat(amt))) return;
+    
+    const users = PC.getUsers();
+    const u = users.find(x => x.id === id);
+    if (!u) return;
+    
+    u.earnings = (u.earnings || 0) + parseFloat(amt);
+    PC.saveUsers(users);
+    PC.toast(`+$${parseFloat(amt).toFixed(2)} added to ${u.name}`, 'success');
+    renderAffiliates();
+  } catch (error) {
+    console.error('Update earnings error:', error);
+  }
 }
 
 function removeAffiliate(id) {
-  if (!confirm('Remove affiliate status from this user?')) return;
-  const users = PC.getUsers();
-  const u = users.find(x => x.id === id);
-  if (!u) return;
-  u.affiliate = false;
-  u.referralCode = '';
-  PC.saveUsers(users);
-  PC.toast(`${u.name} removed as affiliate`);
-  renderAffiliates();
+  try {
+    if (!confirm('Remove affiliate status from this user?')) return;
+    
+    const users = PC.getUsers();
+    const u = users.find(x => x.id === id);
+    if (!u) return;
+    
+    u.affiliate = false;
+    u.referralCode = '';
+    PC.saveUsers(users);
+    PC.toast(`${u.name} removed as affiliate`);
+    renderAffiliates();
+  } catch (error) {
+    console.error('Remove affiliate error:', error);
+  }
 }
 
 function populateAffUserSelect() {
-  const users = PC.getUsers().filter(u => !u.affiliate && u.role !== 'admin');
-  const sel = document.getElementById('aff_user_select');
-  sel.innerHTML = `<option value="">— Choose user —</option>` + users.map(u => `<option value="${u.id}">${u.name} (${u.email})</option>`).join('');
-  document.getElementById('affLinkPreviewUrl').textContent = '';
+  try {
+    const users = PC.getUsers().filter(u => !u.affiliate && u.role !== 'admin');
+    const sel = document.getElementById('aff_user_select');
+    if (sel) {
+      sel.innerHTML = `<option value="">— Choose user —</option>` + users.map(u => `<option value="${u.id}">${u.name || ''} (${u.email || ''})</option>`).join('');
+    }
+  } catch (error) {
+    console.error('Populate affiliate select error:', error);
+  }
 }
 
 function prefillAffCode() {
-  const id = parseInt(document.getElementById('aff_user_select').value);
-  if (!id) return;
-  const u = PC.getUsers().find(x => x.id === id);
-  if (!u) return;
-  // Auto-generate code from name
-  const code = u.name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g,'') + Math.floor(Math.random()*90+10);
-  document.getElementById('aff_code').value = code;
-  updateAffPreview();
+  try {
+    const id = parseInt(document.getElementById('aff_user_select').value);
+    if (!id) return;
+    
+    const u = PC.getUsers().find(x => x.id === id);
+    if (!u) return;
+    
+    // Auto-generate code from name
+    const namePart = (u.name || '').split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '');
+    const code = namePart + Math.floor(Math.random()*90+10);
+    
+    const codeInput = document.getElementById('aff_code');
+    if (codeInput) {
+      codeInput.value = code;
+      updateAffPreview();
+    }
+  } catch (error) {
+    console.error('Prefill affiliate code error:', error);
+  }
 }
 
-document.addEventListener('input', function(e) { if (e.target.id === 'aff_code') updateAffPreview(); });
 function updateAffPreview() {
-  const code = document.getElementById('aff_code').value.toUpperCase();
-  const preview = document.getElementById('affLinkPreviewUrl');
-  if (code) preview.textContent = SITE_BASE + 'login?ref=' + code;
+  try {
+    const code = document.getElementById('aff_code')?.value.toUpperCase() || '';
+    const preview = document.getElementById('affLinkPreviewUrl');
+    if (preview) {
+      preview.textContent = code ? SITE_BASE + 'login?ref=' + code : '';
+    }
+  } catch (error) {
+    console.error('Update affiliate preview error:', error);
+  }
 }
 
 function makeAffiliate() {
-  const userId = parseInt(document.getElementById('aff_user_select').value);
-  const code = document.getElementById('aff_code').value.toUpperCase().trim();
-  const earnings = parseFloat(document.getElementById('aff_earnings').value) || 0;
-  if (!userId) { PC.toast('Please select a user', 'error'); return; }
-  if (!code) { PC.toast('Please enter a referral code', 'error'); return; }
-  if (PC.findUserByReferral(code)) { PC.toast('Referral code already in use', 'error'); return; }
-  const users = PC.getUsers();
-  const u = users.find(x => x.id === userId);
-  if (!u) return;
-  u.affiliate = true;
-  u.referralCode = code;
-  u.earnings = earnings;
-  PC.saveUsers(users);
-  PC.toast(`${u.name} is now an affiliate with code ${code} ✓`, 'success');
-  showSection('affiliates');
+  try {
+    const userId = parseInt(document.getElementById('aff_user_select').value);
+    const code = document.getElementById('aff_code').value.toUpperCase().trim();
+    const earnings = parseFloat(document.getElementById('aff_earnings').value) || 0;
+    
+    if (!userId) { 
+      PC.toast('Please select a user', 'error'); 
+      return; 
+    }
+    if (!code) { 
+      PC.toast('Please enter a referral code', 'error'); 
+      return; 
+    }
+    if (PC.findUserByReferral(code)) { 
+      PC.toast('Referral code already in use', 'error'); 
+      return; 
+    }
+    
+    const users = PC.getUsers();
+    const u = users.find(x => x.id === userId);
+    if (!u) return;
+    
+    u.affiliate = true;
+    u.referralCode = code;
+    u.earnings = earnings;
+    
+    PC.saveUsers(users);
+    PC.toast(`${u.name} is now an affiliate with code ${code} ✓`, 'success');
+    showSection('affiliates');
+  } catch (error) {
+    console.error('Make affiliate error:', error);
+    PC.toast('Error making affiliate', 'error');
+  }
 }
 
 // ---- SIGNALS ----
 function renderSignalTable() {
-  const signals = PC.getSignals();
-  document.getElementById('signalTableBody').innerHTML = signals.map(s => `
-    <tr>
-      <td style="font-size:.8rem;color:var(--white3);">${s.date}</td>
-      <td>${s.dir==='BUY'?'<span class="badge badge-buy" style="font-size:.68rem;">BUY</span>':'<span class="badge badge-sell" style="font-size:.68rem;">SELL</span>'}</td>
-      <td style="font-family:JetBrains Mono,monospace;font-size:.83rem;">$${s.entry}</td>
-      <td style="font-family:JetBrains Mono,monospace;font-size:.83rem;">$${s.tp}</td>
-      <td style="font-family:JetBrains Mono,monospace;font-size:.83rem;">$${s.sl}</td>
-      <td>${s.status==='active'?'<span class="badge badge-pending" style="font-size:.65rem;">Active</span>':s.result==='win'?'<span class="badge badge-win" style="font-size:.65rem;">Win</span>':s.result==='loss'?'<span class="badge badge-loss" style="font-size:.65rem;">Loss</span>':'<span style="font-size:.75rem;color:var(--white3);">—</span>'}</td>
-      <td style="font-weight:700;color:${s.pnl>0?'var(--green)':s.pnl<0?'var(--red)':'var(--white3)'};">${s.pnl?(s.pnl>0?'+':'')+'$'+Math.abs(s.pnl).toLocaleString():'—'}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deleteSignal(${s.id})" style="min-height:28px;font-size:.72rem;">✕</button></td>
-    </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--white3);padding:2rem;">No signals yet</td></tr>`;
+  try {
+    const signals = PC.getSignals() || [];
+    const tbody = document.getElementById('signalTableBody');
+    
+    if (tbody) {
+      tbody.innerHTML = signals.map(s => `
+        <tr>
+          <td style="font-size:.8rem;color:var(--white3);">${s.date || ''}</td>
+          <td>${s.dir==='BUY'?'<span class="badge badge-buy" style="font-size:.68rem;">BUY</span>':'<span class="badge badge-sell" style="font-size:.68rem;">SELL</span>'}</td>
+          <td style="font-family:JetBrains Mono,monospace;font-size:.83rem;">$${s.entry || 0}</td>
+          <td style="font-family:JetBrains Mono,monospace;font-size:.83rem;">$${s.tp || 0}</td>
+          <td style="font-family:JetBrains Mono,monospace;font-size:.83rem;">$${s.sl || 0}</td>
+          <td>${s.status==='active'?'<span class="badge badge-pending" style="font-size:.65rem;">Active</span>':s.result==='win'?'<span class="badge badge-win" style="font-size:.65rem;">Win</span>':s.result==='loss'?'<span class="badge badge-loss" style="font-size:.65rem;">Loss</span>':'<span style="font-size:.75rem;color:var(--white3);">—</span>'}</td>
+          <td style="font-weight:700;color:${s.pnl>0?'var(--green)':s.pnl<0?'var(--red)':'var(--white3)'};">${s.pnl?(s.pnl>0?'+':'')+'$'+Math.abs(s.pnl).toLocaleString():'—'}</td>
+          <td><button class="btn btn-sm btn-danger" onclick="deleteSignal(${s.id})" style="min-height:28px;font-size:.72rem;">✕</button></td>
+        </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--white3);padding:2rem;">No signals yet</td></tr>`;
+    }
+  } catch (error) {
+    console.error('Signal table render error:', error);
+  }
 }
 
 function addSignal() {
-  const date = document.getElementById('as_date').value;
-  const entry = parseFloat(document.getElementById('as_entry').value);
-  const tp = parseFloat(document.getElementById('as_tp').value);
-  const sl = parseFloat(document.getElementById('as_sl').value);
-  if (!date || isNaN(entry) || isNaN(tp) || isNaN(sl)) { PC.toast('Please fill in required fields', 'error'); return; }
-  const signals = PC.getSignals();
-  signals.unshift({ id: Date.now(), date, dir: document.getElementById('as_dir').value, entry, tp, sl, status: document.getElementById('as_status').value, result: document.getElementById('as_result').value, pnl: parseFloat(document.getElementById('as_pnl').value)||null, notes: document.getElementById('as_notes').value.trim() });
-  PC.saveSignals(signals);
-  PC.toast('Signal published ✓', 'success');
-  ['as_entry','as_tp','as_sl','as_pnl','as_notes'].forEach(id => document.getElementById(id).value = '');
-  showSection('signals');
+  try {
+    const date = document.getElementById('as_date').value;
+    const entry = parseFloat(document.getElementById('as_entry').value);
+    const tp = parseFloat(document.getElementById('as_tp').value);
+    const sl = parseFloat(document.getElementById('as_sl').value);
+    
+    if (!date || isNaN(entry) || isNaN(tp) || isNaN(sl)) { 
+      PC.toast('Please fill in required fields', 'error'); 
+      return; 
+    }
+    
+    const signals = PC.getSignals();
+    signals.unshift({ 
+      id: Date.now(), 
+      date, 
+      dir: document.getElementById('as_dir').value, 
+      entry, 
+      tp, 
+      sl, 
+      status: document.getElementById('as_status').value, 
+      result: document.getElementById('as_result').value, 
+      pnl: parseFloat(document.getElementById('as_pnl').value) || null, 
+      notes: document.getElementById('as_notes').value.trim() 
+    });
+    
+    PC.saveSignals(signals);
+    PC.toast('Signal published ✓', 'success');
+    
+    ['as_entry','as_tp','as_sl','as_pnl','as_notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    
+    showSection('signals');
+  } catch (error) {
+    console.error('Add signal error:', error);
+    PC.toast('Error adding signal', 'error');
+  }
 }
 
 function deleteSignal(id) {
-  if (!confirm('Delete this signal?')) return;
-  PC.saveSignals(PC.getSignals().filter(s => s.id !== id));
-  PC.toast('Signal deleted');
-  renderSignalTable();
+  try {
+    if (!confirm('Delete this signal?')) return;
+    
+    PC.saveSignals(PC.getSignals().filter(s => s.id !== id));
+    PC.toast('Signal deleted');
+    renderSignalTable();
+  } catch (error) {
+    console.error('Delete signal error:', error);
+  }
 }
 
-// init handled above
+// Set default date for add signal form
+document.addEventListener('DOMContentLoaded', function() {
+  const dateInput = document.getElementById('as_date');
+  if (dateInput) {
+    dateInput.valueAsDate = new Date();
+  }
+});
 </script>
 </body>
 </html>
