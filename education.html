@@ -46,7 +46,7 @@
   <a href="/affiliate">💰 Affiliate</a>
   <a href="/vip">👑 VIP</a>
   <div class="mobile-menu-actions">
-    <a href="/login" class="btn btn-gold btn-full">Log In / Sign Up</a>
+    <a href="/login" class="btn btn-gold btn-full">Log In</a>
   </div>
 </div>
 
@@ -54,7 +54,7 @@
 <div class="section-pad">
 <div class="container">
 
-  <!-- LOCKED -->
+  <!-- LOCKED (not logged in) -->
   <div id="lockedState" class="hidden" style="text-align:center;padding:4rem 0;">
     <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
     <h2 class="mb-1">Login Required</h2>
@@ -63,6 +63,14 @@
       <a href="/login" class="btn btn-gold btn-lg">Log In</a>
       <a href="/vip" class="btn btn-ghost btn-lg">Get VIP Free</a>
     </div>
+  </div>
+
+  <!-- AFFILIATE LOCKED (logged in but not affiliate) -->
+  <div id="affiliateLockedState" class="hidden" style="text-align:center;padding:3rem 1rem;background:var(--black3);border:1px solid var(--gold-border);border-radius:var(--radius-lg);margin-bottom:2rem;">
+    <div style="font-size:3rem;margin-bottom:1rem;">🤝</div>
+    <h2 class="mb-1" style="font-size:1.5rem;">Affiliate Partners Only</h2>
+    <p class="text-dim mb-3" style="max-width:480px;margin:0 auto 1.5rem;">The Affiliate Academy is exclusively available to members of The Profits Circle affiliate programme. Contact us on Telegram to apply.</p>
+    <a href="https://t.me/tacfxin" target="_blank" class="btn btn-gold btn-lg">💬 Apply on Telegram</a>
   </div>
 
   <!-- MAIN -->
@@ -80,7 +88,7 @@
     <!-- TRACK SWITCHER -->
     <div class="track-tabs">
       <button class="track-tab active" onclick="switchTrack('trader',this)">📈 Trader Track — 100 Lessons</button>
-      <button class="track-tab" onclick="switchTrack('affiliate',this)">💰 Affiliate Track — 100 Lessons</button>
+      <button class="track-tab" id="affiliateTabBtn" onclick="switchTrack('affiliate',this)">💰 Affiliate Track — 100 Lessons</button>
     </div>
 
     <!-- TRADER TRACK -->
@@ -170,9 +178,7 @@
 
 <script src="assets/app.js"></script>
 <script>
-PC.initNav('education');
-
-// ─── TRADER TRACK — 20 LESSONS ──────────────────────────────────────────────
+// ─── TRADER TRACK — 100 LESSONS ──────────────────────────────────────────────
 const traderLessons = [
   { id:1, track:'trader', level:'Beginner', emoji:'🥇', title:'What Is XAUUSD?', duration:'15 min',
     body:`<p>What Is XAUUSD? is a core concept for any serious trader. In this lesson we break down everything you need to know about gold basics.</p>
@@ -1325,20 +1331,21 @@ const traderLessons = [
 <p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
 <h4>Next Steps</h4>
 <p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:85, track:'trader', level:'Advanced', emoji:'🤖', title:'Using AI Tools to Improve Trading', duration:'28 min',
-    body:`<p>Using AI Tools to Improve Trading is a core concept for any serious trader. In this lesson we break down everything you need to know about ai for journaling.</p>
-<h4>Overview</h4>
-<p>Understanding ai for journaling gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+  { id:85, track:'trader', level:'Advanced', emoji:'🏦', title:'Market Maker Models & Price Delivery', duration:'28 min',
+    body:`<p>Understanding how market makers deliver price is one of the most powerful concepts in professional trading. Market makers are the entities that fill orders and ensure liquidity — and their footprint is visible on every chart if you know what to look for.</p>
+<h4>What Market Makers Do</h4>
+<p>Market makers profit from the spread and from accumulating positions at favourable prices before moving the market. They need liquidity — pools of stop losses and pending orders — to fill large positions. This is why price appears to hunt stops before making its real move.</p>
+<h4>The Price Delivery Algorithm</h4>
 <ul>
-<li><strong>Ai For Journaling:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Backtesting Assistant:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Research:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Consolidation:</strong> Price ranges while smart money accumulates or distributes</li>
+<li><strong>Liquidity raid:</strong> Price spikes beyond a key level to trigger stops and pending orders</li>
+<li><strong>Reversal:</strong> With liquidity consumed, price moves in the intended direction</li>
+<li><strong>Target delivery:</strong> Price delivers to the next liquidity pool (opposing highs/lows)</li>
 </ul>
+<h4>Spotting the Pattern on XAUUSD</h4>
+<p>On gold, look for: a clean range-bound period on the 4H or 1H chart, followed by a wick that pierces a clear high or low (the liquidity raid), then a swift reversal. The raid candle itself often becomes an order block — a key area where price will return to before continuing.</p>
 <h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
+<p>Mark all clear equal highs and equal lows on your chart — these are liquidity pools. Note when price aggressively takes one of these levels and immediately reverses. That reversal is your entry signal, with a stop beyond the raid candle and a target at the opposing liquidity pool. This model aligns with ICT concepts and SMC but focuses specifically on the mechanics of why price moves where it does.</p>` },
   { id:86, track:'trader', level:'Advanced', emoji:'📊', title:'Seasonal Patterns in Gold', duration:'25 min',
     body:`<p>Seasonal Patterns in Gold is a core concept for any serious trader. In this lesson we break down everything you need to know about q1 strength.</p>
 <h4>Overview</h4>
@@ -2845,12 +2852,7 @@ const affiliateLessons = [
 let completedLessons = JSON.parse(localStorage.getItem('pc_completed') || '[]');
 let currentLessonId = null;
 
-function switchTrack(track, btn) {
-  document.getElementById('traderTrack').style.display = track === 'trader' ? 'block' : 'none';
-  document.getElementById('affiliateTrack').style.display = track === 'affiliate' ? 'block' : 'none';
-  document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-}
+// switchTrack defined below (see affiliate access control section)
 
 function levelStyle(level, track) {
   if (track === 'affiliate') {
@@ -2909,6 +2911,13 @@ function updateProgress() {
 function openLesson(id) {
   const l = allLessons.find(x => x.id === id);
   if (!l) return;
+  if (l.track === 'affiliate') {
+    const u = PC.getUser();
+    if (!u || (u.affiliate !== true && u.role !== 'admin')) {
+      PC.toast('Affiliate lessons are for affiliate partners only. Contact us on Telegram to join.', 'error');
+      return;
+    }
+  }
   currentLessonId = id;
   document.getElementById('lessonModalTitle').textContent = l.emoji + ' ' + l.title;
   document.getElementById('lessonModalMeta').textContent = l.level + ' · ' + l.duration + (l.track === 'affiliate' ? ' · Affiliate Track' : ' · Trader Track');
@@ -2932,11 +2941,43 @@ function markComplete() {
   }
 }
 
+PC.initNav('education');
 if (PC.isLoggedIn()) {
+  const isAffiliate = PC.isAffiliate();
+
+  if (!isAffiliate) {
+    // Hide affiliate tab — partner-only content
+    const affTabBtn = document.getElementById('affiliateTabBtn');
+    if (affTabBtn) {
+      affTabBtn.innerHTML = '🔒 Affiliate Track — Partners Only';
+      affTabBtn.style.opacity = '0.5';
+      affTabBtn.style.cursor = 'not-allowed';
+      affTabBtn.onclick = (e) => {
+        e.preventDefault();
+        document.getElementById('affiliateLockedState').classList.remove('hidden');
+        document.getElementById('affiliateLockedState').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+    }
+  }
+
   renderAllLessons();
 } else {
   document.getElementById('lockedState').classList.remove('hidden');
   document.getElementById('academyMain').classList.add('hidden');
+}
+
+// Override switchTrack to enforce affiliate lock
+function switchTrack(track, btn) {
+  if (track === 'affiliate' && !PC.isAffiliate()) {
+    document.getElementById('affiliateLockedState').classList.remove('hidden');
+    document.getElementById('affiliateLockedState').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.getElementById('affiliateLockedState').classList.add('hidden');
+  document.getElementById('traderTrack').style.display = track === 'trader' ? 'block' : 'none';
+  document.getElementById('affiliateTrack').style.display = track === 'affiliate' ? 'block' : 'none';
+  document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 }
 </script>
 </body>

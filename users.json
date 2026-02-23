@@ -3,8 +3,8 @@
     {
       "id": 1,
       "name": "Admin",
-      "email": "admin@theprofitscircle.com",
-      "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+      "email": "admin@theprofitscircle.co.uk",
+      "passwordHash": "bd06a622e4db73c9d2e9306b275302a4c4ce67c8e18865d1defdbb45376a311c",
       "role": "admin",
       "plan": "vip",
       "vip": true,

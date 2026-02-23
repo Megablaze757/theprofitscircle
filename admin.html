@@ -352,7 +352,7 @@ const adminUser = PC.getUser();
 if (adminUser) document.getElementById('adminUserLabel').textContent = adminUser.name;
 document.getElementById('as_date').valueAsDate = new Date();
 
-const SITE_BASE = window.location.origin + window.location.origin + '/';
+const SITE_BASE = window.location.origin + '/';
 
 // Load users from GitHub on page load
 PC.fetchUsers().then(() => { renderDashboard(); }).catch(() => { renderDashboard(); });
@@ -507,7 +507,8 @@ function deleteUser(id) {
   renderUserTable();
 }
 
-function addUser() {
+async function addUser() {
+  const btn = document.querySelector('#section-adduser .btn-gold');
   const name = document.getElementById('au_name').value.trim();
   const email = document.getElementById('au_email').value.trim();
   const password = document.getElementById('au_password').value;
@@ -518,12 +519,16 @@ function addUser() {
   const referralCode = document.getElementById('au_refcode').value.toUpperCase().trim();
   const referredBy = document.getElementById('au_referredby').value.toUpperCase().trim();
   if (!name || !email || !password) { PC.toast('Please fill in required fields', 'error'); return; }
+  if (password.length < 6) { PC.toast('Password must be at least 6 characters', 'error'); return; }
   if (PC.findUser(email)) { PC.toast('Email already exists', 'error'); return; }
-  if (referralCode && PC.findUserByReferral(referralCode)) { PC.toast('Referral code already taken', 'error'); return; }
+  if (affiliate && referralCode && PC.findUserByReferral(referralCode)) { PC.toast('Referral code already taken', 'error'); return; }
+  btn.disabled = true; btn.textContent = 'Creating…';
+  const passwordHash = await PC.hashPassword(password);
   const users = PC.getUsers();
-  users.push({ id: Date.now(), name, email, password, role, plan, vip: plan === 'vip', status, joined: new Date().toISOString().slice(0,10), affiliate, referralCode: affiliate ? referralCode : '', referredBy, earnings: 0 });
+  users.push({ id: Date.now(), name, email, passwordHash, role, plan, vip: plan === 'vip', status, joined: new Date().toISOString().slice(0,10), affiliate, referralCode: affiliate ? referralCode : '', referredBy, earnings: 0 });
   PC.saveUsers(users);
-  PC.toast(`"${name}" created ✓`, 'success');
+  btn.disabled = false; btn.textContent = 'Create User';
+  PC.toast(`✓ "${name}" created — download users.json to sync`, 'success');
   ['au_name','au_email','au_password','au_refcode','au_referredby'].forEach(id => document.getElementById(id).value = '');
   showSection('users');
 }

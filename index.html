@@ -45,7 +45,7 @@
   <a href="/vip" data-page="vip">👑 VIP</a>
   <div class="mobile-menu-actions">
     <a href="https://t.me/tacfxin" target="_blank" class="btn btn-gold btn-full">Join Free on Telegram</a>
-    <a href="/login" class="btn btn-ghost btn-full">Log In / Sign Up</a>
+    <a href="/login" class="btn btn-ghost btn-full">Log In</a>
   </div>
 </div>
 
@@ -290,84 +290,105 @@
 <script>
 PC.initNav('home');
 
-// ─── LIVE GOLD PRICE via gold-api.com (free, CORS, no API key) ────────────────
-let lastPrice = null;
+// ─── LIVE PRICES via api.gold-api.com ──────────────────────────────────────────
+// Same API for gold (XAU), silver (XAG), EUR/USD, GBP/USD — no key needed, CORS ok
+let lastGoldPrice = null;
 
-async function fetchGoldPrice() {
+async function fetchPrice(symbol) {
+  const r = await fetch('https://api.gold-api.com/price/' + symbol + '?cb=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error(r.status);
+  return await r.json();
+}
+
+function fmtPrice(p, decimals) {
+  return p.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function setEl(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function setHtml(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+async function updateAllPrices() {
   try {
-    const res = await fetch('https://api.gold-api.com/price/XAU');
-    if (!res.ok) throw new Error('API error');
-    const data = await res.json();
-    // data.price = current price per oz in USD
-    // data.prev_close_price, data.ch (change), data.chp (change %)
-    const price = data.price;
-    const change = data.ch ?? 0;
-    const changePct = data.chp ?? 0;
-    const bid = data.bid;
-    const ask = data.ask;
+    // ── XAUUSD (Gold) ──
+    const xau = await fetchPrice('XAU');
+    const goldPrice = xau.price;
+    const goldChange = xau.ch ?? 0;
+    const goldChp = xau.chp ?? 0;
+    const goldStr = '$' + fmtPrice(goldPrice, 2);
+    const goldArrow = goldChange >= 0 ? '▲' : '▼';
+    const goldClass = goldChange >= 0 ? 'ticker-up' : 'ticker-down';
+    const goldColor = goldChange >= 0 ? 'var(--green)' : 'var(--red)';
+    const goldChStr = (goldChange >= 0 ? '+' : '') + fmtPrice(goldChange, 2) + ' (' + (goldChp >= 0 ? '+' : '') + fmtPrice(goldChp, 2) + '%)';
 
-    const priceStr = '$' + price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-    const changeStr = (change >= 0 ? '+' : '') + change.toFixed(2) + ' (' + (changePct >= 0 ? '+' : '') + changePct.toFixed(2) + '%)';
-    const changeClass = change >= 0 ? 'ticker-up' : 'ticker-down';
-    const changeArrow = change >= 0 ? '▲' : '▼';
-    const changeColor = change >= 0 ? 'var(--green)' : 'var(--red)';
+    setEl('xauPrice', goldStr);
+    setEl('xauPrice2', goldStr);
+    setHtml('xauChange', '<span class="' + goldClass + '">' + goldArrow + ' ' + (goldChp >= 0 ? '+' : '') + fmtPrice(goldChp, 2) + '%</span>');
+    setHtml('xauChange2', '<span class="' + goldClass + '">' + goldArrow + ' ' + (goldChp >= 0 ? '+' : '') + fmtPrice(goldChp, 2) + '%</span>');
 
-    // Update ticker
-    document.getElementById('xauPrice').textContent = priceStr;
-    document.getElementById('xauPrice2').textContent = priceStr;
-    document.getElementById('xauChange').innerHTML = `<span class="${changeClass}">${changeArrow} ${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%</span>`;
-    document.getElementById('xauChange2').innerHTML = `<span class="${changeClass}">${changeArrow} ${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%</span>`;
-
-    // Update hero card
+    // Hero card
     const heroEl = document.getElementById('heroGoldPrice');
-    if (lastPrice && price > lastPrice) heroEl.className = 'price-flash-up';
-    else if (lastPrice && price < lastPrice) heroEl.className = 'price-flash-down';
-    heroEl.textContent = priceStr;
-    document.getElementById('heroGoldChange').innerHTML = `<span style="color:${changeColor};font-weight:800;">${changeArrow} ${changeStr}</span>`;
-
-    if (bid && ask) {
-      document.getElementById('heroBidAsk').textContent = '$' + bid.toFixed(2) + ' / $' + ask.toFixed(2);
-      document.getElementById('bidAskDivider').style.display = 'block';
-      document.getElementById('bidAskBlock').style.display = 'block';
+    if (heroEl) {
+      if (lastGoldPrice && goldPrice > lastGoldPrice) heroEl.className = 'price-flash-up';
+      else if (lastGoldPrice && goldPrice < lastGoldPrice) heroEl.className = 'price-flash-down';
+      heroEl.textContent = goldStr;
     }
+    setHtml('heroGoldChange', '<span style="color:' + goldColor + ';font-weight:800;">' + goldArrow + ' ' + goldChStr + '</span>');
 
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    document.getElementById('priceTimestamp').textContent = 'Updated ' + timeStr + ' · gold-api.com';
-    document.getElementById('tickerLastUpdate').textContent = '🕐 ' + timeStr;
+    if (xau.bid && xau.ask) {
+      setEl('heroBidAsk', '$' + fmtPrice(xau.bid, 2) + ' / $' + fmtPrice(xau.ask, 2));
+      const div1 = document.getElementById('bidAskDivider');
+      const blk = document.getElementById('bidAskBlock');
+      if (div1) div1.style.display = 'block';
+      if (blk) blk.style.display = 'block';
+    }
+    lastGoldPrice = goldPrice;
+  } catch(e) { console.warn('Gold price error:', e.message); }
 
-    lastPrice = price;
-  } catch(e) {
-    console.warn('Gold price fetch failed:', e.message);
-    // Silently fail — no ugly error shown
-  }
-}
-
-fetchGoldPrice();
-setInterval(fetchGoldPrice, 30000); // refresh every 30s
-
-// ─── FX Rates via frankfurter.app (free, no key) ─────────────────────────────
-async function fetchFXRates() {
   try {
-    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR,GBP');
-    if (!res.ok) throw new Error('FX error');
-    const data = await res.json();
-    const eur = data.rates?.EUR;
-    const gbp = data.rates?.GBP;
-    if (eur) {
-      document.getElementById('eurPrice').textContent = eur.toFixed(4);
-      document.getElementById('eurChange').innerHTML = '<span style="color:var(--white3);font-size:.78rem;">USD</span>';
+    // ── EUR/USD ──
+    const eur = await fetchPrice('EUR');
+    if (eur.price) {
+      const eurStr = fmtPrice(eur.price, 4);
+      const eurChp = eur.chp ?? 0;
+      const eurClass = eurChp >= 0 ? 'ticker-up' : 'ticker-down';
+      const eurArrow = eurChp >= 0 ? '▲' : '▼';
+      setEl('eurPrice', eurStr);
+      setEl('eurPrice2', eurStr);
+      setHtml('eurChange', '<span class="' + eurClass + '">' + eurArrow + ' ' + (eurChp >= 0 ? '+' : '') + fmtPrice(eurChp, 2) + '%</span>');
     }
-    if (gbp) {
-      document.getElementById('gbpPrice').textContent = gbp.toFixed(4);
-      document.getElementById('gbpChange').innerHTML = '<span style="color:var(--white3);font-size:.78rem;">USD</span>';
+  } catch(e) { console.warn('EUR error:', e.message); }
+
+  try {
+    // ── GBP/USD ──
+    const gbp = await fetchPrice('GBP');
+    if (gbp.price) {
+      const gbpStr = fmtPrice(gbp.price, 4);
+      const gbpChp = gbp.chp ?? 0;
+      const gbpClass = gbpChp >= 0 ? 'ticker-up' : 'ticker-down';
+      const gbpArrow = gbpChp >= 0 ? '▲' : '▼';
+      setEl('gbpPrice', gbpStr);
+      setEl('gbpPrice2', gbpStr);
+      setHtml('gbpChange', '<span class="' + gbpClass + '">' + gbpArrow + ' ' + (gbpChp >= 0 ? '+' : '') + fmtPrice(gbpChp, 2) + '%</span>');
     }
-  } catch(e) {
-    console.warn('FX fetch failed:', e.message);
-  }
+  } catch(e) { console.warn('GBP error:', e.message); }
+
+  // Timestamp
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  setEl('priceTimestamp', 'Updated ' + timeStr + ' · gold-api.com');
+  setEl('tickerLastUpdate', '🕐 ' + timeStr);
 }
-fetchFXRates();
-setInterval(fetchFXRates, 60000);
+
+updateAllPrices();
+setInterval(updateAllPrices, 30000); // refresh every 30s
+
 </script>
 </body>
 </html>

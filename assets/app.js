@@ -1,14 +1,12 @@
 // ============================================================
 // THE PROFITS CIRCLE — SHARED JS  v5
-// Multi-device login via GitHub-hosted users.json
+// Admin-only user creation. Multi-device login via users.json.
 // Passwords hashed with SHA-256 (Web Crypto API)
 // ============================================================
 
 const PC = {
 
-  // ─── GITHUB CONFIG ──────────────────────────────────────
-  // UPDATE THIS after deploying — replace with your raw GitHub URL:
-  // https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/users.json
+  // ─── CONFIG ─────────────────────────────────────────────
   USERS_JSON_URL: 'https://raw.githubusercontent.com/theprofitscircle/theprofitscircle.co.uk/main/users.json',
 
   // ─── HASHING ────────────────────────────────────────────
@@ -28,11 +26,12 @@ const PC = {
   clearUser() { sessionStorage.removeItem('pc_user'); },
   isLoggedIn() { return !!this.getUser(); },
   isAdmin() { const u = this.getUser(); return u && u.role === 'admin'; },
+  isAffiliate() { const u = this.getUser(); return u && (u.affiliate === true || u.role === 'admin'); },
 
   requireAuth(returnUrl) {
     if (!this.isLoggedIn()) {
       sessionStorage.setItem('pc_redirect', returnUrl || window.location.href);
-      window.location.href = PC.url('login');
+      window.location.href = '/login';
       return false;
     }
     return true;
@@ -86,7 +85,7 @@ const PC = {
     a.href = URL.createObjectURL(blob);
     a.download = 'users.json';
     a.click();
-    this.toast('users.json downloaded — commit this file to your GitHub repo to sync logins across all devices', 'success');
+    this.toast('users.json downloaded — commit to GitHub repo to sync all devices', 'success');
   },
 
   findUser(email) { return this.getUsers().find(u => u.email.toLowerCase() === email.toLowerCase()); },
@@ -104,25 +103,7 @@ const PC = {
     return { ok: true };
   },
 
-  // ─── SIGNUP ──────────────────────────────────────────────
-  async signup(name, email, password, referralCode) {
-    await this.fetchUsers();
-    const existing = this.findUser(email);
-    if (existing) return { ok: false, msg: 'An account with that email already exists.' };
-    const users = this.getUsers();
-    const hash = await this.hashPassword(password);
-    const newUser = {
-      id: Date.now(), name, email, passwordHash: hash, role: 'user', plan: 'free', vip: false,
-      status: 'active', joined: new Date().toISOString().slice(0, 10),
-      affiliate: false, referralCode: '', referredBy: referralCode || '', earnings: 0
-    };
-    users.push(newUser);
-    this.saveUsers(users);
-    this.setUser({ id: newUser.id, name, email, role: 'user', plan: 'free', vip: false, affiliate: false, referralCode: '' });
-    return { ok: true, needsSync: true };
-  },
-
-  logout() { this.clearUser(); window.location.href = PC.url('home'); },
+  logout() { this.clearUser(); window.location.href = '/'; },
 
   hasPlan(plan) {
     const u = this.getUser();
@@ -143,14 +124,14 @@ const PC = {
       if (user) {
         authLabel.textContent = user.name.split(' ')[0];
         if (user.role === 'admin') {
-          authBtn.setAttribute('href', PC.url('admin'));
+          authBtn.setAttribute('href', '/admin');
         } else {
           authBtn.setAttribute('href', '#');
           authBtn.onclick = (e) => { e.preventDefault(); PC.logout(); };
         }
       } else {
         authLabel.textContent = 'Log In';
-        authBtn.setAttribute('href', PC.url('login'));
+        authBtn.setAttribute('href', '/login');
       }
     }
     if (activePageId) {
