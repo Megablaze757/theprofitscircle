@@ -3,116 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – The Profits Circle</title>
+  <title>Login – The Profits Circle (Debug)</title>
   <link rel="stylesheet" href="assets/style.css" />
   <style>
-    .error-message { 
-      color: var(--red); 
-      font-size: 0.85rem; 
-      margin-top: 0.5rem; 
-      text-align: center;
-      min-height: 20px;
-    }
-    .debug-info { 
+    .error-message { color: var(--red); font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+    .debug-panel { 
       background: var(--black4); 
       border: 1px solid var(--border); 
       border-radius: 5px; 
-      padding: 0.75rem; 
-      margin-top: 1rem; 
-      font-size: 0.75rem; 
-      color: var(--white3); 
-      max-height: 200px; 
+      padding: 1rem; 
+      margin-top: 1.5rem; 
+      font-size: 0.8rem; 
+      color: var(--white2); 
+      max-height: 400px; 
       overflow: auto; 
-      display: none; 
     }
-    .debug-toggle {
-      text-align: center;
-      margin-top: 0.5rem;
-      font-size: 0.7rem;
+    .debug-header { 
+      color: var(--gold); 
+      font-weight: bold; 
+      margin-bottom: 0.5rem; 
+      cursor: pointer;
+      user-select: none;
     }
-    .debug-toggle a {
-      color: var(--white3);
-      text-decoration: none;
+    .debug-content { 
+      display: none;
+      font-family: monospace;
+      white-space: pre-wrap;
+      background: var(--black3);
+      padding: 0.5rem;
+      border-radius: 3px;
     }
-    .debug-toggle a:hover {
-      color: var(--gold);
+    .debug-content.show { display: block; }
+    .success { color: var(--green); }
+    .error { color: var(--red); }
+    .warning { color: var(--gold); }
+    .test-btn {
+      background: var(--gold-dim);
+      color: var(--gold2);
+      border: 1px solid var(--gold-border);
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0.25rem;
+      font-size: 0.8rem;
     }
-    .login-box {
-      max-width: 400px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: var(--black2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-    }
-    .login-logo {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .login-logo h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      margin: 0;
-    }
-    .login-logo h1 span {
-      color: var(--gold);
-    }
-    .text-muted {
-      color: var(--white3);
-    }
-    .text-center {
-      text-align: center;
-    }
-    .mt-1 { margin-top: 0.5rem; }
-    .mt-2 { margin-top: 1rem; }
-    .mt-3 { margin-top: 1.5rem; }
-    .btn-full {
-      width: 100%;
+    .test-btn:hover {
+      background: var(--gold);
+      color: var(--black);
     }
   </style>
 </head>
 <body style="background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,67,.07), transparent), var(--black); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
 
-<div class="login-container" style="width: 100%; max-width: 450px; padding: 1rem;">
-  <div class="login-box">
-    <div class="login-logo">
-      <a href="/" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:.5rem;">
-        <img src="logo.png" alt="The Profits Circle" style="height:80px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
-        <h1 style="display:none;">THE <span>PROFITS</span> CIRCLE</h1>
-      </a>
-      <p class="text-muted" style="font-size:.85rem;margin-top:.5rem;">Members only — login below</p>
+<div class="login-container" style="width: 100%; max-width: 500px; padding: 1rem;">
+  <div class="login-box" style="background: var(--black2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem;">
+    <div class="login-logo" style="text-align: center; margin-bottom: 1.5rem;">
+      <h1 style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; margin: 0;">THE <span style="color: var(--gold);">PROFITS</span> CIRCLE</h1>
+      <p style="color: var(--white3); font-size: 0.85rem; margin-top: 0.5rem;">Debug Login Mode</p>
     </div>
 
     <!-- LOGIN FORM -->
-    <div id="loginForm" style="margin-top:1.5rem;">
+    <div style="margin-bottom: 1.5rem;">
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="loginEmail" placeholder="you@email.com" autocomplete="email" value="admin@theprofitscircle.co.uk" />
+        <input type="email" class="form-input" id="loginEmail" value="admin@theprofitscircle.co.uk" placeholder="Email" />
       </div>
       <div class="form-group">
         <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
+        <input type="text" class="form-input" id="loginPassword" value="admin123" placeholder="Password" />
+        <small style="color: var(--white3);">Password field is visible for debugging</small>
       </div>
-      <button class="btn btn-gold btn-full mt-2" id="loginBtn" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
+      <button class="btn btn-gold btn-full" id="loginBtn" onclick="debugLogin()" style="margin-top: 1rem;">Test Login</button>
     </div>
 
-    <!-- Error message display -->
-    <div id="loginError" class="error-message"></div>
-    
-    <!-- Debug toggle -->
-    <div class="debug-toggle">
-      <a href="#" onclick="toggleDebug(); return false;">🔧 Show Debug Info</a>
-    </div>
-    
-    <!-- Debug info -->
-    <div id="debugInfo" class="debug-info"></div>
+    <!-- STATUS -->
+    <div id="loginStatus" class="error-message" style="min-height: 30px;"></div>
 
-    <p class="text-center mt-3" style="font-size:.78rem;color:var(--white3);">
-      By logging in you agree to our <a href="#" class="text-gold2">Terms</a> and <a href="#" class="text-gold2">Privacy Policy</a>
-    </p>
-    <div class="text-center mt-2">
-      <a href="/" style="font-size:.82rem;color:var(--white3);">← Back to Home</a>
+    <!-- DEBUG PANEL -->
+    <div class="debug-panel">
+      <div class="debug-header" onclick="this.nextElementSibling.classList.toggle('show')">
+        🔧 Debug Information ▼
+      </div>
+      <div class="debug-content show" id="debugContent">
+        <div id="debugStatus">Loading debug info...</div>
+      </div>
+    </div>
+
+    <!-- TEST BUTTONS -->
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+      <button class="test-btn" onclick="testHash()">Test Hash Function</button>
+      <button class="test-btn" onclick="testDirectLogin()">Test Direct Login</button>
+      <button class="test-btn" onclick="resetAndReload()">Reset & Reload</button>
+      <button class="test-btn" onclick="createTestUser()">Create Test User</button>
+    </div>
+
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <a href="/" style="color: var(--white3); font-size: 0.8rem;">← Back to Home</a>
     </div>
   </div>
 </div>
@@ -121,296 +107,259 @@
 
 <script>
 // ============================================
-// COMPLETE PC OBJECT DEFINITION
+// COMPLETE PC OBJECT WITH DEBUGGING
 // ============================================
 
-// Create the PC namespace
 window.PC = {};
 
-// ========== DATA STORAGE ==========
-PC.storage = {
-  users: [],
-  
-  init: function() {
-    // Try to load from localStorage first
-    const cached = localStorage.getItem('pc_users');
-    if (cached) {
-      try {
-        this.users = JSON.parse(cached);
-        console.log('Loaded users from cache:', this.users.length);
-      } catch (e) {
-        this.users = [];
-      }
-    }
-  }
-};
+// Storage
+PC.storage = { users: [] };
 
-PC.storage.init();
-
-// ========== USER MANAGEMENT ==========
-PC.fetchUsers = async function() {
-  try {
-    console.log('Fetching users from users.json...');
-    const response = await fetch('users.json?' + Date.now()); // Add timestamp to avoid cache
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log('Raw data loaded:', data);
-    
-    // Handle both array format and { users: [...] } format
-    if (Array.isArray(data)) {
-      PC.storage.users = data;
-      console.log('Loaded users array:', data.length);
-    } else if (data && Array.isArray(data.users)) {
-      PC.storage.users = data.users;
-      console.log('Extracted users from users property:', data.users.length);
-    } else {
-      console.error('Unexpected data format:', data);
-      PC.storage.users = [];
-    }
-    
-    // Store in localStorage for persistence
-    localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
-    
-    // Update debug info
-    updateDebugInfo();
-    return PC.storage.users;
-    
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    
-    // If no users loaded, create default admin as fallback
-    if (PC.storage.users.length === 0) {
-      console.log('Creating default admin user as fallback');
-      PC.storage.users = [{
-        id: 1,
-        name: "Admin",
-        email: "admin@theprofitscircle.co.uk",
-        passwordHash: "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", // hash for "admin123"
-        role: "admin",
-        plan: "vip",
-        vip: true,
-        status: "active",
-        joined: "2024-01-01",
-        affiliate: true,
-        referralCode: "ADMIN",
-        referredBy: "",
-        earnings: 0
-      }];
-      localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
-    }
-    
-    updateDebugInfo();
-    throw error;
-  }
-};
-
-PC.getUsers = function() {
-  return PC.storage.users;
-};
-
-PC.findUser = function(email) {
-  const users = PC.getUsers();
-  return users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
-};
-
-PC.findUserByReferral = function(code) {
-  const users = PC.getUsers();
-  return users.find(u => u.referralCode && u.referralCode.toUpperCase() === code.toUpperCase());
-};
-
-// ========== SESSION MANAGEMENT ==========
-PC.getUser = function() {
-  // Try localStorage first (persists across tabs), then sessionStorage
-  const userStr = localStorage.getItem('pc_user') || sessionStorage.getItem('pc_user');
-  if (userStr) {
-    try {
-      return JSON.parse(userStr);
-    } catch (e) {
-      return null;
-    }
-  }
-  return null;
-};
-
-PC.isLoggedIn = function() {
-  return !!PC.getUser();
-};
-
-PC.logout = function() {
-  localStorage.removeItem('pc_user');
-  sessionStorage.removeItem('pc_user');
-  window.location.href = '/login';
-};
-
-// ========== PASSWORD HANDLING ==========
-PC.hashPassword = async function(password) {
-  const msgBuffer = new TextEncoder().encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  return hashHex;
-};
-
-PC.verifyPassword = async function(password, hash) {
-  const hashedInput = await PC.hashPassword(password);
-  return hashedInput === hash;
-};
-
-// ========== LOGIN FUNCTION ==========
-PC.login = async function(email, password) {
-  try {
-    console.log('Login attempt for:', email);
-    const users = PC.getUsers();
-    console.log('Available users:', users.length);
-    
-    if (!users || users.length === 0) {
-      console.error('No users loaded');
-      return { ok: false, msg: 'System error: No users loaded. Please refresh the page.' };
-    }
-    
-    const user = PC.findUser(email);
-    console.log('Found user:', user ? 'yes' : 'no');
-    
-    if (!user) {
-      return { ok: false, msg: 'Email not found' };
-    }
-    
-    if (user.status === 'suspended') {
-      return { ok: false, msg: 'Account suspended' };
-    }
-    
-    const isValid = await PC.verifyPassword(password, user.passwordHash);
-    console.log('Password valid:', isValid);
-    
-    if (!isValid) {
-      return { ok: false, msg: 'Invalid password' };
-    }
-    
-    // Create session user (without password hash)
-    const sessionUser = { ...user };
-    delete sessionUser.passwordHash;
-    
-    // Store in both localStorage and sessionStorage
-    localStorage.setItem('pc_user', JSON.stringify(sessionUser));
-    sessionStorage.setItem('pc_user', JSON.stringify(sessionUser));
-    
-    console.log('Login successful for:', user.email);
-    return { ok: true, msg: 'Login successful', user: sessionUser };
-    
-  } catch (error) {
-    console.error('Login error:', error);
-    return { ok: false, msg: 'Login failed: ' + error.message };
-  }
-};
-
-// ========== UTILITIES ==========
+// Toast
 PC.toast = function(message, type = 'info') {
   const toast = document.getElementById('siteToast');
   const msgEl = document.getElementById('siteToastMsg');
   if (toast && msgEl) {
     msgEl.textContent = message;
     toast.className = 'toast show ' + type;
-    setTimeout(() => {
-      toast.className = 'toast';
-    }, 3000);
+    setTimeout(() => toast.className = 'toast', 3000);
   } else {
     alert(message);
   }
 };
 
-PC.downloadUsersJson = function() {
-  const users = PC.getUsers();
-  const dataStr = JSON.stringify({ users: users }, null, 2);
-  const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-  const exportFileDefaultName = 'users.json';
-  const linkElement = document.createElement('a');
-  linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
-  linkElement.click();
+// Hash function with multiple methods for debugging
+PC.hashPassword = async function(password, method = 'sha256') {
+  console.log(`Hashing password: "${password}" using ${method}`);
+  
+  if (method === 'sha256') {
+    const msgBuffer = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  
+  return password; // fallback
 };
 
-PC.openModal = function(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) modal.classList.add('show');
+// Simple hash for testing (not secure, just for debugging)
+PC.simpleHash = function(password) {
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(16);
 };
 
-PC.closeModal = function(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) modal.classList.remove('show');
+// Fetch users
+PC.fetchUsers = async function() {
+  try {
+    const response = await fetch('users.json?' + Date.now());
+    const data = await response.json();
+    
+    if (Array.isArray(data)) {
+      PC.storage.users = data;
+    } else if (data && Array.isArray(data.users)) {
+      PC.storage.users = data.users;
+    } else {
+      PC.storage.users = [];
+    }
+    
+    localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
+    updateDebugInfo();
+    return PC.storage.users;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    const cached = localStorage.getItem('pc_users');
+    if (cached) {
+      try {
+        PC.storage.users = JSON.parse(cached);
+      } catch (e) {
+        PC.storage.users = [];
+      }
+    }
+    updateDebugInfo();
+    return PC.storage.users;
+  }
+};
+
+// Find user
+PC.findUser = function(email) {
+  return PC.storage.users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+};
+
+// Verify password with debugging
+PC.verifyPassword = async function(password, storedHash, debug = true) {
+  console.log('=== Password Verification Debug ===');
+  console.log('Input password:', password);
+  console.log('Stored hash:', storedHash);
+  
+  // Try SHA-256
+  const sha256Hash = await PC.hashPassword(password, 'sha256');
+  console.log('SHA-256 of input:', sha256Hash);
+  
+  const sha256Match = sha256Hash === storedHash;
+  console.log('SHA-256 match:', sha256Match);
+  
+  if (debug) {
+    document.getElementById('debugStatus').innerHTML += `
+      <br><span class="warning">🔍 Password Check:</span><br>
+      • Input: "${password}"<br>
+      • Stored Hash: ${storedHash}<br>
+      • SHA-256 Hash: ${sha256Hash}<br>
+      • Match: ${sha256Match ? '✅' : '❌'}<br>
+    `;
+  }
+  
+  return sha256Match;
+};
+
+// Login function with debugging
+PC.login = async function(email, password) {
+  const status = document.getElementById('loginStatus');
+  status.innerHTML = 'Attempting login...';
+  
+  try {
+    const users = PC.storage.users;
+    status.innerHTML += `<br>Users loaded: ${users.length}`;
+    
+    const user = PC.findUser(email);
+    if (!user) {
+      status.innerHTML += `<br><span class="error">❌ Email not found: ${email}</span>`;
+      return { ok: false, msg: 'Email not found' };
+    }
+    
+    status.innerHTML += `<br>✅ Found user: ${user.name} (${user.role})`;
+    status.innerHTML += `<br>Stored hash: ${user.passwordHash.substring(0, 10)}...`;
+    
+    const isValid = await PC.verifyPassword(password, user.passwordHash);
+    
+    if (!isValid) {
+      status.innerHTML += `<br><span class="error">❌ Password invalid</span>`;
+      return { ok: false, msg: 'Invalid password' };
+    }
+    
+    status.innerHTML += `<br><span class="success">✅ Password valid!</span>`;
+    
+    const sessionUser = { ...user };
+    delete sessionUser.passwordHash;
+    localStorage.setItem('pc_user', JSON.stringify(sessionUser));
+    
+    return { ok: true, msg: 'Login successful', user: sessionUser };
+    
+  } catch (error) {
+    status.innerHTML += `<br><span class="error">❌ Error: ${error.message}</span>`;
+    return { ok: false, msg: error.message };
+  }
 };
 
 // ========== DEBUG FUNCTIONS ==========
-function toggleDebug() {
-  const debug = document.getElementById('debugInfo');
-  if (debug.style.display === 'none' || !debug.style.display) {
-    debug.style.display = 'block';
-    updateDebugInfo();
-  } else {
-    debug.style.display = 'none';
-  }
+async function updateDebugInfo() {
+  const debug = document.getElementById('debugContent');
+  if (!debug) return;
+  
+  let html = '<span class="success">✅ Debug Info Updated</span><br><br>';
+  
+  // Users loaded
+  html += `<span class="warning">📊 Users in system: ${PC.storage.users.length}</span><br>`;
+  
+  // List all users
+  PC.storage.users.forEach((u, i) => {
+    html += `<br><span class="warning">User ${i+1}:</span><br>`;
+    html += `• Email: ${u.email}<br>`;
+    html += `• Name: ${u.name}<br>`;
+    html += `• Role: ${u.role}<br>`;
+    html += `• Hash: ${u.passwordHash ? u.passwordHash.substring(0, 20) + '...' : 'MISSING'}<br>`;
+    html += `• Hash length: ${u.passwordHash ? u.passwordHash.length : 0}<br>`;
+  });
+  
+  // Test hash for admin123
+  const testHash = await PC.hashPassword('admin123');
+  html += `<br><span class="warning">🔑 Test Data:</span><br>`;
+  html += `• Hash of "admin123": ${testHash}<br>`;
+  html += `• Should match: 240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9<br>`;
+  html += `• Match: ${testHash === '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9' ? '✅' : '❌'}<br>`;
+  
+  debug.innerHTML = html;
 }
 
-function updateDebugInfo() {
-  const debug = document.getElementById('debugInfo');
-  if (debug) {
-    const users = PC.getUsers();
-    const currentUser = PC.getUser();
-    
-    let usersList = '';
-    if (users && users.length > 0) {
-      usersList = users.map(u => 
-        `- ${u.email} (${u.role})${u.status === 'suspended' ? ' [SUSPENDED]' : ''}`
-      ).join('<br>');
-    } else {
-      usersList = 'No users found';
-    }
-    
-    debug.innerHTML = `
-      <strong>🔧 Debug Information:</strong><br>
-      <br>
-      <strong>System Status:</strong><br>
-      • Users loaded: ${users ? users.length : 0}<br>
-      • Current user: ${currentUser ? currentUser.email : 'Not logged in'}<br>
-      • PC object: ${typeof PC !== 'undefined' ? '✅' : '❌'}<br>
-      • LocalStorage users: ${localStorage.getItem('pc_users') ? '✅' : '❌'}<br>
-      <br>
-      <strong>Registered Users:</strong><br>
-      ${usersList}
-      <br><br>
-      <strong>Test Login:</strong><br>
-      • Email: admin@theprofitscircle.co.uk<br>
-      • Password: admin123<br>
-      <br>
-      <button onclick="testLogin()" style="background:var(--gold); color:var(--black); border:none; padding:5px 10px; border-radius:5px; cursor:pointer; margin-right:5px;">Test Login</button>
-      <button onclick="resetUsers()" style="background:var(--red-dim); color:var(--red); border:1px solid var(--red-border); padding:5px 10px; border-radius:5px; cursor:pointer;">Reset Users</button>
-    `;
-  }
-}
-
-// ========== TEST FUNCTIONS ==========
-window.testLogin = async function() {
-  console.log('Testing login with admin@theprofitscircle.co.uk / admin123');
-  const result = await PC.login('admin@theprofitscircle.co.uk', 'admin123');
-  console.log('Test result:', result);
+async function debugLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  const status = document.getElementById('loginStatus');
+  
+  btn.disabled = true;
+  btn.textContent = 'Testing...';
+  status.innerHTML = '';
+  
+  const result = await PC.login(email, password);
+  
+  btn.disabled = false;
+  btn.textContent = 'Test Login';
+  
   if (result.ok) {
-    PC.toast('Test login successful!', 'success');
-    setTimeout(() => {
-      window.location.href = '/admin';
-    }, 1000);
+    status.innerHTML = `<span class="success">✅ SUCCESS! Redirecting to admin...</span>`;
+    setTimeout(() => window.location.href = '/admin', 1500);
   } else {
-    PC.toast('Test login failed: ' + result.msg, 'error');
+    status.innerHTML = `<span class="error">❌ ${result.msg}</span>`;
   }
-};
+}
 
-window.resetUsers = function() {
-  // Reset to default admin user
+async function testHash() {
+  const password = document.getElementById('loginPassword').value;
+  const hash = await PC.hashPassword(password);
+  const status = document.getElementById('loginStatus');
+  
+  status.innerHTML = `
+    <span class="warning">🔑 Hash Test:</span><br>
+    Password: "${password}"<br>
+    SHA-256: ${hash}<br>
+    Length: ${hash.length} characters
+  `;
+}
+
+async function testDirectLogin() {
+  const email = 'admin@theprofitscircle.co.uk';
+  const password = 'admin123';
+  
+  const status = document.getElementById('loginStatus');
+  status.innerHTML = 'Testing direct login...<br>';
+  
+  const hash = await PC.hashPassword(password);
+  status.innerHTML += `Hash of "${password}": ${hash}<br>`;
+  
+  const user = PC.findUser(email);
+  if (user) {
+    status.innerHTML += `Found user with hash: ${user.passwordHash}<br>`;
+    status.innerHTML += `Hashes match: ${hash === user.passwordHash ? '✅' : '❌'}<br>`;
+    
+    if (hash !== user.passwordHash) {
+      status.innerHTML += `<br><span class="error">❌ Hash mismatch! The stored hash doesn't match "admin123"</span>`;
+      status.innerHTML += `<br>Update users.json with this hash: <strong>${hash}</strong>`;
+    }
+  } else {
+    status.innerHTML += `<span class="error">❌ User not found!</span>`;
+  }
+}
+
+function resetAndReload() {
+  localStorage.removeItem('pc_users');
+  localStorage.removeItem('pc_user');
+  sessionStorage.removeItem('pc_user');
+  location.reload();
+}
+
+async function createTestUser() {
+  const hash = await PC.hashPassword('admin123');
+  
   PC.storage.users = [{
     id: 1,
     name: "Admin",
     email: "admin@theprofitscircle.co.uk",
-    passwordHash: "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", // hash for "admin123"
+    passwordHash: hash,
     role: "admin",
     plan: "vip",
     vip: true,
@@ -421,85 +370,22 @@ window.resetUsers = function() {
     referredBy: "",
     earnings: 0
   }];
+  
   localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
-  PC.toast('Users reset to default admin', 'success');
-  updateDebugInfo();
-};
-
-// ========== INITIALIZATION ==========
-// Redirect if already logged in
-if (PC.isLoggedIn()) {
-  const user = PC.getUser();
-  const redirect = sessionStorage.getItem('pc_redirect') || (user && user.role === 'admin' ? '/admin' : '/');
-  sessionStorage.removeItem('pc_redirect');
-  window.location.href = redirect;
+  await updateDebugInfo();
+  
+  const status = document.getElementById('loginStatus');
+  status.innerHTML = `<span class="success">✅ Test user created with hash: ${hash}</span>`;
 }
 
-// Load users on page load
-PC.fetchUsers().catch(() => {
-  console.log('Using fallback user data');
+// Initialize
+PC.fetchUsers().then(() => {
   updateDebugInfo();
+  console.log('Users loaded:', PC.storage.users);
 });
 
-// ========== LOGIN FORM HANDLER ==========
-async function doLogin() {
-  const btn = document.getElementById('loginBtn');
-  const email = document.getElementById('loginEmail').value.trim();
-  const pw = document.getElementById('loginPassword').value;
-  const errorEl = document.getElementById('loginError');
-  
-  errorEl.textContent = '';
-  
-  if (!email || !pw) { 
-    PC.toast('Please fill in all fields', 'error'); 
-    return; 
-  }
-  
-  btn.disabled = true; 
-  btn.innerHTML = '<span style="display:inline-block; width:20px; height:20px; border:2px solid #fff; border-radius:50%; border-top-color:transparent; animation:spin 1s linear infinite; margin-right:8px;"></span>Signing in…';
-  
-  try {
-    const res = await PC.login(email, pw);
-    
-    if (!res.ok) { 
-      errorEl.textContent = res.msg;
-      PC.toast(res.msg, 'error'); 
-      btn.disabled = false; 
-      btn.innerHTML = 'Log In →';
-      return; 
-    }
-    
-    const user = PC.getUser();
-    PC.toast('Welcome back, ' + (user.name || 'User').split(' ')[0] + '! 👋', 'success');
-    
-    setTimeout(() => {
-      const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : '/');
-      sessionStorage.removeItem('pc_redirect');
-      window.location.href = redirect;
-    }, 700);
-    
-  } catch (error) {
-    btn.disabled = false; 
-    btn.innerHTML = 'Log In →';
-    errorEl.textContent = 'Login failed: ' + error.message;
-    PC.toast('Login failed', 'error');
-    console.error('Login error:', error);
-  }
-}
-
-// Add animation style
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-`;
-document.head.appendChild(style);
-
-// Initialize debug info
-setTimeout(updateDebugInfo, 500);
-
-console.log('Login page initialized. Users:', PC.getUsers().length);
+// Auto-run test on load
+setTimeout(testDirectLogin, 500);
 </script>
 </body>
 </html>
