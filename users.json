@@ -1,17 +1,32 @@
 {
   "users": [
     {
-      "id": 1,
-      "name": "Admin",
-      "email": "admin@theprofitscircle.co.uk",
+      "id": 1771799521857,
+      "name": "sac",
+      "email": "admin@theprofitscircle.com",
       "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
-      "role": "admin",
+      "role": "user",
+      "plan": "free",
+      "vip": false,
+      "status": "active",
+      "joined": "2026-02-22",
+      "affiliate": false,
+      "referralCode": "",
+      "referredBy": "",
+      "earnings": 0
+    },
+    {
+      "id": 1771884560829,
+      "name": "Jonathan",
+      "email": "jon4th4n.m07@gmail.com",
+      "passwordHash": "a69c0d2890f717da22d505c87aac55b1a2b0434efdf635cca78a0de44247028c",
+      "role": "user",
       "plan": "vip",
       "vip": true,
       "status": "active",
-      "joined": "2024-01-01",
-      "affiliate": true,
-      "referralCode": "ADMIN",
+      "joined": "2026-02-23",
+      "affiliate": false,
+      "referralCode": "",
       "referredBy": "",
       "earnings": 0
     }
