@@ -14,6 +14,10 @@
     .track-tab { flex: 1; padding: .65rem 1rem; border-radius: 10px; font-size: .875rem; font-weight: 700; text-align: center; cursor: pointer; border: none; background: none; color: var(--white3); transition: all .2s; }
     .track-tab.active { background: var(--gold); color: var(--black); }
     .track-tab:not(.active):hover { background: var(--black4); color: var(--white); }
+    .key-concept-box { background: var(--black4); border-left: 3px solid var(--gold); padding: 1rem; margin: 1rem 0; border-radius: 0 var(--radius) var(--radius) 0; }
+    .example-box { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold-border); padding: 1rem; border-radius: var(--radius); margin: 1rem 0; }
+    .warning-box { background: rgba(255, 0, 0, 0.05); border: 1px solid var(--red-border); padding: 1rem; border-radius: var(--radius); margin: 1rem 0; }
+    .tip-box { background: rgba(0, 255, 0, 0.05); border: 1px solid var(--green-border); padding: 1rem; border-radius: var(--radius); margin: 1rem 0; }
   </style>
 </head>
 <body>
@@ -178,354 +182,1909 @@
 
 <script src="assets/app.js"></script>
 <script>
-// ─── TRADER TRACK — 100 LESSONS ──────────────────────────────────────────────
+// ─── TRADER TRACK — 100 LESSONS (First 25 Enhanced) ─────────────────────────
 const traderLessons = [
-  { id:1, track:'trader', level:'Beginner', emoji:'🥇', title:'What Is XAUUSD?', duration:'15 min',
-    body:`<p>What Is XAUUSD? is a core concept for any serious trader. In this lesson we break down everything you need to know about gold basics.</p>
-<h4>Overview</h4>
-<p>Understanding gold basics gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+  { id:1, track:'trader', level:'Beginner', emoji:'🥇', title:'What Is XAUUSD? The Complete Guide', duration:'25 min',
+    body:`<p>XAUUSD is the ticker symbol for the spot price of gold quoted in US dollars. "XAU" is the internationally recognized code for one troy ounce of gold, and "USD" stands for US dollar. This pairing represents one of the most traded instruments in the world.</p>
+
+<div class="key-concept-box">
+  <strong>Why This Matters:</strong> Gold is unique—it's both a commodity and a currency. Understanding its dual nature is the foundation of profitable gold trading.
+</div>
+
+<h4>The History of Gold as Money</h4>
+<p>For thousands of years, gold served as the foundation of the global monetary system. The Gold Standard (1870s-1971) meant currencies were directly convertible to gold. When President Nixon ended dollar-gold convertibility in 1971, gold became a free-floating asset—and modern gold trading was born.</p>
+
+<h4>What Makes XAUUSD Different</h4>
 <ul>
-<li><strong>Gold Basics:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Spot Vs Futures:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Why It Moves:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Liquidity:</strong> Gold is one of the most liquid markets globally, with daily trading volume exceeding $180 billion</li>
+<li><strong>Volatility:</strong> Unlike many forex pairs, gold can move 100-300 pips daily during major sessions</li>
+<li><strong>Safe Haven Status:</strong> During economic uncertainty, institutions flock to gold, creating predictable patterns</li>
+<li><strong>Inverse Dollar Correlation:</strong> Gold typically moves opposite to the US Dollar Index (DXY)</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:2, track:'trader', level:'Beginner', emoji:'📊', title:'Reading Candlestick Charts', duration:'20 min',
-    body:`<p>Reading Candlestick Charts is a core concept for any serious trader. In this lesson we break down everything you need to know about open/high/low/close.</p>
-<h4>Overview</h4>
-<p>Understanding open/high/low/close gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="example-box">
+  <strong>Real-World Example:</strong> On March 24, 2020, as COVID恐慌 gripped markets, gold surged from $1,480 to $1,970 over 4 months—a 33% move. Traders who understood gold's safe haven status captured this once-in-a-decade opportunity.
+</div>
+
+<h4>Spot Price vs Futures</h4>
+<p>XAUUSD typically refers to the spot price—the current price for immediate delivery. Futures are contracts for future delivery. Most retail traders trade spot gold through CFDs or spread betting, meaning you're speculating on price movement without taking physical delivery.</p>
+
+<h4>Key Market Participants</h4>
 <ul>
-<li><strong>Open/High/Low/Close:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Wicks:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Body Colour:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Central Banks:</strong> Hold gold as reserves; their buying/selling moves markets</li>
+<li><strong>Institutional Investors:</strong> Pension funds, hedge funds using gold for diversification</li>
+<li><strong>ETFs:</strong> GLD and similar products allow easy gold exposure</li>
+<li><strong>Retail Traders:</strong> You and I—collectively significant, especially during major sessions</li>
+<li><strong>Jewelry Industry:</strong> Physical demand, especially from India and China</li>
 </ul>
+
 <h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:3, track:'trader', level:'Beginner', emoji:'🧱', title:'Support & Resistance Basics', duration:'20 min',
-    body:`<p>Support & Resistance Basics is a core concept for any serious trader. In this lesson we break down everything you need to know about how to draw levels.</p>
-<h4>Overview</h4>
-<p>Understanding how to draw levels gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+<p>Open your trading platform and add XAUUSD to your watchlist. Spend 10 minutes just watching the price move during the London session (8am-12pm GMT). Notice how it behaves—the rhythm, the reactions to news, the way it moves through round numbers. This observation is your first step toward mastery.</p>
+
+<h4>Key Takeaways</h4>
 <ul>
-<li><strong>How To Draw Levels:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Horizontal Zones:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Retests:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-</ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:4, track:'trader', level:'Beginner', emoji:'📈', title:'Trend Analysis', duration:'18 min',
-    body:`<p>Trend Analysis is a core concept for any serious trader. In this lesson we break down everything you need to know about uptrend.</p>
-<h4>Overview</h4>
-<p>Understanding uptrend gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+<li>XAUUSD is gold priced in US dollars—the world's primary gold benchmark</li>
+<li>Gold is both a commodity and a currency, with unique market drivers</li>
+<li>Understanding gold's history and market structure gives you context for price action</li>
+<li>Spot gold is what most retail traders speculate on through brokers</li>
+</ul>` },
+  { id:2, track:'trader', level:'Beginner', emoji:'📊', title:'Reading Candlestick Charts Like a Pro', duration:'28 min',
+    body:`<p>Candlestick charts are the language of trading. Developed by Japanese rice trader Munehisa Homma in the 1700s, they display four critical pieces of price information in a single visual: open, high, low, and close (OHLC).</p>
+
+<div class="key-concept-box">
+  <strong>The Four Essential Data Points:</strong>
+  <ul style="margin-top:0.5rem;">
+    <li><strong>Open:</strong> The price at the beginning of the time period</li>
+    <li><strong>High:</strong> The highest price reached</li>
+    <li><strong>Low:</strong> The lowest price reached</li>
+    <li><strong>Close:</strong> The final price at period end</li>
+  </ul>
+</div>
+
+<h4>Candlestick Anatomy</h4>
+<p>Each candle consists of a body (the range between open and close) and wicks/shadow (the range from high to low and low to open/close). A green/white candle closes higher than it opened—bullish momentum. A red/black candle closes lower than it opened—bearish momentum.</p>
+
+<div class="example-box">
+  <strong>Reading the Story:</strong> A candle with a long lower wick and small body shows buyers stepped in after a sell-off—potential reversal. A candle with a tiny body and long wicks shows indecision—the market can't decide direction.
+</div>
+
+<h4>Timeframes and Their Stories</h4>
 <ul>
-<li><strong>Uptrend:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Downtrend:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Sideways:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Higher Highs & Lows:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>1-minute (M1):</strong> The market's heartbeat—chaotic, noisy, for scalpers only</li>
+<li><strong>5-minute (M5):</strong> Short-term structure, entry precision</li>
+<li><strong>15-minute (M15):</strong> Intraday bias and trade management</li>
+<li><strong>1-hour (H1):</strong> Key for day traders—clean structure</li>
+<li><strong>4-hour (H4):</strong> The "sweet spot" for swing traders—trend definition</li>
+<li><strong>Daily (D1):</strong> Overall market direction, support/resistance</li>
+<li><strong>Weekly (W1):</strong> Macro structure, major turning points</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:5, track:'trader', level:'Beginner', emoji:'🎯', title:'Entry & Exit Strategies', duration:'22 min',
-    body:`<p>Entry & Exit Strategies is a core concept for any serious trader. In this lesson we break down everything you need to know about where to buy.</p>
-<h4>Overview</h4>
-<p>Understanding where to buy gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="tip-box">
+  <strong>Pro Tip:</strong> Always start with higher timeframes (H4/Daily) to determine trend direction, then drop down to lower timeframes for entry precision. This is called "top-down analysis."
+</div>
+
+<h4>Common Candlestick Patterns for Beginners</h4>
 <ul>
-<li><strong>Where To Buy:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Where To Sell:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Planned Exits:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Pin Bar:</strong> Long wick, small body—price rejected a level</li>
+<li><strong>Engulfing:</strong> A candle that completely "eats" the previous candle—strong momentum shift</li>
+<li><strong>Doji:</strong> Open and close virtually equal—market indecision</li>
+<li><strong>Inside Bar:</strong> A candle forming within the previous candle's range—consolidation</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:6, track:'trader', level:'Beginner', emoji:'🛑', title:'Stop Losses & Why You Need Them', duration:'15 min',
-    body:`<p>Stop Losses & Why You Need Them is a core concept for any serious trader. In this lesson we break down everything you need to know about purpose.</p>
-<h4>Overview</h4>
-<p>Understanding purpose gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Practical Exercise</h4>
+<p>Open your XAUUSD H4 chart. Go back one week and identify every candle. For each, ask: Is it bullish or bearish? What's the story? Long wick rejection? Strong momentum with no wicks? Do this daily for two weeks and you'll read candles instinctively.</p>
+
+<h4>Key Takeaways</h4>
 <ul>
-<li><strong>Purpose:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Placement:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Common Mistakes:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-</ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:7, track:'trader', level:'Beginner', emoji:'⚖️', title:'Risk-to-Reward Ratio', duration:'18 min',
-    body:`<p>Risk-to-Reward Ratio is a core concept for any serious trader. In this lesson we break down everything you need to know about 1:2 minimum.</p>
-<h4>Overview</h4>
-<p>Understanding 1:2 minimum gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+<li>Every candle tells a story of the battle between buyers and sellers</li>
+<li>The body shows who controlled the period; wicks show where they were rejected</li>
+<li>Different timeframes reveal different market stories—always use multiple timeframes</li>
+<li>Pattern recognition becomes instinctive with daily practice</li>
+</ul>` },
+  { id:3, track:'trader', level:'Beginner', emoji:'🧱', title:'Support & Resistance — The Foundation of Technical Analysis', duration:'30 min',
+    body:`<p>Support and resistance are the building blocks of all technical analysis. Support is a price level where buying pressure is strong enough to halt a downtrend. Resistance is where selling pressure halts an uptrend. These levels form because market participants remember them and act accordingly.</p>
+
+<div class="key-concept-box">
+  <strong>The Psychology Behind S/R:</strong>
+  <p>Traders who missed a breakout remember the level. Traders who took profits remember where they sold. Orders accumulate at these prices, creating self-fulfilling prophecies.</p>
+</div>
+
+<h4>How to Identify Valid Levels</h4>
 <ul>
-<li><strong>1:2 Minimum:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Calculating R:R:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Why It Matters:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Multiple Touches:</strong> The more times price respects a level, the stronger it becomes</li>
+<li><strong>Round Numbers:</strong> $1,900, $1,950, $2,000—these are psychological magnets</li>
+<li><strong>Recent Swings:</strong> The most recent highs and lows are always significant</li>
+<li><strong>Time Spent:</strong> Levels where price consolidated for many candles carry weight</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:8, track:'trader', level:'Beginner', emoji:'💱', title:'Understanding Pips & Lot Sizes', duration:'20 min',
-    body:`<p>Understanding Pips & Lot Sizes is a core concept for any serious trader. In this lesson we break down everything you need to know about pip value.</p>
-<h4>Overview</h4>
-<p>Understanding pip value gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="example-box">
+  <strong>Real Gold Example:</strong> In August 2020, gold hit $2,075—an all-time high. This became massive resistance. For two years, every rally toward $2,000-$2,075 was sold. When gold finally broke above in December 2023, that resistance flipped to support—a classic breakout trade that ran to $2,400.
+</div>
+
+<h4>The "Role Reversal" Phenomenon</h4>
+<p>Once a strong resistance level is broken, it often becomes support on retests. This is called "role reversal" or "flipping the level." It's one of the highest-probability setups in trading.</p>
+
+<h4>Drawing S/R Correctly</h4>
 <ul>
-<li><strong>Pip Value:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Micro/Mini/Standard Lots:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Position Sizing:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Don't draw lines—draw zones.</strong> Price respects areas, not exact pennies</li>
+<li><strong>Use wicks, not bodies.</strong> The wick shows where price was rejected</li>
+<li><strong>Start with obvious levels.</strong> Recent highs/lows, round numbers</li>
+<li><strong>Refine as price evolves.</strong> Markets change, your levels should too</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:9, track:'trader', level:'Beginner', emoji:'🕐', title:'Trading Sessions & Market Hours', duration:'15 min',
-    body:`<p>Trading Sessions & Market Hours is a core concept for any serious trader. In this lesson we break down everything you need to know about london.</p>
-<h4>Overview</h4>
-<p>Understanding london gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="tip-box">
+  <strong>Pro Tip:</strong> On your XAUUSD H4 chart, use the rectangle tool to mark zones around obvious swing points. Give each zone about 5-10 pips of "fuzz." Watch how price reacts when it enters these zones—you'll start seeing high-probability trades.
+</div>
+
+<h4>Dynamic Support and Resistance</h4>
+<p>Not all S/R is horizontal. Moving averages, trendlines, and Fibonacci levels act as dynamic support/resistance. These "moving" levels are just as important as static ones.</p>
+
+<h4>Practical Exercise</h4>
+<p>Take a screenshot of your XAUUSD H4 chart. Without looking at indicators, draw every obvious support and resistance level you can find—at least 10 levels. Do this daily for a week. You'll train your brain to see what most traders miss.</p>
+
+<h4>Key Takeaways</h4>
 <ul>
-<li><strong>London:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>New York:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Overlap:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>When Gold Moves Most:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-</ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:10, track:'trader', level:'Beginner', emoji:'🧠', title:'The Psychology of a New Trader', duration:'20 min',
-    body:`<p>The Psychology of a New Trader is a core concept for any serious trader. In this lesson we break down everything you need to know about fear.</p>
-<h4>Overview</h4>
-<p>Understanding fear gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+<li>Support and resistance form because of human psychology and order flow</li>
+<li>The more touches, the stronger the level—but too many touches can weaken it</li>
+<li>Broken resistance becomes support, and vice versa</li>
+<li>Draw zones, not lines—price respects areas</li>
+<li>Start with higher timeframes for stronger levels</li>
+</ul>` },
+  { id:4, track:'trader', level:'Beginner', emoji:'📈', title:'Trend Analysis — Identifying Market Direction', duration:'27 min',
+    body:`<p>"The trend is your friend until the end." This isn't just a cliché—it's the most profitable truth in trading. Trading with the trend gives you statistical edge; trading against it is fighting the market's gravity.</p>
+
+<div class="key-concept-box">
+  <strong>What is a Trend?</strong>
+  <p>A trend is the persistent directional movement of price over time. Uptrends make higher highs and higher lows. Downtrends make lower highs and lower lows. Sideways (ranging) markets make equal highs and lows.</p>
+</div>
+
+<h4>The Three Trend Types</h4>
 <ul>
-<li><strong>Fear:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Greed:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Fomo:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>The Emotional Cycle:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Uptrend:</strong> Each swing high is higher than the last; each swing low is higher than the last—buyers in control</li>
+<li><strong>Downtrend:</strong> Each swing low is lower than the last; each swing high is lower than the last—sellers in control</li>
+<li><strong>Sideways/Range:</strong> Swings are contained between clear support and resistance—supply and demand balanced</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:11, track:'trader', level:'Beginner', emoji:'📰', title:'Introduction to Fundamental Analysis', duration:'18 min',
-    body:`<p>Introduction to Fundamental Analysis is a core concept for any serious trader. In this lesson we break down everything you need to know about news.</p>
-<h4>Overview</h4>
-<p>Understanding news gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="example-box">
+  <strong>Trend Analysis on Gold:</strong> From November 2022 to December 2023, gold formed a clear uptrend on weekly charts—higher lows at $1,615, $1,800, $1,930, and finally a breakout above $2,075. Traders who bought dips in this uptrend captured 500+ pips multiple times.
+</div>
+
+<h4>Drawing Trendlines Correctly</h4>
 <ul>
-<li><strong>News:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Data:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Interest Rates:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Dxy Correlation:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Uptrend:</strong> Connect at least two higher lows (swing lows)</li>
+<li><strong>Downtrend:</strong> Connect at least two lower highs (swing highs)</li>
+<li><strong>Validity:</strong> Three touches makes a trendline significant</li>
+<li><strong>Angle:</strong> 30-45 degrees is sustainable; steeper often leads to exhaustion</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:12, track:'trader', level:'Beginner', emoji:'🔢', title:'Basic Technical Indicators Explained', duration:'22 min',
-    body:`<p>Basic Technical Indicators Explained is a core concept for any serious trader. In this lesson we break down everything you need to know about ma.</p>
-<h4>Overview</h4>
-<p>Understanding ma gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Multiple Timeframe Trend Analysis</h4>
+<p>The trend on daily might be up, but on 1-hour it might be down. Which one matters? Both—but higher timeframe trend dominates. Use this framework:</p>
 <ul>
-<li><strong>Ma:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Rsi:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Macd — What They Are:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Daily/Weekly:</strong> Your bias (only trade in this direction)</li>
+<li><strong>4-hour:</strong> Your confirmation (wait for setups aligning with bias)</li>
+<li><strong>1-hour/15-min:</strong> Your entry timing (execute when lower timeframe aligns)</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:13, track:'trader', level:'Beginner', emoji:'📅', title:'Reading an Economic Calendar', duration:'15 min',
-    body:`<p>Reading an Economic Calendar is a core concept for any serious trader. In this lesson we break down everything you need to know about high-impact events.</p>
-<h4>Overview</h4>
-<p>Understanding high-impact events gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="tip-box">
+  <strong>The Golden Rule:</strong> Never trade against the daily trend. If daily is uptrend, only look for buy setups. This simple rule eliminates 50% of bad trades immediately.
+</div>
+
+<h4>Trend Strength Indicators</h4>
 <ul>
-<li><strong>High-Impact Events:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Nfp:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Cpi:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Fomc:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>ADX:</strong> Above 25 = trending, below 20 = ranging</li>
+<li><strong>Moving Averages:</strong> Price above 200 EMA = long-term uptrend</li>
+<li><strong>MACD:</strong> Histogram expanding = trend strengthening</li>
+<li><strong>RSI:</strong> Above 50 in uptrend, below 50 in downtrend</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:14, track:'trader', level:'Beginner', emoji:'🗂️', title:'How to Keep a Trade Journal', duration:'12 min',
-    body:`<p>How to Keep a Trade Journal is a core concept for any serious trader. In this lesson we break down everything you need to know about what to record.</p>
-<h4>Overview</h4>
-<p>Understanding what to record gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Practical Exercise</h4>
+<p>Open XAUUSD on H4 and Daily. Label the current trend on both timeframes. If they align (both up or both down), find three reasons supporting that trend. If they conflict, wait for alignment. Do this daily for two weeks—you'll develop "trend eyes."</p>
+
+<h4>Key Takeaways</h4>
 <ul>
-<li><strong>What To Record:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Why Consistency Matters:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-</ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:15, track:'trader', level:'Beginner', emoji:'🧮', title:'Calculating Position Size', duration:'20 min',
-    body:`<p>Calculating Position Size is a core concept for any serious trader. In this lesson we break down everything you need to know about formula.</p>
-<h4>Overview</h4>
-<p>Understanding formula gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+<li>Uptrend = higher highs and higher lows; downtrend = lower highs and lower lows</li>
+<li>Always identify trend before considering any trade</li>
+<li>Higher timeframe trend determines your bias</li>
+<li>Valid trendlines require at least three touches</li>
+<li>Sideways markets require different strategies (range trading)</li>
+</ul>` },
+  { id:5, track:'trader', level:'Beginner', emoji:'🎯', title:'Entry & Exit Strategies — Where and When to Trade', duration:'32 min',
+    body:`<p>Knowing WHAT to trade is useless without knowing WHEN to trade. Entry and exit strategies transform analysis into action. This lesson covers the mechanics of getting into and out of trades with precision.</p>
+
+<div class="key-concept-box">
+  <strong>The Entry/Exit Mindset:</strong>
+  <p>Your edge comes from the combination of entry and exit, not either alone. A perfect entry with a poor exit loses money. A mediocre entry with excellent exit management can be profitable.</p>
+</div>
+
+<h4>Entry Types</h4>
 <ul>
-<li><strong>Formula:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>1% Risk Rule:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Worked Examples:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Market Execution:</strong> Buying/selling at current price—instant, but slippage possible</li>
+<li><strong>Limit Orders:</strong> Setting an order to buy below or sell above current price—you control price, but may not get filled</li>
+<li><strong>Stop Orders:</strong> Setting an order to buy above or sell below current price—entering on breakout/momentum</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:16, track:'trader', level:'Beginner', emoji:'📉', title:'Understanding Drawdown', duration:'15 min',
-    body:`<p>Understanding Drawdown is a core concept for any serious trader. In this lesson we break down everything you need to know about what it is.</p>
-<h4>Overview</h4>
-<p>Understanding what it is gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="example-box">
+  <strong>Limit vs Stop on Gold:</strong> If gold is at $1,950 and you want to buy at $1,940 (expecting support), use a limit order. If you want to buy if it breaks $1,960 (expecting breakout), use a stop order.
+</div>
+
+<h4>Where to Enter: Confluence Zones</h4>
+<p>The best entries combine multiple factors. Look for:</p>
 <ul>
-<li><strong>What It Is:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Acceptable Levels:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Recovery Math:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li>Support/resistance level + trendline touch + Fibonacci level = HIGH PROBABILITY</li>
+<li>Round number + previous day high/low + oversold RSI = HIGH PROBABILITY</li>
+<li>Moving average + trendline + bullish candlestick pattern = HIGH PROBABILITY</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:17, track:'trader', level:'Beginner', emoji:'🌍', title:'What Moves the Gold Price?', duration:'22 min',
-    body:`<p>What Moves the Gold Price? is a core concept for any serious trader. In this lesson we break down everything you need to know about inflation.</p>
-<h4>Overview</h4>
-<p>Understanding inflation gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Exit Strategies</h4>
 <ul>
-<li><strong>Inflation:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Geopolitics:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Usd:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Central Banks:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Fixed Target:</strong> Predetermined profit level based on risk:reward (e.g., 1:2)</li>
+<li><strong>Trailing Stop:</strong> Moving stop loss as price moves in your favor—captures trends</li>
+<li><strong>Partial Profits:</strong> Taking some profit at first target, letting rest run</li>
+<li><strong>Technical Exit:</strong> Exiting at next S/R level, trendline, or on reversal signal</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:18, track:'trader', level:'Beginner', emoji:'🔍', title:'Choosing Your Timeframe', duration:'18 min',
-    body:`<p>Choosing Your Timeframe is a core concept for any serious trader. In this lesson we break down everything you need to know about scalp/day/swing.</p>
-<h4>Overview</h4>
-<p>Understanding scalp/day/swing gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="tip-box">
+  <strong>The 1:2 Minimum Rule:</strong> Never take a trade where potential profit is less than twice your risk. If you risk 20 pips, target at least 40. This means you can be wrong 40% of the time and still break even.
+</div>
+
+<h4>The Complete Trade Plan</h4>
+<p>Before entering ANY trade, write down:</p>
 <ul>
-<li><strong>Scalp/Day/Swing:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Matching Personality To Style:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li>Entry price (specific number)</li>
+<li>Stop loss level (where you're wrong)</li>
+<li>First target (where you take partial)</li>
+<li>Final target (where you exit fully)</li>
+<li>Maximum risk amount (in dollars/pips)</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:19, track:'trader', level:'Beginner', emoji:'💻', title:'Setting Up Your Trading Platform', duration:'15 min',
-    body:`<p>Setting Up Your Trading Platform is a core concept for any serious trader. In this lesson we break down everything you need to know about mt4/mt5 basics.</p>
-<h4>Overview</h4>
-<p>Understanding mt4/mt5 basics gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Common Entry Mistakes</h4>
 <ul>
-<li><strong>Mt4/Mt5 Basics:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Charts:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Order Types:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Chasing:</strong> Entering after price has already moved 30+ pips</li>
+<li><strong>FOMO:</strong> Entering without a plan because you "feel" it will go up</li>
+<li><strong>Averaging down:</strong> Adding to losing positions—the fast path to blowing accounts</li>
+<li><strong>Moving stops:</strong> Widening stop because price got close—dishonoring your plan</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:20, track:'trader', level:'Beginner', emoji:'🎓', title:'Your First XAUUSD Trade — Step by Step', duration:'25 min',
-    body:`<p>Your First XAUUSD Trade — Step by Step is a core concept for any serious trader. In this lesson we break down everything you need to know about walkthrough from analysis to close.</p>
-<h4>Overview</h4>
-<p>Understanding walkthrough from analysis to close gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:21, track:'trader', level:'Beginner', emoji:'📐', title:'Drawing Trendlines Correctly', duration:'18 min',
-    body:`<p>Drawing Trendlines Correctly is a core concept for any serious trader. In this lesson we break down everything you need to know about technique.</p>
-<h4>Overview</h4>
-<p>Understanding technique gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Practical Exercise</h4>
+<p>For the next five trading days, write down three potential trades each day with complete entry/exit plans (entry, stop, targets). Don't take them—just practice planning. Review after each day: Would you have won or lost? Why? This builds planning discipline.</p>
+
+<h4>Key Takeaways</h4>
 <ul>
-<li><strong>Technique:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Breakouts:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>False Breaks:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-</ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:22, track:'trader', level:'Beginner', emoji:'🔄', title:'Understanding Retracements', duration:'20 min',
-    body:`<p>Understanding Retracements is a core concept for any serious trader. In this lesson we break down everything you need to know about pullbacks in trends.</p>
-<h4>Overview</h4>
-<p>Understanding pullbacks in trends gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+<li>Always have entry, stop, and targets defined BEFORE trading</li>
+<li>Combine multiple factors for high-probability entries (confluence)</li>
+<li>Risk:reward minimum 1:2—otherwise don't trade</li>
+<li>Different exit strategies suit different market conditions</li>
+<li>The plan protects you from emotional decisions</li>
+</ul>` },
+  { id:6, track:'trader', level:'Beginner', emoji:'🛑', title:'Stop Losses — Your Ultimate Protection', duration:'25 min',
+    body:`<p>A stop loss is an order to close a trade at a predetermined price if the market moves against you. It's not optional—it's mandatory. Professional traders use stops every single trade; amateurs "hope" the market turns. Hope is not a strategy.</p>
+
+<div class="key-concept-box">
+  <strong>Why Stops Are Non-Negotiable:</strong>
+  <p>Without a stop, a single unexpected news event can wipe months of profits. Gold can move 1000 pips in minutes during NFP or FOMC. Without protection, you're gambling, not trading.</p>
+</div>
+
+<h4>Where to Place Stops</h4>
 <ul>
-<li><strong>Pullbacks In Trends:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Entry On Retrace:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Below support (for longs):</strong> If support breaks, your setup is invalid</li>
+<li><strong>Above resistance (for shorts):</strong> If resistance breaks, bears are wrong</li>
+<li><strong>Beyond recent swing:</strong> Just below last higher low in uptrend</li>
+<li><strong>Behind moving average:</strong> Stop beyond key dynamic support</li>
+<li><strong>% of account:</strong> Never risk more than 1-2% of account on any trade</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:23, track:'trader', level:'Beginner', emoji:'🏦', title:'How Brokers Work', duration:'15 min',
-    body:`<p>How Brokers Work is a core concept for any serious trader. In this lesson we break down everything you need to know about spread.</p>
-<h4>Overview</h4>
-<p>Understanding spread gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<div class="example-box">
+  <strong>Correct Stop Placement:</strong> You buy gold at $1,950, with nearest support at $1,940. Place stop at $1,938—below support, giving it "room to breathe." Risk: 12 pips. If support holds, price bounces; if it breaks, you're out with small loss.
+</div>
+
+<h4>The "Room to Breathe" Concept</h4>
+<p>Stops placed too tight get hit by normal market noise. Gold often spikes 5-10 pips against you before moving in your direction. Give your trade space to work. Place stops where the trade is objectively wrong, not where you're uncomfortable.</p>
+
+<div class="warning-box">
+  <strong>Common Stop Error:</strong> Placing stops at exact round numbers ($1,950, $2,000). Institutions hunt these. Place stops 5-10 pips beyond to avoid being stopped by market makers.
+</div>
+
+<h4>Stop Types</h4>
 <ul>
-<li><strong>Spread:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Swap:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Leverage Explained Simply:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li><strong>Fixed Stop:</strong> Set and forget—best for most traders</li>
+<li><strong>Trailing Stop:</strong> Moves with price—locks in profits during trends</li>
+<li><strong>Time Stop:</strong> Exit after X time if target not hit—capital efficiency</li>
+<li><strong>Break-even Stop:</strong> Move stop to entry after price moves favorably—risk-free trade</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:24, track:'trader', level:'Beginner', emoji:'💰', title:'Understanding Margin & Leverage', duration:'22 min',
-    body:`<p>Understanding Margin & Leverage is a core concept for any serious trader. In this lesson we break down everything you need to know about margin call.</p>
-<h4>Overview</h4>
-<p>Understanding margin call gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Position Sizing and Stops</h4>
+<p>Stop distance determines position size, not the other way around. Formula:</p>
+<p><strong>Position Size = (Account Risk $) ÷ (Stop Distance in Pips × Pip Value)</strong></p>
+<p>Example: Risk $100, stop 20 pips, pip value $10 → $100 ÷ (20 × $10) = 0.5 lots</p>
+
+<h4>Psychological Benefits of Stops</h4>
 <ul>
-<li><strong>Margin Call:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Safe Leverage:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Real Examples:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li>Removes emotional decision-making during trades</li>
+<li>Defines risk before entering—no surprises</li>
+<li>Allows you to detach and let the trade work</li>
+<li>Preserves capital for the next opportunity</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
-  { id:25, track:'trader', level:'Beginner', emoji:'✅', title:'Beginner Review & Quiz', duration:'15 min',
-    body:`<p>Beginner Review & Quiz is a core concept for any serious trader. In this lesson we break down everything you need to know about recap of lessons 1–24.</p>
-<h4>Overview</h4>
-<p>Understanding recap of lessons 1–24 gives you a significant edge. Most traders overlook this — mastering it separates the profitable minority from the losing majority. Apply what you learn here immediately in your trading or affiliate work.</p>
-<h4>Key Concepts</h4>
+
+<h4>Practical Exercise</h4>
+<p>Review your last 10 trades (or demo trades). For each, write: Where should the stop have been? Was it hit? If not, did the trade eventually work? This teaches you proper stop placement relative to your strategy.</p>
+
+<h4>Key Takeaways</h4>
 <ul>
-<li><strong>Recap Of Lessons 1–24:</strong> A foundational element that directly impacts your results when applied correctly.</li>
-<li><strong>Self-Assessment:</strong> A foundational element that directly impacts your results when applied correctly.</li>
+<li>Every trade must have a stop loss before entry</li>
+<li>Place stops where the trade is invalidated, not where you're scared</li>
+<li>Give trades room—avoid stops at exact obvious levels</li>
+<li>Stop distance determines position size, not emotion</li>
+<li>Stops are your survival mechanism—never trade without them</li>
+</ul>` },
+  { id:7, track:'trader', level:'Beginner', emoji:'⚖️', title:'Risk-to-Reward Ratio — The Math of Profitability', duration:'28 min',
+    body:`<p>Risk-to-reward ratio (R:R) compares how much you risk to how much you expect to gain. A 1:2 ratio means risking $1 to make $2. This single metric determines whether you can be wrong often and still profitable.</p>
+
+<div class="key-concept-box">
+  <strong>The Math That Matters:</strong>
+  <p>Win rate alone means nothing. A 90% win rate with 1:10 R:R loses money. A 40% win rate with 1:2 R:R makes money. Profitability = (Win Rate × Average Win) - (Loss Rate × Average Loss).</p>
+</div>
+
+<h4>Minimum Acceptable R:R by Strategy</h4>
+<ul>
+<li><strong>Scalping:</strong> 1:1 minimum (need 50%+ win rate)</li>
+<li><strong>Day Trading:</strong> 1:2 minimum (need 35%+ win rate)</li>
+<li><strong>Swing Trading:</strong> 1:3 minimum (need 25%+ win rate)</li>
+<li><strong>Position Trading:</strong> 1:5+ (need only 17% win rate)</li>
 </ul>
-<h4>Practical Application</h4>
-<p>To implement what you've learned in this lesson: first review your recent trader activity and identify where this concept applies. Then set one specific action to take in the next 24 hours. Consistency in applying small improvements compounds significantly over time.</p>
-<h4>Next Steps</h4>
-<p>After completing this lesson, log any relevant notes in your journal and move on to the next lesson. The concepts in this track build sequentially — each lesson prepares you for the next. Stay consistent, take notes, and re-read any section that needs more clarity.</p>` },
+
+<div class="example-box">
+  <strong>The 1:2 Advantage:</strong> You take 10 trades risking $50 each ($500 total). You win 4 (40% win rate) at 1:2 = $100 profit each = $400 total profit. You lose 6 = $300 total loss. Net profit: $100. You were wrong 60% of the time and still made money!
+</div>
+
+<h4>How to Calculate Position Size from R:R</h4>
+<p>If your stop is 20 pips and you want 1:3, target is 60 pips. If your account is $10,000 and you risk 1% ($100), your position size is: $100 ÷ (20 pips × pip value).</p>
+
+<h4>Realistic R:R Targets on Gold</h4>
+<ul>
+<li><strong>M5 scalps:</strong> 10-15 pip stop, 10-20 pip target (1:1 to 1:1.5)</li>
+<li><strong>M15 trades:</strong> 20-30 pip stop, 40-90 pip target (1:2 to 1:3)</li>
+<li><strong>H1 trades:</strong> 40-60 pip stop, 120-240 pip target (1:3 to 1:4)</li>
+<li><strong>H4 swings:</strong> 80-150 pip stop, 300-600 pip target (1:3 to 1:5)</li>
+</ul>
+
+<div class="tip-box">
+  <strong>Pro Tip:</strong> Don't force R:R. Let the market structure tell you where logical stops and targets are. If nearest support is 20 pips away and next resistance is 80 pips away, that's a 1:4 opportunity. If they're 20 and 25, that's only 1:1.25—skip it.
+</div>
+
+<h4>The R:R and Win Rate Trade-off</h4>
+<p>Higher R:R usually means lower win rate. This is normal. A 1:5 strategy might win only 20% of the time but still be highly profitable. The key is finding your psychological comfort zone.</p>
+
+<h4>Common R:R Mistakes</h4>
+<ul>
+<li><strong>Taking 1:1 trades:</strong> Requires >50% win rate—very hard to maintain</li>
+<li><strong>Moving targets closer:</strong> Taking profit early ruins R:R</li>
+<li><strong>Letting winners become losers:</strong> Failing to protect profits destroys edge</li>
+<li><strong>Not considering spread:</strong> In gold, spread counts toward your stop distance</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>For the next 20 trades you take (or demo), record: Entry, stop, target, actual outcome. Calculate your average win, average loss, and win rate. Plug into: (Win% × Avg Win) - (Loss% × Avg Loss). Is it positive? If not, adjust your R:R requirements.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>R:R determines profitability more than win rate</li>
+<li>Minimum 1:2 for day/swing trading, 1:3 for longer-term</li>
+<li>Let market structure define your R:R—don't force arbitrary targets</li>
+<li>Higher R:R usually means lower win rate—that's fine</li>
+<li>Track your actual R:R performance, not just planned</li>
+</ul>` },
+  { id:8, track:'trader', level:'Beginner', emoji:'💱', title:'Understanding Pips & Lot Sizes — The Numbers Behind the Trade', duration:'26 min',
+    body:`<p>A pip is the smallest price move in a currency pair. For XAUUSD, 1 pip is typically $0.10 (10 cents) for most brokers, though some quote to 2 decimal places ($0.01). Understanding pip values is essential for proper position sizing and risk management.</p>
+
+<div class="key-concept-box">
+  <strong>Pip Definition:</strong>
+  <p>Most brokers quote XAUUSD to two decimal places (e.g., 1,950.50). A move from 1,950.50 to 1,951.50 is 1 pip (or 100 points if your broker uses 3 decimals). Always check your broker's pip definition.</p>
+</div>
+
+<h4>Pip Value Calculation</h4>
+<p>Pip value depends on position size and the instrument. For XAUUSD:</p>
+<ul>
+<li><strong>1 standard lot (100 oz):</strong> 1 pip = $10</li>
+<li><strong>1 mini lot (10 oz):</strong> 1 pip = $1</li>
+<li><strong>1 micro lot (1 oz):</strong> 1 pip = $0.10</li>
+</ul>
+
+<div class="example-box">
+  <strong>Real Example:</strong> You buy 0.5 mini lots (5 oz) at $1,950. Your stop is 20 pips. Risk = 20 pips × $5 pip value = $100. If target is 40 pips, profit = 40 × $5 = $200. Perfect 1:2 R:R.
+</div>
+
+<h4>Position Sizing Formula</h4>
+<p><strong>Position Size (lots) = (Account Risk $) ÷ (Stop Loss in Pips × Pip Value per Lot)</strong></p>
+<p>Example: $10,000 account, risk 1% ($100), stop 25 pips, pip value per standard lot = $10. Position size = $100 ÷ (25 × $10) = 0.4 standard lots.</p>
+
+<div class="tip-box">
+  <strong>Critical Rule:</strong> Always calculate position size based on stop distance, not the other way around. Never choose a stop distance based on what lot size you want to trade—that's gambling.
+</div>
+
+<h4>Leverage and Margin</h4>
+<p>Leverage allows you to control larger positions with less capital. 1:100 leverage means $1,000 controls $100,000. But leverage amplifies both profits AND losses. Higher leverage doesn't mean you should trade larger size—it just reduces margin requirements.</p>
+
+<h4>Margin Requirements for Gold</h4>
+<p>Different brokers have different margin requirements. Typically:</p>
+<ul>
+<li>1 standard lot gold requires approximately $1,000-$2,000 margin at 1:100 leverage</li>
+<li>Always check your broker's margin calculator before trading</li>
+<li>Never use more than 5-10% of account for margin on all open positions</li>
+</ul>
+
+<h4>Common Pip/Sizing Mistakes</h4>
+<ul>
+<li><strong>Ignoring spread:</strong> 20 pip stop with 5 pip spread = actually 15 pip effective stop</li>
+<li><strong>Overtrading:</strong> Using too large size relative to account</li>
+<li><strong>Inconsistent pip values:</strong> Not checking if broker uses 2 or 3 decimal quotes</li>
+<li><strong>Adding to losers:</strong> Increasing position size while wrong = account killer</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Using a demo account, practice these calculations for 10 hypothetical trades:</p>
+<ul>
+<li>Account size: $5,000, risk 1% ($50), stop 30 pips → position size?</li>
+<li>Account size: $10,000, risk 0.5% ($50), stop 15 pips → position size?</li>
+<li>Account size: $25,000, risk 2% ($500), stop 40 pips → position size?</li>
+</ul>
+<p>Calculate before checking with a position size calculator. Do this until it's automatic.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>1 pip on gold = $10 per standard lot, $1 per mini lot, $0.10 per micro lot</li>
+<li>Position size = (Account risk $) ÷ (Stop pips × Pip value per lot)</li>
+<li>Leverage increases buying power but also risk—use it responsibly</li>
+<li>Always account for spread in your stop distance</li>
+<li>Never risk more than 1-2% per trade</li>
+</ul>` },
+  { id:9, track:'trader', level:'Beginner', emoji:'🕐', title:'Trading Sessions & Market Hours — When Gold Moves', duration:'25 min',
+    body:`<p>The forex market operates 24 hours a day, but gold doesn't move equally in all sessions. Understanding when volatility peaks helps you trade when the odds are in your favor and avoid getting chopped up in slow markets.</p>
+
+<div class="key-concept-box">
+  <strong>The Three Major Sessions (all times GMT):</strong>
+  <ul>
+    <li><strong>Asian Session:</strong> 00:00 - 09:00 — Low volatility, ranging</li>
+    <li><strong>London Session:</strong> 08:00 - 17:00 — High volatility, trend begins</li>
+    <li><strong>New York Session:</strong> 13:00 - 22:00 — Highest volatility, momentum</li>
+  </ul>
+</div>
+
+<h4>When Gold Moves Most</h4>
+<p>Gold's highest volatility occurs during:</p>
+<ul>
+<li><strong>London Open (08:00 GMT):</strong> First major volume of the day</li>
+<li><strong>New York Open (13:00 GMT):</strong> US traders enter, volume spikes</li>
+<li><strong>London Close / NY Overlap (13:00-17:00 GMT):</strong> Peak volatility—both sessions active</li>
+<li><strong>US Economic Data:</strong> NFP, CPI, FOMC (always 13:30 or 14:00 GMT depending on daylight savings)</li>
+</ul>
+
+<div class="example-box">
+  <strong>Session Impact Example:</strong> Gold might range in Asian session between $1,950-1,955. London opens, price breaks to $1,958. NY opens, momentum accelerates to $1,965. The trend established in London often continues into NY—this is your edge.
+</div>
+
+<h4>Session Characteristics</h4>
+<ul>
+<li><strong>Asian Session:</strong> Range-bound, support/resistance holds, good for breakout traders waiting for London</li>
+<li><strong>London Session:</strong> Trend initiation, first move of the day, high probability direction</li>
+<li><strong>New York Session:</strong> Momentum continuation, often the strongest move, news-driven volatility</li>
+<li><strong>Overlap (13:00-17:00):</strong> Maximum volume, best trading hours, avoid during news if you're not trading it</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The Golden Hours:</strong> For most retail traders, the best time to trade gold is 08:00-17:00 GMT. This covers London open through NY close. Outside these hours, volatility drops and spreads often widen—not ideal for most strategies.
+</div>
+
+<h4>Daylight Savings Impact</h4>
+<p>Session times shift by one hour during daylight savings:</p>
+<ul>
+<li><strong>Summer (March-October):</strong> London open 07:00 GMT, NY open 12:00 GMT</li>
+<li><strong>Winter (November-February):</strong> London open 08:00 GMT, NY open 13:00 GMT</li>
+<li>Always check current session times on your trading platform</li>
+</ul>
+
+<h4>When NOT to Trade</h4>
+<ul>
+<li>Last hour of NY session (21:00-22:00 GMT)—profit-taking, erratic moves</li>
+<li>Asian session unless you're a range trader</li>
+<li>5 minutes before major news releases—spreads blow out, slippage common</li>
+<li>Sunday open—low liquidity, false moves</li>
+<li>Friday afternoon—position squaring, unpredictable</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>For one week, mark on your chart when each session opens and closes. Note the price action: Does London usually establish direction? Does NY continue it? What time do reversals often happen? Build your personal "gold hours" based on observation.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>London and NY sessions drive gold's biggest moves</li>
+<li>Asian session is typically range-bound—trade breakouts or wait</li>
+<li>Session overlap (13:00-17:00 GMT) offers highest volatility</li>
+<li>Avoid low-liquidity periods unless you have a specific strategy</li>
+<li>Know your local session times relative to GMT</li>
+</ul>` },
+  { id:10, track:'trader', level:'Beginner', emoji:'🧠', title:'The Psychology of a New Trader — Your Biggest Enemy', duration:'35 min',
+    body:`<p>Technical analysis is 20% of trading success. The other 80% is psychology. Your brain is wired to lose money in the markets—understanding these wiring flaws is the first step to rewiring for profitability.</p>
+
+<div class="key-concept-box">
+  <strong>The Four Horsemen of Trading Destruction:</strong>
+  <ul>
+    <li><strong>Fear:</strong> Missing out (FOMO), closing winners too early, not taking trades</li>
+    <li><strong>Greed:</strong> Overtrading, adding to losers, moving targets</li>
+    <li><strong>Hope:</strong> Holding losers, not cutting losses, "it will come back"</li>
+    <li><strong>Revenge:</strong> Doubling down after loss, abandoning strategy</li>
+  </ul>
+</div>
+
+<h4>The Emotional Cycle of a Trade</h4>
+<ul>
+<li><strong>Anticipation:</strong> Excitement before entry—danger zone for impulsive trades</li>
+<li><strong>Entry:</strong> Adrenaline, immediate emotional attachment to the trade</li>
+<li><strong>Early Movement:</strong> If against you, fear spikes; if for you, greed emerges</li>
+<li><strong>Mid-Trade:</strong> Anxiety, checking charts constantly, emotional exhaustion</li>
+<li><strong>Exit:</strong> Relief or regret—both dangerous for next trade</li>
+</ul>
+
+<div class="example-box">
+  <strong>FOMO Example:</strong> Gold breaks out to $1,960. You didn't buy. It goes to $1,965. You think "I'm missing out!" and buy at $1,967. It reverses to $1,958. You panic sell at $1,959. Loss: 8 pips. The lesson: Don't chase—there's always another trade.
+</div>
+
+<h4>Common Psychological Traps</h4>
+<ul>
+<li><strong>Confirmation Bias:</strong> Only seeing information that supports your trade, ignoring warnings</li>
+<li><strong>Loss Aversion:</strong> Feeling loss twice as intensely as same-sized gain—leads to holding losers</li>
+<li><strong>Recency Bias:</strong> Last trade (win or loss) influences next trade too heavily</li>
+<li><strong>Overconfidence After Wins:</strong> Increasing size, taking worse setups after a streak</li>
+<li><strong>Paralysis After Losses:</strong> Not taking valid setups after a loss</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The Journal Solution:</strong> Write down your emotional state before, during, and after every trade. Review weekly. You'll spot patterns—"I always revenge trade after lunch," "I take bad entries when excited." Awareness is the first step to change.
+</div>
+
+<h4>The Professional Mindset</h4>
+<ul>
+<li><strong>Detachment:</strong> Each trade is one data point in 1000, not life or death</li>
+<li><strong>Process-Focused:</strong> Judge success by following your plan, not by win/loss</li>
+<li><strong>Probabilistic Thinking:</strong> Even great setups lose sometimes—that's normal</li>
+<li><strong>Continuous Learning:</strong> Losses are tuition, not failures</li>
+<li><strong>Patience:</strong> Waiting for A+ setups, not forcing trades</li>
+</ul>
+
+<h4>Practical Psychological Exercises</h4>
+<ul>
+<li><strong>Meditation:</strong> 5 minutes before trading—clears emotional noise</li>
+<li><strong>Trade Size Reduction:</strong> After 3 losses, cut size by 50% until back to even</li>
+<li><strong>Post-Trade Review:</strong> "Did I follow my plan? If not, why?"</li>
+<li><strong>Physical Separation:</strong> Step away from screen after loss—reset emotionally</li>
+<li><strong>Gratitude Practice:</strong> Note one trading lesson learned each day, win or lose</li>
+</ul>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Psychology determines long-term success more than strategy</li>
+<li>Fear, greed, hope, and revenge are your real enemies</li>
+<li>Journal emotions to identify destructive patterns</li>
+<li>Focus on process, not outcomes—good process leads to good results over time</li>
+<li>Professional traders think in probabilities, not certainties</li>
+</ul>` },
+  { id:11, track:'trader', level:'Beginner', emoji:'📰', title:'Introduction to Fundamental Analysis — What Really Moves Gold', duration:'30 min',
+    body:`<p>While technical analysis tells you WHERE to trade, fundamental analysis tells you WHY price moves. Understanding fundamentals gives you conviction during volatile moves and helps you avoid trading against massive institutional flows.</p>
+
+<div class="key-concept-box">
+  <strong>The Primary Drivers of Gold Price:</strong>
+  <ul>
+    <li><strong>US Dollar Strength:</strong> Inverse correlation—strong dollar = weak gold</li>
+    <li><strong>Interest Rates:</strong> Higher rates = stronger dollar = weaker gold</li>
+    <li><strong>Inflation:</strong> Higher inflation = gold as hedge = stronger gold</li>
+    <li><strong>Geopolitical Risk:</strong> Uncertainty = safe-haven buying = stronger gold</li>
+    <li><strong>Central Bank Policies:</strong> Fed dovish = gold up; Fed hawkish = gold down</li>
+  </ul>
+</div>
+
+<h4>The Dollar-Gold Relationship</h4>
+<p>Gold is priced in US dollars. When dollar strengthens, you need fewer dollars to buy gold—price falls. When dollar weakens, you need more dollars—price rises. This inverse correlation is ~80% reliable. Watch DXY (Dollar Index) alongside gold.</p>
+
+<div class="example-box">
+  <strong>Real Example:</strong> June 2022: Fed raises rates aggressively, DXY surges to 114. Gold falls from $2,070 to $1,620. November 2023: Fed signals rate cuts, DXY drops to 101, gold rallies to $2,150. Fundamentals drove both moves.
+</div>
+
+<h4>Interest Rates and Gold</h4>
+<p>Gold pays no interest. When bonds pay 5%, holding gold has "opportunity cost." When rates are low, gold becomes more attractive. Key indicators:</p>
+<ul>
+<li><strong>Real Yields:</strong> Treasury yields minus inflation—falling real yields = gold up</li>
+<li><strong>Fed Funds Rate:</strong> Expectations of future rates drive gold more than current rates</li>
+<li><strong>Rate Cut Expectations:</strong> Gold typically rallies 3-6 months BEFORE first cut</li>
+</ul>
+
+<h4>Inflation's Impact</h4>
+<p>Gold is historically an inflation hedge. When CPI (Consumer Price Index) rises, investors buy gold to preserve purchasing power. But markets are forward-looking—it's inflation EXPECTATIONS that move gold, not reported inflation.</p>
+
+<h4>Geopolitical Events</h4>
+<ul>
+<li><strong>War/Conflict:</strong> Ukraine-Russia (Feb 2022): gold spiked $100 in days</li>
+<li><strong>Banking Crises:</strong> Silicon Valley Bank collapse (March 2023): gold surged $150</li>
+<li><strong>Elections:</strong> Uncertainty around outcomes can boost gold</li>
+<li><strong>Trade Wars:</strong> US-China tensions often support gold</li>
+</ul>
+
+<div class="tip-box">
+  <strong>News Trading Framework:</strong>
+  <ul>
+    <li>Before news: Expect volatility, reduce size, widen stops</li>
+    <li>During news: Don't trade unless you have a specific news strategy</li>
+    <li>After news: Let market settle (15-30 min), then trade the reaction</li>
+  </ul>
+</div>
+
+<h4>Key Economic Indicators for Gold</h4>
+<ul>
+<li><strong>Non-Farm Payrolls (NFP):</strong> First Friday monthly—massive gold moves</li>
+<li><strong>CPI (Inflation):</strong> Monthly—bigger than expected = gold volatile</li>
+<li><strong>FOMC Statements:</strong> 8 times/year—rate decisions and forward guidance</li>
+<li><strong>GDP:</strong> Quarterly—economic health indicator</li>
+<li><strong>Retail Sales:</strong> Consumer spending strength</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Create an economic calendar alert for the next major US data release. Watch gold 30 minutes before and 60 minutes after. Note: Did price spike and reverse? Trend after? Did it respect technical levels? Build your own "news reaction playbook."</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Gold has strong inverse correlation with dollar and yields</li>
+<li>Inflation, geopolitics, and central banks drive long-term trends</li>
+<li>Market moves on EXPECTATIONS, not reported data</li>
+<li>Know when major economic data releases occur</li>
+<li>Combine fundamental context with technical execution</li>
+</ul>` },
+  { id:12, track:'trader', level:'Beginner', emoji:'🔢', title:'Basic Technical Indicators Explained — Tools, Not Crutches', duration:'27 min',
+    body:`<p>Indicators are mathematical calculations based on price and volume. They help identify trends, momentum, and potential reversals. But they're tools, not crystal balls—the best traders use them as confirmation, not as standalone signals.</p>
+
+<div class="key-concept-box">
+  <strong>The Golden Rule of Indicators:</strong>
+  <p>Never take a trade based on ONE indicator. Wait for confluence—multiple indicators agreeing, or indicators aligning with price action. The more confirmation, the higher the probability.</p>
+</div>
+
+<h4>Moving Averages — The Trend Foundation</h4>
+<p>Moving averages smooth price data to show trend direction.</p>
+<ul>
+<li><strong>Simple MA (SMA):</strong> Average price over X periods—slower, smoother</li>
+<li><strong>Exponential MA (EMA):</strong> Gives more weight to recent price—faster, more responsive</li>
+<li><strong>Key periods for gold:</strong> 20 EMA (short-term), 50 EMA (medium), 200 EMA (long-term)</li>
+</ul>
+
+<div class="example-box">
+  <strong>MA Strategy:</strong> In uptrend, price pulls back to 20 EMA, bounces—buy signal. In downtrend, price rallies to 20 EMA, rejects—sell signal. When 20 crosses above 50 = "golden cross" bullish; 20 below 50 = "death cross" bearish.
+</div>
+
+<h4>RSI — Momentum and Exhaustion</h4>
+<p>Relative Strength Index measures speed and change of price movements (0-100).</p>
+<ul>
+<li><strong>Above 70:</strong> Overbought—potential reversal down (but can stay overbought in strong trends)</li>
+<li><strong>Below 30:</strong> Oversold—potential reversal up (but can stay oversold)</li>
+<li><strong>Divergence:</strong> Price makes higher high, RSI makes lower high = bearish divergence</li>
+</ul>
+
+<h4>MACD — Trend and Momentum Combined</h4>
+<p>Moving Average Convergence Divergence shows relationship between two MAs.</p>
+<ul>
+<li><strong>MACD Line:</strong> Fast MA minus slow MA</li>
+<li><strong>Signal Line:</strong> MA of MACD line</li>
+<li><strong>Histogram:</strong> MACD minus Signal—expanding = momentum increasing</li>
+<li><strong>Crossovers:</strong> MACD above Signal = bullish; below = bearish</li>
+</ul>
+
+<div class="tip-box">
+  <strong>Beginner Indicator Stack (Simple & Effective):</strong>
+  <ul>
+    <li>20 EMA on H1/H4—trend direction</li>
+    <li>RSI (14) on H1—momentum confirmation</li>
+    <li>Support/resistance levels—entry zones</li>
+    <li>That's it. Three tools. Master these before adding more.</li>
+  </ul>
+</div>
+
+<h4>Bollinger Bands — Volatility Measurement</h4>
+<p>Three bands: middle MA, upper (MA + 2 std dev), lower (MA - 2 std dev).</p>
+<ul>
+<li><strong>Wide bands:</strong> High volatility</li>
+<li><strong>Narrow bands (squeeze):</strong> Low volatility—often precedes big move</li>
+<li><strong>Touch upper band:</strong> Potentially overextended (in range)</li>
+<li><strong>Touch lower band:</strong> Potentially oversold (in range)</li>
+</ul>
+
+<h4>Common Indicator Mistakes</h4>
+<ul>
+<li><strong>Overloading charts:</strong> 10 indicators = paralysis by analysis</li>
+<li><strong>Ignoring price action:</strong> Indicators derived from price—price is primary</li>
+<li><strong>Using lagging indicators alone:</strong> They confirm, they don't predict</li>
+<li><strong>Same settings on all timeframes:</strong> Adjust periods for your timeframe</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Add 20 EMA and RSI (14) to your XAUUSD H1 chart. For one week, don't trade—just observe. Note every time price touches 20 EMA with RSI >50 (bullish) or <50 (bearish). How often does price continue in that direction? Build your own stats.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Indicators confirm what price action shows—they don't replace it</li>
+<li>Start with 2-3 indicators and master them before adding more</li>
+<li>Different timeframes need different indicator settings</li>
+<li>Divergence is one of the most powerful signals (price vs indicator)</li>
+<li>Indicators work best in conjunction with support/resistance</li>
+</ul>` },
+  { id:13, track:'trader', level:'Beginner', emoji:'📅', title:'Reading an Economic Calendar — Your Trading Roadmap', duration:'22 min',
+    body:`<p>An economic calendar lists all scheduled economic releases, central bank meetings, and events that move markets. Knowing what's coming allows you to prepare, avoid unnecessary risk, and position for volatility.</p>
+
+<div class="key-concept-box">
+  <strong>Why You Need an Economic Calendar:</strong>
+  <p>Major news can move gold 500-1000 pips in minutes. Without knowing the calendar, you could be holding a trade when a nuclear bomb drops on your position. With the calendar, you either close before or trade the volatility deliberately.</p>
+</div>
+
+<h4>Calendar Essentials — What Each Column Means</h4>
+<ul>
+<li><strong>Currency:</strong> USD events matter most for gold (some EUR/GBP matter too)</li>
+<li><strong>Impact:</strong> Low/Medium/High—only trade around high-impact events</li>
+<li><strong>Actual/Forecast/Previous:</strong> Compare actual to forecast—bigger miss = bigger move</li>
+<li><strong>Volatility Expectation:</strong> Some calendars show expected pip range</li>
+</ul>
+
+<div class="example-box">
+  <strong>News Reaction Framework:</strong>
+  <p>NFP forecast: 200K, previous: 180K. Actual: 300K (much stronger). Dollar rallies, gold drops 300 pips in 30 minutes. If you weren't in a trade, you watch. If you were long, your stop should have been wide enough or you should have closed before.</p>
+</div>
+
+<h4>High-Impact Events for Gold</h4>
+<ul>
+<li><strong>FOMC (Federal Reserve):</strong> Rate decisions and press conference—always moves gold</li>
+<li><strong>NFP (Non-Farm Payrolls):</strong> First Friday monthly—employment data</li>
+<li><strong>CPI (Consumer Price Index):</strong> Inflation data—directly impacts rate expectations</li>
+<li><strong>PPI (Producer Price Index):</strong> Wholesale inflation—leading indicator</li>
+<li><strong>Retail Sales:</strong> Consumer spending strength</li>
+<li><strong>GDP:</strong> Overall economic growth</li>
+<li><strong>Jackson Hole Symposium:</strong> Annual central bank meeting—major policy signals</li>
+</ul>
+
+<div class="tip-box">
+  <strong>News Trading Rules for Beginners:</strong>
+  <ul>
+    <li>Rule 1: Don't trade 15 minutes before high-impact news</li>
+    <li>Rule 2: Never hold a trade through news unless you have a wide stop</li>
+    <li>Rule 3: Wait 15-30 minutes after news for direction to settle</li>
+    <li>Rule 4: Trade the reaction, not the release</li>
+  </ul>
+</div>
+
+<h4>How to Prepare for News</h4>
+<ul>
+<li><strong>24 hours before:</strong> Check calendar, mark high-impact events in your trading hours</li>
+<li><strong>1 hour before:</strong> Close or adjust positions if you're not trading news</li>
+<li><strong>15 minutes before:</strong> No new entries—wait</li>
+<li><strong>During release:</strong> Watch, don't trade (unless you have a news strategy)</li>
+<li><strong>After release:</strong> Let first spike settle, then look for reversal or continuation setups</li>
+</ul>
+
+<h4>Forecast vs Actual — Understanding the Move</h4>
+<p>The market prices in EXPECTATIONS. The move comes from the DIFFERENCE between actual and forecast:</p>
+<ul>
+<li><strong>Actual >> Forecast:</strong> Stronger than expected = dollar up, gold down (usually)</li>
+<li><strong>Actual << Forecast:</strong> Weaker than expected = dollar down, gold up (usually)</li>
+<li><strong>Actual = Forecast:</strong> "As expected"—often muted reaction or reversal</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Bookmark a free economic calendar (ForexFactory, Investing.com). For the next month, every Sunday, note all high-impact USD events. Set alerts 15 minutes before each. Watch how gold reacts—build your personal "news reaction database."</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Economic calendar tells you when NOT to trade (if you're risk-averse)</li>
+<li>High-impact USD events move gold significantly</li>
+<li>Market moves on difference between actual and forecast</li>
+<li>Never hold positions through news without a plan</li>
+<li>Reaction after news often offers best trading opportunities</li>
+</ul>` },
+  { id:14, track:'trader', level:'Beginner', emoji:'🗂️', title:'How to Keep a Trade Journal — Your Path to Improvement', duration:'20 min',
+    body:`<p>A trade journal is the single most powerful tool for improvement. It transforms trading from guessing to practicing. Professional athletes watch game film—traders review journals. Without one, you're doomed to repeat the same mistakes.</p>
+
+<div class="key-concept-box">
+  <strong>What Gets Measured Gets Improved:</strong>
+  <p>You can't fix what you don't track. A journal reveals your winning patterns (do more of these) and losing patterns (eliminate these). It's the difference between 10 years of experience and 1 year repeated 10 times.</p>
+</div>
+
+<h4>What to Record for Every Trade</h4>
+<ul>
+<li><strong>Date & Time:</strong> Session context matters</li>
+<li><strong>Setup Type:</strong> Support bounce? Trendline break? News reaction?</li>
+<li><strong>Screenshot:</strong> Chart with entries, stops, targets marked</li>
+<li><strong>Entry/Exit Prices:</strong> Exact numbers</li>
+<li><strong>Position Size:</strong> Lots and risk amount</li>
+<li><strong>Stop Loss:</strong> Distance and price</li>
+<li><strong>Target:</strong> Initial target and actual exit</li>
+<li><strong>R:R:</strong> Planned vs actual</li>
+<li><strong>Emotional State:</strong> Before, during, after</li>
+<li><strong>Lesson:</strong> What did this trade teach you?</li>
+</ul>
+
+<div class="example-box">
+  <strong>Journal Entry Example:</strong>
+  <p>2025-02-15 14:30 GMT — Long XAUUSD at $1,952.50<br>
+  Setup: Support bounce at $1,950 (previous day low) + bullish engulfing on M15<br>
+  Stop: $1,948.00 (25 pips) — Risk $50 (0.5% account)<br>
+  Target: $1,962.50 (100 pips) — 1:4 R:R<br>
+  Exit: $1,960.00 (partial at 75 pips), rest at $1,965 (trailed)<br>
+  Emotion: Patient, waited for bounce confirmation<br>
+  Lesson: Waiting for candle close before entry avoided false breakout</p>
+</div>
+
+<h4>Weekly Review Routine</h4>
+<p>Every Sunday, spend 30 minutes reviewing your week:</p>
+<ul>
+<li>Win rate by setup type (what's working?)</li>
+<li>Average R:R by session (when are you most profitable?)</li>
+<li>Biggest losses (why? how to avoid?)</li>
+<li>Emotional patterns (when do you make bad decisions?)</li>
+<li>One thing to improve next week</li>
+</ul>
+
+<div class="tip-box">
+  <strong>Digital Journal Tools:</strong>
+  <ul>
+    <li>Google Sheets/Excel — simple, free, customizable</li>
+    <li>Tradervue — specialized trading journal with analytics</li>
+    <li>Edgewonk — advanced stats and performance tracking</li>
+    <li>Even a notebook works—consistency matters more than tool</li>
+  </ul>
+</div>
+
+<h4>Key Metrics to Track</h4>
+<ul>
+<li><strong>Win Rate:</strong> % of winning trades</li>
+<li><strong>Average Win / Average Loss:</strong> Your actual R:R</li>
+<li><strong>Profit Factor:</strong> Gross profit ÷ Gross loss (target >1.5)</li>
+<li><strong>Max Drawdown:</strong> Biggest peak-to-trough drop</li>
+<li><strong>Expectancy:</strong> (Win% × Avg Win) - (Loss% × Avg Loss) — your true edge</li>
+<li><strong>Sharpe Ratio:</strong> Risk-adjusted returns (advanced)</li>
+</ul>
+
+<h4>Common Journal Mistakes</h4>
+<ul>
+<li><strong>Not journaling at all:</strong> Flying blind</li>
+<li><strong>Only journaling losses:</strong> Learn from winners too</li>
+<li><strong>Too much data, no review:</strong> Journal is useless without analysis</li>
+<li><strong>Dishonest entries:</strong> "I followed my plan" when you didn't—cheating yourself</li>
+<li><strong>No screenshots:</strong> You won't remember chart context</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Create a journal template today. For the next 20 trades (demo or live), record EVERY field listed above. After 20 trades, review: What patterns emerge? What's your best setup? Worst time to trade? This data is gold—use it.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Journaling transforms random trading into deliberate practice</li>
+<li>Record not just numbers, but emotions and context</li>
+<li>Review weekly—don't just collect data, analyze it</li>
+<li>Track metrics that matter: expectancy, profit factor, win rate by setup</li>
+<li>Be brutally honest—the journal is for you, no one else</li>
+</ul>` },
+  { id:15, track:'trader', level:'Beginner', emoji:'🧮', title:'Calculating Position Size — The Mathematics of Safety', duration:'25 min',
+    body:`<p>Position sizing is the most underrated skill in trading. You can have a 90% win rate and blow up with poor position sizing. You can have a 40% win rate and compound consistently with proper sizing. It's not about how right you are—it's about how much you risk when you're wrong.</p>
+
+<div class="key-concept-box">
+  <strong>The 1% Rule:</strong>
+  <p>Never risk more than 1% of your trading account on a single trade. With a $10,000 account, maximum loss per trade = $100. This ensures a losing streak of 10 trades only costs 10% of account—you survive to trade another day.</p>
+</div>
+
+<h4>The Position Size Formula</h4>
+<p><strong>Position Size (lots) = (Account Risk $) ÷ (Stop Loss in Pips × Pip Value per Lot)</strong></p>
+<p>Step-by-step:</p>
+<ul>
+<li>Step 1: Determine account risk $ (account size × risk %)</li>
+<li>Step 2: Measure stop loss in pips (from entry to invalidation)</li>
+<li>Step 3: Know pip value for 1 lot (gold = $10 per standard lot)</li>
+<li>Step 4: Calculate: Risk $ ÷ (Stop pips × $10) = standard lots</li>
+</ul>
+
+<div class="example-box">
+  <strong>Worked Example 1:</strong>
+  <p>Account: $5,000 — Risk: 1% ($50)<br>
+  Stop: 20 pips — Pip value (standard lot): $10<br>
+  $50 ÷ (20 × $10) = $50 ÷ $200 = 0.25 standard lots</p>
+  <p>If using mini lots (pip value $1): $50 ÷ (20 × $1) = 2.5 mini lots (0.25 standard same)</p>
+</div>
+
+<div class="example-box">
+  <strong>Worked Example 2 (Different Risk %):</strong>
+  <p>Account: $25,000 — Risk: 0.5% ($125) — Stop: 30 pips<br>
+  $125 ÷ (30 × $10) = $125 ÷ $300 = 0.42 standard lots</p>
+</div>
+
+<h4>Adjusting for Spread</h4>
+<p>Your stop distance must include spread. If stop is 20 pips and spread is 5 pips, your effective stop is 15 pips—price only needs to move 15 pips against you to hit. Calculate with: (Stop pips + Spread) in your formula.</p>
+
+<div class="tip-box">
+  <strong>Position Size Shortcuts (for quick mental math):</strong>
+  <ul>
+    <li>For 1% risk on $10K ($100): Stop 20 pips = 0.5 lots; Stop 40 pips = 0.25 lots</li>
+    <li>For 1% on $5K ($50): Stop 20 pips = 0.25 lots; Stop 40 pips = 0.125 lots</li>
+    <li>Memorize your "base" for quick adjustments</li>
+  </ul>
+</div>
+
+<h4>Fractional Sizing</h4>
+<p>You don't have to trade standard lots. Most brokers allow:</p>
+<ul>
+<li><strong>Standard lots:</strong> 1.0 = $10/pip</li>
+<li><strong>Mini lots:</strong> 0.1 = $1/pip</li>
+<li><strong>Micro lots:</strong> 0.01 = $0.10/pip</li>
+<li>Trade whatever size your calculation requires—even 0.03 lots</li>
+</ul>
+
+<h4>When to Adjust Risk %</h4>
+<ul>
+<li><strong>Lower risk (0.25-0.5%):</strong> During news, high volatility, after losses</li>
+<li><strong>Normal risk (1%):</strong> Standard trades, normal conditions</li>
+<li><strong>Slightly higher (1.5-2%):</strong> Only with massive edge (rare), only for professionals</li>
+<li><strong>Never exceed 2%:</strong> Even the best traders have losing streaks</li>
+</ul>
+
+<div class="warning-box">
+  <strong>Deadly Mistake:</strong> "I'll just risk 2% this one time—it's a sure thing." This thinking blows accounts. That "sure thing" will be the one that fails spectacularly. Discipline means same risk on every trade.
+</div>
+
+<h4>Practical Exercise</h4>
+<p>Take 10 hypothetical trades with different account sizes and stops. Calculate position size for each using the formula. Then use an online position size calculator to verify. Do this until the math is automatic—it should take 30 seconds maximum during trading.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Position size = (Account risk $) ÷ (Stop pips × Pip value)</li>
+<li>Never risk more than 1-2% per trade—ever</li>
+<li>Account for spread in your stop distance</li>
+<li>Use micro/mini lots for precise sizing</li>
+<li>Adjust risk % based on market conditions and recent performance</li>
+</ul>` },
+  { id:16, track:'trader', level:'Beginner', emoji:'📉', title:'Understanding Drawdown — The Reality of Losing Streaks', duration:'23 min',
+    body:`<p>Drawdown is the peak-to-trough decline in your account during a losing period. Every trader experiences drawdown—the question is whether you survive it. Understanding drawdown psychologically and mathematically is essential for long-term survival.</p>
+
+<div class="key-concept-box">
+  <strong>Drawdown Defined:</strong>
+  <p>If your account peaks at $10,000 and drops to $9,000, that's a 10% drawdown. Recovery requires an 11.1% gain just to break even. Larger drawdowns require exponentially larger gains: 50% drawdown needs 100% gain to recover.</p>
+</div>
+
+<h4>Types of Drawdown</h4>
+<ul>
+<li><strong>Account Drawdown:</strong> Peak-to-trough decline in total equity—the one that matters</li>
+<li><strong>Trade Drawdown:</strong> Maximum adverse move during an open trade</li>
+<li><strong>System Drawdown:</strong> Historical worst period for your strategy</li>
+<li><strong>Psychological Drawdown:</strong> Emotional impact of losing—often worse than financial</li>
+</ul>
+
+<div class="example-box">
+  <strong>The Recovery Math:</strong>
+  <ul>
+    <li>10% loss needs 11% gain to recover</li>
+    <li>20% loss needs 25% gain</li>
+    <li>30% loss needs 43% gain</li>
+    <li>40% loss needs 67% gain</li>
+    <li>50% loss needs 100% gain</li>
+    <li>60% loss needs 150% gain</li>
+    <li>80% loss needs 400% gain</li>
+  </ul>
+  <p>This is why protecting against large drawdowns is more important than maximizing profits.</p>
+</div>
+
+<h4>What Causes Drawdown</h4>
+<ul>
+<li><strong>Normal Market Conditions:</strong> Even profitable strategies have losing periods</li>
+<li><strong>Strategy Doesn't Fit Market:</strong> Trend strategy in range market = drawdown</li>
+<li><strong>Psychological Breakdown:</strong> Revenge trading after losses increases drawdown</li>
+<li><strong>Overleveraging:</strong> Too large size turns small loss into major drawdown</li>
+<li><strong>Not Adapting:</strong> Markets change; strategies must evolve</li>
+</ul>
+
+<h4>Managing Drawdown</h4>
+<ul>
+<li><strong>Prevention (best):</strong> Proper position sizing, 1% risk per trade</li>
+<li><strong>Early Detection:</strong> If down 5-10% in a week, reduce size 50%</li>
+<li><strong>During Drawdown:</strong> Cut size, take fewer trades, focus on process</li>
+<li><strong>Stop Trading Level:</strong> If down 20%, STOP. Step away for 1-2 weeks</li>
+<li><strong>Review:</strong> After recovery, analyze what went wrong</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The Drawdown Action Plan:</strong>
+  <ul>
+    <li>0-5% drawdown: Normal—continue with caution</li>
+    <li>5-10% drawdown: Reduce size by 50%, review recent trades</li>
+    <li>10-15% drawdown: Stop trading, take 3-5 days off, full review</li>
+    <li>15%+ drawdown: Stop trading for 1-2 weeks, consider strategy overhaul</li>
+  </ul>
+</div>
+
+<h4>Expected Drawdown by Strategy</h4>
+<ul>
+<li><strong>Scalping (high win rate):</strong> 5-10% max drawdown normal</li>
+<li><strong>Day trading (moderate win rate):</strong> 10-20% drawdown possible</li>
+<li><strong>Swing trading (lower win rate):</strong> 20-30% drawdown within normal range</li>
+<li><strong>Trend following (low win rate):</strong> 30-40% drawdown possible</li>
+</ul>
+
+<h4>Psychological Survival During Drawdown</h4>
+<ul>
+<li><strong>Detach self-worth from P&L:</strong> Losing trades don't make you a loser</li>
+<li><strong>Focus on process:</strong> Did you follow your plan? That's success regardless of outcome</li>
+<li><strong>Talk to other traders:</strong> Everyone experiences drawdown—you're not alone</li>
+<li><strong>Physical activity:</strong> Exercise helps reset emotional state</li>
+<li><strong>Remember your edge:</strong> One losing period doesn't invalidate your strategy</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Look at your trading history (or a demo account). Calculate your maximum drawdown. Now, plan: What will you do next time you hit 5%, 10%, 15%? Write it down. Having a plan prevents emotional decisions during drawdown.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Drawdown is inevitable—prepare for it mentally and financially</li>
+<li>Large drawdowns require exponentially larger gains to recover</li>
+<li>Position sizing is your primary drawdown defense</li>
+<li>Have a written action plan for different drawdown levels</li>
+<li>When in drawdown, focus on process, not profits</li>
+</ul>` },
+  { id:17, track:'trader', level:'Beginner', emoji:'🌍', title:'What Moves the Gold Price? — The Complete Driver Map', duration:'28 min',
+    body:`<p>Gold is unique—it's simultaneously a commodity, a currency, and a store of value. Understanding what drives its price gives you context for every trade. This lesson maps all the major forces affecting XAUUSD.</p>
+
+<div class="key-concept-box">
+  <strong>The Three Pillars of Gold Price:</strong>
+  <ul>
+    <li><strong>Macro Forces:</strong> Interest rates, inflation, dollar strength</li>
+    <li><strong>Geopolitical Forces:</strong> Conflict, uncertainty, central bank policies</li>
+    <li><strong>Market Forces:</strong> Supply/demand, ETF flows, seasonality</li>
+  </ul>
+</div>
+
+<h4>1. Macro Forces — The Biggest Drivers</h4>
+<ul>
+<li><strong>US Dollar Index (DXY):</strong> 80% inverse correlation—primary driver</li>
+<li><strong>Real Interest Rates:</strong> (Nominal rates - inflation)—falling real rates = gold up</li>
+<li><strong>Inflation Expectations:</strong> Gold as hedge—rising expectations = gold up</li>
+<li><strong>Fed Policy:</strong> Dovish (cuts) = gold up; Hawkish (hikes) = gold down</li>
+<li><strong>Economic Growth:</strong> Strong growth = risk-on = less gold demand (sometimes)</li>
+</ul>
+
+<div class="example-box">
+  <strong>Real Example — 2024 Rate Cut Expectations:</strong>
+  <p>October 2023: Markets priced 0% chance of rate cuts. Gold at $1,820.<br>
+  December 2023: Markets priced 100% chance of cuts in 2024. Gold at $2,150.<br>
+  No cuts happened yet—just expectations moved gold 3300 pips.</p>
+</div>
+
+<h4>2. Geopolitical Forces</h4>
+<ul>
+<li><strong>War/Conflict:</strong> Russia-Ukraine (2022): gold +$300; Israel-Gaza (2023): gold +$150</li>
+<li><strong>Banking Crises:</strong> Silicon Valley Bank collapse (2023): gold +$200 in days</li>
+<li><strong>Elections:</strong> US election uncertainty often supports gold</li>
+<li><strong>Trade Wars:</strong> US-China tensions = safe-haven demand</li>
+<li><strong>Central Bank Buying:</strong> China, India, Turkey buying physical = structural support</li>
+</ul>
+
+<h4>3. Market Forces</h4>
+<ul>
+<li><strong>ETF Flows:</strong> GLD holdings correlate with price—large inflows = buying pressure</li>
+<li><strong>COMEX Positioning:</strong> Futures market—large specs net long = potential reversal</li>
+<li><strong>Physical Demand:</strong> India (wedding season), China (Lunar New Year)—seasonal support</li>
+<li><strong>Mining Supply:</strong> Production costs (~$1,000/oz) act as long-term floor</li>
+<li><strong>Central Bank Reserves:</strong> Diversification from dollars = structural buying</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The Hierarchy of Drivers:</strong>
+  <p>Order of importance for daily trading:<br>
+  1. Fed policy expectations (macro)<br>
+  2. Dollar strength (immediate reaction)<br>
+  3. Yields (real rates)<br>
+  4. Geopolitical headlines<br>
+  5. Technical levels (execution)</p>
+</div>
+
+<h4>Correlation Cheat Sheet</h4>
+<ul>
+<li><strong>Gold vs DXY:</strong> Strong inverse (-0.80 correlation)</li>
+<li><strong>Gold vs Yields:</strong> Inverse (higher yields = lower gold)</li>
+<li><strong>Gold vs Stocks:</strong> Sometimes inverse (risk-off), sometimes positive (inflation)</li>
+<li><strong>Gold vs Silver:</strong> Positive (but silver more volatile)</li>
+<li><strong>Gold vs Bitcoin:</strong> Occasionally correlated (both "anti-fiat"), but unreliable</li>
+</ul>
+
+<h4>Seasonal Patterns in Gold</h4>
+<ul>
+<li><strong>January-February:</strong> Chinese New Year demand—typically bullish</li>
+<li><strong>March-April:</strong> Wedding season in India—supportive</li>
+<li><strong>Summer (June-August):</strong> Typically range-bound, lower volume</li>
+<li><strong>September-October:</strong> Indian festival season (Diwali)—bullish</li>
+<li><strong>November-December:</strong> Year-end position squaring—volatile</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Create a "Gold Drivers" checklist for your daily analysis:</p>
+<ul>
+<li>DXY trend? (up/down/sideways)</li>
+<li>10Y Treasury yield? (rising/falling)</li>
+<li>Next Fed meeting? (cut/hike expected?)</li>
+<li>Any geopolitical headlines?</li>
+<li>Any major economic data today?</li>
+</ul>
+<p>Do this every morning before trading—it takes 5 minutes and provides crucial context.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Dollar and yields are gold's primary daily drivers</li>
+<li>Fed policy expectations drive medium-term trends</li>
+<li>Geopolitics cause sharp, often short-term spikes</li>
+<li>Physical demand creates seasonal patterns</li>
+<li>Combine fundamental context with technical execution</li>
+</ul>` },
+  { id:18, track:'trader', level:'Beginner', emoji:'🔍', title:'Choosing Your Timeframe — Match Your Personality', duration:'25 min',
+    body:`<p>There is no "best" timeframe—only the one that fits your personality, schedule, and psychology. Forcing yourself to scalp when you're a patient person leads to misery. Trying to swing trade when you need daily action leads to overtrading.</p>
+
+<div class="key-concept-box">
+  <strong>The Three Trading Styles:</strong>
+  <ul>
+    <li><strong>Scalping:</strong> Seconds to minutes—high stress, high speed</li>
+    <li><strong>Day Trading:</strong> Minutes to hours—intraday focus, no overnight risk</li>
+    <li><strong>Swing Trading:</strong> Days to weeks—patient, captures trends</li>
+    <li><strong>Position Trading:</strong> Weeks to months—macro-focused, low time commitment</li>
+  </ul>
+</div>
+
+<h4>Scalping — For the Hyper-Focused</h4>
+<p><strong>Timeframe:</strong> M1-M5, trades last seconds to 30 minutes<br>
+<strong>Pros:</strong> Many opportunities, no overnight risk, small stops<br>
+<strong>Cons:</strong> High stress, requires constant attention, transaction costs add up, psychologically demanding<br>
+<strong>Best for:</strong> People who can focus intensely for short periods, enjoy fast action, have time during active sessions<br>
+<strong>Gold scalping:</strong> 5-15 pip targets, 5-10 pip stops, during high volatility only</p>
+
+<div class="example-box">
+  <strong>Scalping Reality Check:</strong>
+  <p>You need 60%+ win rate just to cover spreads. Requires iron discipline—one distracted trade can wipe 10 wins. Not recommended for beginners.</p>
+</div>
+
+<h4>Day Trading — The Sweet Spot</h4>
+<p><strong>Timeframe:</strong> M15-H1, trades last 1-8 hours<br>
+<strong>Pros:</strong> Clear structure, no overnight risk, good R:R potential, manageable screen time<br>
+<strong>Cons:</strong> Requires daily commitment, need to be active during London/NY<br>
+<strong>Best for:</strong> Most retail traders—balance of activity and sanity<br>
+<strong>Gold day trading:</strong> 20-60 pip stops, 40-180 pip targets, trade session opens/overlaps</p>
+
+<h4>Swing Trading — For the Patient</h4>
+<p><strong>Timeframe:</strong> H4-Daily, trades last 2-10 days<br>
+<strong>Pros:</strong> Less screen time, captures big moves, lower stress, better R:R<br>
+<strong>Cons:</strong> Overnight risk (gaps, news), requires patience, fewer opportunities<br>
+<strong>Best for:</strong> People with day jobs, patient personalities, those who hate screen stress<br>
+<strong>Gold swing trading:</strong> 80-200 pip stops, 300-1000 pip targets, trade pullbacks in trends</p>
+
+<div class="tip-box">
+  <strong>Find Your Fit — Questions to Ask:</strong>
+  <ul>
+    <li>How many hours can I trade daily? (1-2 hours? = swing; 4-6? = day trade)</li>
+    <li>Can I handle watching every tick? (No = don't scalp)</li>
+    <li>Do I hate leaving trades open overnight? (Yes = day trade only)</li>
+    <li>Am I patient or do I need action? (Patient = swing; action = day trade)</li>
+    <li>What's my risk tolerance? (Lower = shorter timeframes with tight stops)</li>
+  </ul>
+</div>
+
+<h4>Multi-Timeframe Analysis — The Pro Approach</h4>
+<p>Even if you trade one timeframe, you must analyze multiple:</p>
+<ul>
+<li><strong>Higher timeframe (2-4× yours):</strong> Determines trend and bias</li>
+<li><strong>Your trading timeframe:</strong> Your strategy, setups, entries</li>
+<li><strong>Lower timeframe (½-¼ yours):</strong> Precision entry timing</li>
+</ul>
+
+<div class="example-box">
+  <strong>Multi-Timeframe Example (Day Trader):</strong>
+  <p>H4: Uptrend (higher highs/lows)—bias = long only<br>
+  H1: Pullback to support—potential setup<br>
+  M15: Bullish reversal candle—entry trigger</p>
+</div>
+
+<h4>Practical Exercise</h4>
+<p>For one week, try each style on demo:</p>
+<ul>
+<li>Monday: Scalp M5 (trade session opens)</li>
+<li>Tuesday: Day trade H1 (London/NY)</li>
+<li>Wednesday: Swing trade H4 (set and forget)</li>
+</ul>
+<p>After each day, rate: Stress level (1-10), Enjoyment (1-10), Did it fit my schedule? Pick the style that scores best.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>No "best" timeframe—only what fits you</li>
+<li>Scalping requires intense focus and high win rate</li>
+<li>Day trading balances activity and sanity for most</li>
+<li>Swing trading suits patient traders with less time</li>
+<li>Always use multiple timeframes regardless of your style</li>
+<li>Demo test styles before committing real money</li>
+</ul>` },
+  { id:19, track:'trader', level:'Beginner', emoji:'💻', title:'Setting Up Your Trading Platform — Your Cockpit', duration:'20 min',
+    body:`<p>Your trading platform is your cockpit. A clean, organized setup reduces errors, speeds decision-making, and keeps you focused on what matters—price action. This lesson covers optimal MT4/MT5 setup for gold trading.</p>
+
+<div class="key-concept-box">
+  <strong>The Minimalist Philosophy:</strong>
+  <p>Every indicator, line, or object on your chart should serve a purpose. If it doesn't help you make better decisions, remove it. A cluttered chart leads to cluttered thinking.</p>
+</div>
+
+<h4>Essential Chart Setup</h4>
+<ul>
+<li><strong>Chart Type:</strong> Candlestick (always—never line or bar)</li>
+<li><strong>Color Scheme:</strong> Dark background (less eye strain), green/white bullish, red/black bearish</li>
+<li><strong>Grid:</strong> OFF—distracting, adds no value</li>
+<li><strong>Volume:</strong> Optional—some find it useful, not essential for gold</li>
+<li><strong>Auto-scroll:</strong> OFF—keeps chart stable as new candles form</li>
+</ul>
+
+<div class="example-box">
+  <strong>My Recommended Defaults:</strong>
+  <ul>
+    <li>Background: Black (#000000)</li>
+    <li>Candles: Bullish = Lime, Bearish = Red (high contrast)</li>
+    <li>Grid: Off</li>
+    <li>OHLC data: Show in corner</li>
+    <li>Spread indicator: On (to see current dealing costs)</li>
+  </ul>
+</div>
+
+<h4>Essential Indicators for Gold (Start Here)</h4>
+<ul>
+<li><strong>20 EMA (Exponential):</strong> Short-term trend, dynamic support/resistance</li>
+<li><strong>50 EMA (Exponential):</strong> Medium-term trend</li>
+<li><strong>200 EMA (Exponential):</strong> Long-term trend, major S/R (H4/Daily)</li>
+<li><strong>RSI (14):</strong> Momentum, overbought/oversold, divergence</li>
+<li><strong>Volume (optional):</strong> Confirms breakouts</li>
+</ul>
+
+<div class="tip-box">
+  <strong>Layout by Timeframe:</strong>
+  <ul>
+    <li>M5: 20 EMA only (clean for entries)</li>
+    <li>M15: 20 + 50 EMA</li>
+    <li>H1: 20 + 50 + 200 EMA (full context)</li>
+    <li>H4: 20 + 200 EMA (major structure)</li>
+    <li>Daily: 200 EMA only (big picture)</li>
+  </ul>
+</div>
+
+<h4>Drawing Tools You Need</h4>
+<ul>
+<li><strong>Horizontal Line:</strong> Support/resistance levels</li>
+<li><strong>Trendline:</strong> Diagonal support/resistance</li>
+<li><strong>Rectangle:</strong> Marking supply/demand zones</li>
+<li><strong>Fibonacci:</strong> Retracement tool for pullbacks</li>
+<li><strong>Text:</strong> Labeling key levels, notes</li>
+</ul>
+
+<h4>Template Setup (Do This Once)</h4>
+<ol>
+<li>Set up one chart perfectly (H1 recommended)</li>
+<li>Add your indicators, remove grid, set colors</li>
+<li>Save as template ("Gold_H1_Default")</li>
+<li>Apply same template to all timeframes</li>
+<li>Save chart profiles for each setup (e.g., "Gold_Scalp", "Gold_Swing")</li>
+</ol>
+
+<h4>Essential Platform Features</h4>
+<ul>
+<li><strong>One-click trading:</strong> Enable but be careful—fast execution, fast mistakes</li>
+<li><strong>Auto-arrange windows:</strong> Set multiple timeframes side-by-side</li>
+<li><strong>Alerts:</strong> Set price alerts at key levels—no need to watch constantly</li>
+<li><strong>Journal/Notes:</strong> Some platforms allow trade notes—use them</li>
+<li><strong>Economic calendar:</strong> Built-in or browser tab open</li>
+</ul>
+
+<div class="warning-box">
+  <strong>Common Setup Mistakes:</strong>
+  <ul>
+    <li>Too many indicators (analysis paralysis)</li>
+    <li>Bright white background (eye fatigue)</li>
+    <li>Grid on (distracting noise)</li>
+    <li>No saved templates (wasting time each session)</li>
+    <li>Not testing tools on demo first</li>
+  </ul>
+</div>
+
+<h4>Practical Exercise</h4>
+<p>Today, rebuild your charts from scratch:</p>
+<ol>
+<li>Delete all current templates and profiles</li>
+<li>Create a clean template following this lesson's recommendations</li>
+<li>Set up at least 4 timeframes (M5, M15, H1, H4) with proper MAs</li>
+<li>Save as "Gold_Default"</li>
+<li>Practice marking levels for 15 minutes—your setup should feel intuitive</li>
+</ol>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Clean charts = clear thinking—remove everything unnecessary</li>
+<li>Start with 2-3 indicators max, add only when needed</li>
+<li>Save templates so you're not rebuilding daily</li>
+<li>Dark backgrounds reduce eye strain during long sessions</li>
+<li>Your platform should feel like an extension of your brain—intuitive and fast</li>
+</ul>` },
+  { id:20, track:'trader', level:'Beginner', emoji:'🎓', title:'Your First XAUUSD Trade — Complete Step-by-Step Walkthrough', duration:'35 min',
+    body:`<p>This lesson walks through a complete trade from start to finish—analysis, entry, management, and exit. Follow along with your demo account. By the end, you'll have a repeatable framework for every trade.</p>
+
+<div class="key-concept-box">
+  <strong>The Complete Trade Framework:</strong>
+  <ol>
+    <li>Market analysis (HTF trend, key levels)</li>
+    <li>Setup identification (confluence)</li>
+    <li>Trade plan (entry, stop, targets, size)</li>
+    <li>Execution (entry order)</li>
+    <li>Management (monitoring, adjustments)</li>
+    <li>Exit (taking profit or loss)</li>
+    <li>Review (journal entry)</li>
+  </ol>
+</div>
+
+<h4>Step 1: Market Analysis (8:00 GMT, London Open)</h4>
+<p>You check XAUUSD on higher timeframes:</p>
+<ul>
+<li><strong>Daily:</strong> Uptrend—higher highs, higher lows. Price just pulled back to 20 EMA.</li>
+<li><strong>H4:</strong> Uptrend intact, price at support zone $1,945-1,950 (previous resistance turned support).</li>
+<li><strong>DXY:</strong> Showing weakness (downtrend)—supports gold upside.</li>
+<li><strong>Key levels:</strong> Support $1,945, Resistance $1,970, $1,990.</li>
+</ul>
+<p><strong>Bias:</strong> Bullish—look for long setups only.</p>
+
+<div class="example-box">
+  <strong>Trade Scenario:</strong>
+  <p>Price: $1,948.50 (8:30 GMT)<br>
+  Support zone: $1,945-1,948 (previous H4 swing low + round number)<br>
+  Candlestick pattern: Bullish engulfing just formed on M15 at support.</p>
+</div>
+
+<h4>Step 2: Setup Identification (Confluence Check)</h4>
+<p>You have confluence:</p>
+<ul>
+<li>✓ Support zone ($1,945-1,948) — 3 previous touches</li>
+<li>✓ Bullish engulfing on M15 (reversal signal)</li>
+<li>✓ RSI (14) on M15 at 42—not oversold, room to run</li>
+<li>✓ H4 trend up (higher timeframe alignment)</li>
+<li>✓ DXY weak (fundamental support)</li>
+</ul>
+<p><strong>Probability:</strong> High (4+ confluence factors). This is an A+ setup.</p>
+
+<h4>Step 3: Trade Plan (Written Before Entry)</h4>
+<p><strong>Entry:</strong> $1,949.00 (market buy after candle close above engulfing high)<br>
+<strong>Stop Loss:</strong> $1,944.00 (5 pips below support zone—50 pips)<br>
+<strong>Target 1 (partial):</strong> $1,964.00 (150 pips—next resistance, 1:3 R:R)<br>
+<strong>Target 2 (final):</strong> $1,974.00 (250 pips—major resistance, 1:5 R:R)<br>
+<strong>Position Size:</strong> $10,000 account, 1% risk ($100). Stop 50 pips, pip value $1/mini lot → $100 ÷ (50 × $1) = 2 mini lots (0.2 standard)<br>
+<strong>Total risk:</strong> $100 (1% of account)</p>
+
+<div class="tip-box">
+  <strong>Pro Move:</strong> Write your plan on a sticky note or in your journal. When emotions flare during the trade, refer back to the plan. It was made when you were calm—trust it.
+</div>
+
+<h4>Step 4: Execution (9:00 GMT)</h4>
+<p>Price breaks above engulfing high. You enter market buy at $1,949.20 (slight slippage). Stop and targets set immediately. Trade is live.</p>
+
+<h4>Step 5: Trade Management (9:00-15:00 GMT)</h4>
+<ul>
+<li><strong>10:00 GMT:</strong> Price at $1,955—moving well. No action.</li>
+<li><strong>11:30 GMT:</strong> Price pulls back to $1,951. Stop still safe. No action—trust the plan.</li>
+<li><strong>13:00 GMT (NY open):</strong> Price breaks above $1,958—momentum increasing.</li>
+<li><strong>14:15 GMT:</strong> Price hits $1,964 (Target 1). You close 1 mini lot (half position) for 150 pip profit = $150.</li>
+<li><strong>Move stop to breakeven:</strong> Remaining 1 mini lot stop moved to $1,949.20 (entry). Trade now risk-free.</li>
+<li><strong>Trailing stop:</strong> As price moves up, you trail stop 20 pips below each new high.</li>
+</ul>
+
+<h4>Step 6: Exit (15:30 GMT)</h4>
+<p>Price reaches $1,972, then forms bearish divergence on M15. Your trailing stop at $1,962 gets hit. Remaining position closes: profit 230 pips × $1 = $230.</p>
+<p><strong>Total trade profit:</strong> $150 + $230 = $380 (3.8% account return). Risk was $100 (1%). R:R achieved = 3.8:1.</p>
+
+<h4>Step 7: Review (After Trade)</h4>
+<p>Journal entry:</p>
+<ul>
+<li>Followed plan perfectly? Yes</li>
+<li>What worked: Patience for setup, multiple timeframe alignment</li>
+<li>What to improve: Entry execution slightly late (could have used limit order)</li>
+<li>Emotions: Anxious during pullback but plan kept me in</li>
+<li>Grade: A- (excellent execution, minor entry timing issue)</li>
+</ul>
+
+<div class="warning-box">
+  <strong>What Could Go Wrong:</strong>
+  <ul>
+    <li>Support fails: Stop hit at $1,944 = $100 loss (1%). Loss is planned—move to next trade.</li>
+    <li>Price hits target but you don't take partial: Greed = runner could reverse to breakeven.</li>
+    <li>You move stop wider: Risking more than planned = blowing up eventually.</li>
+  </ul>
+</div>
+
+<h4>Practical Exercise</h4>
+<p>On demo, repeat this exact process for 5 trades:</p>
+<ol>
+<li>Write full analysis (HTF trend, levels)</li>
+<li>Identify setup with confluence checklist</li>
+<li>Write complete trade plan with entry, stop, targets, size</li>
+<li>Execute (screenshot entry)</li>
+<li>Manage (screenshot management points)</li>
+<li>Exit (screenshot exit)</li>
+<li>Journal with lessons learned</li>
+</ol>
+<p>Do this 5 times and you'll have a repeatable trading process.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Every trade follows the same 7-step framework</li>
+<li>Higher timeframe trend determines your bias</li>
+<li>Confluence (multiple factors) increases probability</li>
+<li>Written plan prevents emotional decisions</li>
+<li>Partial profits + breakeven stop = risk-free runner</li>
+<li>Journaling completes the learning loop</li>
+</ul>` },
+  { id:21, track:'trader', level:'Beginner', emoji:'📐', title:'Drawing Trendlines Correctly — Art and Science', duration:'22 min',
+    body:`<p>Trendlines are diagonal support and resistance lines connecting swing points. They reveal the market's rhythm and provide high-probability entry points. But most traders draw them wrong—this lesson ensures you won't.</p>
+
+<div class="key-concept-box">
+  <strong>The Three Rules of Valid Trendlines:</strong>
+  <ol>
+    <li>Connect at least TWO swing points (three is better)</li>
+    <li>Price should touch the line (wicks count, bodies preferred)</li>
+    <li>The line extends into the future, showing potential reaction points</li>
+  </ol>
+</div>
+
+<h4>Uptrend Lines (Support)</h4>
+<p>Connect two or more rising swing lows. The line slopes upward, showing where buyers enter. Price should bounce off this line in a healthy uptrend. A break below signals potential trend change.</p>
+
+<div class="example-box">
+  <strong>Drawing Uptrend Lines:</strong>
+  <ul>
+    <li>Start at the lowest low before the uptrend began</li>
+    <li>Connect to the next higher low (swing low)</li>
+    <li>Adjust to include a third touch if possible</li>
+    <li>The more touches, the stronger the line</li>
+  </ul>
+</div>
+
+<h4>Downtrend Lines (Resistance)</h4>
+<p>Connect two or more falling swing highs. The line slopes downward, showing where sellers enter. Price should reject off this line. A break above signals potential reversal.</p>
+
+<h4>Common Drawing Mistakes</h4>
+<ul>
+<li><strong>Forcing lines:</strong> If it doesn't connect clearly, it's not a trendline—it's wishful thinking</li>
+<li><strong>Using bodies only:</strong> Wicks show where price was rejected—include them</li>
+<li><strong>Lines too steep:</strong> 45° angles are sustainable; steeper often break</li>
+<li><strong>Ignoring time:</strong> Long-term trendlines (weeks/months) are stronger than short-term</li>
+<li><strong>Not updating:</strong> As market evolves, trendlines need adjustment</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The "Three Touches" Rule:</strong>
+  <ul>
+    <li>1 touch: Nothing (just a point)</li>
+    <li>2 touches: Possible trendline—needs confirmation</li>
+    <li>3 touches: Valid trendline—institutional level</li>
+    <li>4+ touches: Major level—highly significant</li>
+  </ul>
+</div>
+
+<h4>Channel Drawing</h4>
+<p>Once you have a trendline, draw a parallel line on the opposite side (connecting swing highs in uptrend, swing lows in downtrend). This creates a channel—price often oscillates between these lines.</p>
+
+<h4>Trading Trendlines</h4>
+<ul>
+<li><strong>Bounce trade:</strong> Buy at uptrend line support, sell at downtrend line resistance</li>
+<li><strong>Breakout trade:</strong> Enter when price breaks trendline with conviction (closing candle beyond)</li>
+<li><strong>Retest trade:</strong> After breakout, price often retests the broken line (now flipped)—enter on retest</li>
+</ul>
+
+<div class="example-box">
+  <strong>Gold Example (Oct 2023):</strong>
+  <p>Weekly chart showed uptrend line from 2015 lows ($1,050) to 2018 ($1,180) to 2022 ($1,615). This 7-year trendline held perfectly. When price touched it in October 2023 at $1,810, it bounced 3000 pips to $2,150. Long-term trendlines = massive moves.</p>
+</div>
+
+<h4>Practical Exercise</h4>
+<p>On your XAUUSD daily chart, go back 6 months. Identify and draw:</p>
+<ul>
+<li>Major uptrend line (connecting swing lows)</li>
+<li>Major downtrend line (connecting swing highs)</li>
+<li>Channel if applicable</li>
+<li>Now zoom to H4—draw current trendlines</li>
+<li>Note where price is relative to each line</li>
+</ul>
+<p>Do this weekly—it trains your eye to see market structure.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Valid trendlines require at least 2 touches (3+ ideal)</li>
+<li>Wicks count—price rejection matters</li>
+<li>Longer timeframe trendlines are stronger</li>
+<li>Channels form when both support and resistance trendlines are parallel</li>
+<li>Trade bounces, breakouts, and retests of trendlines</li>
+</ul>` },
+  { id:22, track:'trader', level:'Beginner', emoji:'🔄', title:'Understanding Retracements — Pullbacks in Trends', duration:'23 min',
+    body:`<p>Markets don't move in straight lines. Even the strongest trend has pullbacks—temporary moves against the trend. Understanding retracements helps you enter trends at favorable prices rather than chasing breakouts.</p>
+
+<div class="key-concept-box">
+  <strong>Retracement vs Reversal:</strong>
+  <ul>
+    <li><strong>Retracement:</strong> Temporary counter-trend move within the larger trend (trend resumes)</li>
+    <li><strong>Reversal:</strong> End of trend, new trend begins in opposite direction</li>
+  </ul>
+  <p>The challenge: Distinguishing between them in real time.</p>
+</div>
+
+<h4>Why Retracements Happen</h4>
+<ul>
+<li><strong>Profit-taking:</strong> Early buyers sell some position, causing temporary dip</li>
+<li><strong>New entrants:</strong> Late traders wait for pullbacks to enter—their buying stops the retracement</li>
+<li><strong>Institutional accumulation:</strong> Smart money uses pullbacks to build larger positions</li>
+<li><strong>Overextension:</strong> Price moved too fast, needs to "breathe" before continuing</li>
+</ul>
+
+<h4>Fibonacci Retracement Levels</h4>
+<p>The most common tool for measuring retracements. Key levels:</p>
+<ul>
+<li><strong>23.6%:</strong> Shallow retracement—very strong trend</li>
+<li><strong>38.2%:</strong> Moderate retracement—healthy trend</li>
+<li><strong>50%:</strong> Not Fibonacci but psychologically important</li>
+<li><strong>61.8%:</strong> "Golden ratio"—deep retracement, trend may be weakening</li>
+<li><strong>78.6%:</strong> Very deep—potential reversal zone</li>
+</ul>
+
+<div class="example-box">
+  <strong>How to Draw Fibonacci:</strong>
+  <p>In an uptrend: Draw from swing low (start of move) to swing high (end of move). Levels show potential support where price might retrace to before continuing up.<br>
+  In downtrend: Draw from swing high to swing low. Levels show potential resistance for retracements up.</p>
+</div>
+
+<h4>Retracement Entry Strategies</h4>
+<ul>
+<li><strong>At Fibonacci level:</strong> Enter when price reaches 38.2%, 50%, or 61.8% retracement</li>
+<li><strong>With confluence:</strong> Fib level + trendline + moving average = high probability</li>
+<li><strong>With reversal candle:</strong> Wait for bullish/bearish candle at Fib level</li>
+<li><strong>With momentum confirmation:</strong> Enter after small bounce, not at exact low</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The 50% Rule:</strong>
+  <p>In strong trends, retracements often stall at the 50% level. It's not a Fibonacci number, but institutions watch it. If price breaks 50%, next level is 61.8%. If 61.8% breaks, trend may be reversing.</p>
+</div>
+
+<h4>Moving Averages as Dynamic Retracement Levels</h4>
+<p>In trending markets, price often retraces to key moving averages:</p>
+<ul>
+<li><strong>20 EMA:</strong> First pullback level in strong trends</li>
+<li><strong>50 EMA:</strong> Deeper pullback, still healthy trend</li>
+<li><strong>200 EMA:</strong> Major pullback—trend at risk if broken</li>
+</ul>
+
+<h4>Retracement vs Reversal — How to Tell</h4>
+<table style="width:100%; border-collapse:collapse; margin:1rem 0;">
+  <tr style="background:var(--gold-dim);"><th>Factor</th><th>Retracement</th><th>Reversal</th></tr>
+  <tr><td>Depth</td><td>Typically <61.8%</td><td>Breaks >78.6%</td></tr>
+  <tr><td>Structure</td><td>Higher timeframe trend intact</td><td>Higher timeframe breaks trendline</td></tr>
+  <tr><td>Momentum</td><td>RSI stays >50 (uptrend)</td><td>RSI crosses below 50</td></tr>
+  <tr><td>Volume</td><td>Decreasing on pullback</td><td>Increasing on pullback (distribution)</td></tr>
+  <tr><td>Price action</td><td>Clean bounce at level</td><td>Breaks level with momentum</td></tr>
+</table>
+
+<h4>Practical Exercise</h4>
+<p>On your XAUUSD H4 chart, identify the last 3 significant trends. For each:</p>
+<ol>
+<li>Mark the start and end of the trend move</li>
+<li>Draw Fibonacci from low to high (uptrend) or high to low (downtrend)</li>
+<li>Note where price retraced to (which Fib level)</li>
+<li>Did it bounce and continue? Or break and reverse?</li>
+<li>What confluence existed at that level? (MA, trendline?)</li>
+</ol>
+<p>This builds your "retracement memory."</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Retracements are normal in trends—don't confuse them with reversals</li>
+<li>Fibonacci (38.2%, 50%, 61.8%) identifies potential retracement levels</li>
+<li>Confluence (Fib + MA + trendline) increases probability</li>
+<li>Wait for reversal signals at Fib levels—don't buy the low, buy the bounce</li>
+<li>Depth of retracement indicates trend strength: shallow = strong, deep = weakening</li>
+</ul>` },
+  { id:23, track:'trader', level:'Beginner', emoji:'🏦', title:'How Brokers Work — Your Trading Counterparty', duration:'22 min',
+    body:`<p>Your broker isn't just a platform—they're your counterparty. Understanding how brokers operate, how they make money, and the different broker types protects you from bad actors and helps you choose the right partner for your trading.</p>
+
+<div class="key-concept-box">
+  <strong>The Broker's Role:</strong>
+  <p>Brokers provide access to the market, execute your trades, and provide trading platforms. But not all brokers are the same—some trade against you, some pass your trades to liquidity providers.</p>
+</div>
+
+<h4>Broker Types</h4>
+<ul>
+<li><strong>Dealing Desk (DD) / Market Maker:</strong> Takes opposite side of your trade. You profit = they lose. Conflict of interest—may manipulate prices, widen spreads, requote. Not necessarily evil, but structure creates temptation.</li>
+<li><strong>No Dealing Desk (NDD):</strong> Passes your trades to liquidity providers (banks, institutions). Two subtypes:
+  <ul>
+    <li><strong>STP (Straight Through Processing):</strong> Automatically passes to liquidity providers</li>
+    <li><strong>ECN (Electronic Communication Network):</strong> Matches you with other traders, shows depth of market</li>
+  </ul>
+</li>
+</ul>
+
+<div class="example-box">
+  <strong>Which is Better?</strong>
+  <p>ECN/STP brokers generally preferred—they profit from commission/spread markup, not from your losses. Market makers can be fine for beginners with small accounts, but as you grow, ECN becomes essential.</p>
+</div>
+
+<h4>How Brokers Make Money</h4>
+<ul>
+<li><strong>Spread:</strong> Difference between buy and sell price. Gold spread typically 0.20-0.50 during peak hours, 0.80-2.00 during slow periods.</li>
+<li><strong>Commission:</strong> Some ECN brokers charge per lot (e.g., $5 per $100k traded) plus tiny spread.</li>
+<li><strong>Swap/Overnight fees:</strong> Interest charged for holding positions overnight (can be positive or negative).</li>
+<li><strong>Inactivity fees:</strong> Some charge if you don't trade for months.</li>
+<li><strong>Withdrawal fees:</strong> Some charge for withdrawals—avoid these.</li>
+</ul>
+
+<h4>Spreads Explained</h4>
+<p>Gold spread is the difference between bid (sell) and ask (buy). If price is $1,950.00/1,950.20, spread is 0.20 (2 pips on 2-decimal brokers, 20 points on 3-decimal).</p>
+<ul>
+<li><strong>Tight spreads (0.10-0.30):</strong> Good for scalping, during peak hours</li>
+<li><strong>Normal spreads (0.30-0.60):</strong> Acceptable for day trading</li>
+<li><strong>Wide spreads (0.60+):</strong> Avoid trading—usually during Asian session or news</li>
+</ul>
+
+<div class="tip-box">
+  <strong>Spread Check:</strong>
+  <p>Always check spread before entering. If spread suddenly widens, don't trade. News, low liquidity, or broker issues can spike spreads—you'll start at a disadvantage.</p>
+</div>
+
+<h4>Leverage Explained</h4>
+<p>Leverage allows controlling larger positions with less capital. 1:100 leverage means $1,000 controls $100,000.</p>
+<ul>
+<li><strong>Higher leverage ≠ more risk (directly).</strong> Risk comes from position size, not leverage itself.</li>
+<li><strong>Leverage just determines margin required.</strong> With 1:100, 1 standard lot gold needs ~$1,500 margin. With 1:500, needs ~$300.</li>
+<li><strong>But higher leverage tempts overtrading.</strong> Don't use available leverage as license to trade larger.</li>
+</ul>
+
+<h4>Red Flags — Bad Brokers</h4>
+<ul>
+<li><strong>Unregulated:</strong> No FCA, CySEC, ASIC, FSCA regulation—walk away</li>
+<li><strong>Constant requotes:</strong> Especially when price moving fast—DD broker interfering</li>
+<li><strong>Slippage always against you:</strong> Some slippage normal, but consistently bad = manipulation</li>
+<li><strong>Withdrawal issues:</strong> Delays, fees, excuses—run</li>
+<li><strong>Bonus offers too good:</strong> Often trap—terms make withdrawal impossible</li>
+<li><strong>Negative balance protection missing:</strong> Essential—prevents owing money</li>
+</ul>
+
+<div class="warning-box">
+  <strong>Never Trade with Unregulated Brokers:</strong>
+  <p>If your broker isn't regulated by a major authority (FCA, CySEC, ASIC, FSCA), your money isn't safe. They can disappear overnight. Regulation isn't guarantee, but it's essential protection.</p>
+</div>
+
+<h4>Choosing a Broker Checklist</h4>
+<ul>
+  <li>Regulated by major authority? (FCA, CySEC, ASIC, FSCA)</li>
+  <li>Spreads competitive? (0.20-0.50 on gold during peak)</li>
+  <li>ECN/STP model? (preferred over market maker)</li>
+  <li>Negative balance protection?</li>
+  <li>Fast withdrawal process? (test with small withdrawal)</li>
+  <li>Good reviews from real traders? (not paid testimonials)</li>
+  <li>Platform stable? (demo test during peak hours)</li>
+  <li>Customer support responsive?</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>Research your current broker (or one you're considering):</p>
+<ol>
+<li>Find their regulation (check regulator's website, don't trust broker's claim alone)</li>
+<li>Check average gold spread during London/NY (open demo, watch 1 hour)</li>
+<li>Test withdrawal with small amount ($50-100)—how long? Any fees?</li>
+<li>Read independent reviews on ForexPeaceArmy, TrustPilot</li>
+<li>Grade your broker A-F. If below B, start researching alternatives.</li>
+</ol>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>ECN/STP brokers preferable—they don't trade against you</li>
+<li>Regulation by major authority is non-negotiable</li>
+<li>Spreads vary by session—trade when tight</li>
+<li>Leverage amplifies both gains and losses—use it responsibly</li>
+<li>Test brokers with small deposits and withdrawals before committing</li>
+</ul>` },
+  { id:24, track:'trader', level:'Beginner', emoji:'💰', title:'Understanding Margin & Leverage — Power and Danger', duration:'25 min',
+    body:`<p>Leverage is a double-edged sword—it magnifies profits AND losses. Understanding margin and leverage is essential for survival. This lesson explains the mechanics and teaches you to use leverage safely.</p>
+
+<div class="key-concept-box">
+  <strong>Definitions:</strong>
+  <ul>
+    <li><strong>Leverage:</strong> Ratio of capital controlled to capital required. 1:100 means $1 controls $100.</li>
+    <li><strong>Margin:</strong> The amount required to open and maintain a position. Collateral for the trade.</li>
+    <li><strong>Free Margin:</strong> Funds available to open new positions.</li>
+    <li><strong>Margin Level:</strong> (Equity ÷ Used Margin) × 100%. Below 100% = margin call.</li>
+  </ul>
+</div>
+
+<h4>How Margin Works</h4>
+<p>With 1:100 leverage on a $10,000 account:</p>
+<ul>
+<li>1 standard lot gold (100 oz) at $1,950 = $195,000 notional value</li>
+<li>Margin required = $195,000 ÷ 100 = $1,950</li>
+<li>You control $195,000 with $1,950 of your capital</li>
+<li>Remaining $8,050 is free margin for other trades or buffer</li>
+</ul>
+
+<div class="example-box">
+  <strong>Margin Call Scenario:</strong>
+  <p>You open 1 standard lot gold with $10,000 account. Used margin = $1,950. If price moves against you $800 (800 pips), your loss = $8,000. Equity becomes $2,000. Margin level = $2,000 ÷ $1,950 = 102%—close to margin call (usually 100%). If price drops another $50, margin call hits—broker closes your trade to prevent negative balance.</p>
+</div>
+
+<h4>Leverage by Account Size — Recommendations</h4>
+<ul>
+<li><strong>$500-2,000:</strong> 1:100 or 1:200 maximum—anything higher invites overtrading</li>
+<li><strong>$2,000-10,000:</strong> 1:100 ideal—plenty of buying power, reasonable risk</li>
+<li><strong>$10,000-50,000:</strong> 1:50 or 1:100—you don't need more</li>
+<li><strong>$50,000+:</strong> 1:20 or 1:30—institutional level, focus on capital preservation</li>
+</ul>
+
+<div class="tip-box">
+  <strong>The 1% Rule with Leverage:</strong>
+  <p>Leverage doesn't change your risk calculation. Still risk 1% per trade. Leverage just determines margin required—not how much you risk. A beginner with 1:500 and proper 1% risk is safer than a cowboy with 1:10 risking 10%.</p>
+</div>
+
+<h4>Margin Level Warning Levels</h4>
+<ul>
+<li><strong>500%+:</strong> Safe—plenty of buffer</li>
+<li><strong>200-500%:</strong> Healthy—normal trading range</li>
+<li><strong>100-200%:</strong> Caution—one bad move could trigger margin call</li>
+<li><strong><100%:</strong> Margin call—positions being closed</li>
+</ul>
+
+<h4>Leverage and Position Sizing</h4>
+<p>Many traders mistakenly think: "I have 1:500, I can trade 5 lots!" No—position size determined by risk, not available leverage. Always:</p>
+<ol>
+<li>Calculate position size from risk % and stop distance</li>
+<li>Check if required margin exceeds your comfort (keep margin level >500%)</li>
+<li>If margin required too high, reduce size further</li>
+</ol>
+
+<div class="warning-box">
+  <strong>Leverage Traps:</strong>
+  <ul>
+    <li><strong>High leverage = overtrading:</strong> Just because you can trade 10 lots doesn't mean you should</li>
+    <li><strong>Ignoring margin on multiple positions:</strong> 5 open trades each at 20% margin = 100% used—one bad move wipes you</li>
+    <li><strong>Adding to losers with leverage:</strong> Doubling down with high leverage = account killer</li>
+    <li><strong>Holding through news with high leverage:</strong> 100 pip move with large size = margin call</li>
+  </ul>
+</div>
+
+<h4>Practical Margin Management</h4>
+<ul>
+<li><strong>Keep margin level >500%:</strong> Use less than 20% of available margin</li>
+<li><strong>Reduce size during news:</strong> Even if risk % same, lower margin usage</li>
+<li><strong>Monitor correlated trades:</strong> 3 gold longs = effectively 3× risk—margin requirement compounds</li>
+<li><strong>Use stop losses:</strong> Prevents margin call by closing losing trades</li>
+<li><strong>Check margin requirements per instrument:</strong> Gold often higher margin than forex</li>
+</ul>
+
+<h4>Practical Exercise</h4>
+<p>On demo, test different leverage scenarios:</p>
+<ol>
+<li>Open demo account with 1:100 leverage, $10,000 balance</li>
+<li>Open 1 standard lot gold—note used margin, margin level</li>
+<li>Let price move against you—note margin level dropping</li>
+<li>Calculate what price triggers margin call</li>
+<li>Repeat with 0.5 lots—see difference in safety</li>
+</ol>
+<p>This visceral experience teaches margin respect better than reading.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Leverage amplifies both profits AND losses equally</li>
+<li>Margin is collateral—keep margin level >500% for safety</li>
+<li>Position size determined by risk, not available leverage</li>
+<li>Higher leverage requires more discipline, not less</li>
+<li>Monitor margin level on all open positions</li>
+<li>Never add to losers—margin call accelerates</li>
+</ul>` },
+  { id:25, track:'trader', level:'Beginner', emoji:'✅', title:'Beginner Review & Quiz — Test Your Foundation', duration:'20 min',
+    body:`<p>Congratulations—you've completed the 25-lesson beginner track! This lesson reviews key concepts and tests your understanding. Take the quiz honestly—identify weak areas to revisit before moving to Intermediate.</p>
+
+<div class="key-concept-box">
+  <strong>The Beginner Foundation — Key Concepts:</strong>
+  <ul>
+    <li>XAUUSD fundamentals (what moves gold)</li>
+    <li>Candlestick reading and patterns</li>
+    <li>Support/resistance identification</li>
+    <li>Trend analysis (higher highs/lows)</li>
+    <li>Entry/exit strategies and trade planning</li>
+    <li>Stop losses and risk management</li>
+    <li>Risk-to-reward ratio (minimum 1:2)</li>
+    <li>Pips, lots, and position sizing</li>
+    <li>Trading sessions and market hours</li>
+    <li>Trading psychology and journaling</li>
+    <li>Basic indicators (MAs, RSI)</li>
+    <li>Economic calendar and fundamentals</li>
+    <li>Broker types and margin/leverage</li>
+  </ul>
+</div>
+
+<h4>Self-Assessment Quiz (Answer Each)</h4>
+<ol>
+<li>What is XAUUSD and what are its three primary drivers?</li>
+<li>Draw a bullish engulfing candle and explain what it indicates.</li>
+<li>How do you identify a valid support level? (list 3 criteria)</li>
+<li>Define uptrend in terms of swing highs and lows.</li>
+<li>What four elements must be in every trade plan before entry?</li>
+<li>Where should you place a stop loss on a long trade?</li>
+<li>Calculate position size: $8,000 account, 1% risk, stop 25 pips, pip value $1/mini lot.</li>
+<li>What is the minimum R:R you should accept for day trading? Why?</li>
+<li>Which trading session typically has highest gold volatility?</li>
+<li>List three psychological traps that hurt traders.</li>
+<li>What does RSI >70 indicate? What's a divergence?</li>
+<li>Name three high-impact economic events that move gold.</li>
+<li>What's the difference between market maker and ECN broker?</li>
+<li>At what margin level does margin call typically trigger?</li>
+<li>What's the 1% rule and why does it matter?</li>
+</ol>
+
+<div class="example-box">
+  <strong>Quiz Answers (Check Yourself):</strong>
+  <ol>
+    <li>Gold in USD; drivers: dollar, yields, geopolitics</li>
+    <li>Large green candle closing above previous red candle's open—bullish momentum</li>
+    <li>Multiple touches, wick rejections, round number, previous swing low</li>
+    <li>Higher highs and higher lows</li>
+    <li>Entry, stop loss, targets, position size</li>
+    <li>Below nearest support (where trade invalidated)</li>
+    <li>$80 risk ÷ (25 × $1) = 3.2 mini lots (0.32 standard)</li>
+    <li>1:2—allows 40% win rate to be profitable</li>
+    <li>London/NY overlap (13:00-17:00 GMT)</li>
+    <li>Fear (FOMO), greed (holding too long), hope (not cutting losses)</li>
+    <li>Overbought (potential reversal down); divergence = price high higher, RSI lower = bearish</li>
+    <li>NFP, CPI, FOMC</li>
+    <li>Market maker trades against you; ECN passes to liquidity providers</li>
+    <li>Typically 100% (equity = used margin)</li>
+    <li>Never risk >1-2% per trade—survive losing streaks</li>
+  </ol>
+</div>
+
+<h4>Score Interpretation</h4>
+<ul>
+<li><strong>14-15 correct:</strong> Excellent foundation—ready for Intermediate</li>
+<li><strong>11-13 correct:</strong> Good, but review missed topics before moving on</li>
+<li><strong>8-10 correct:</strong> Re-study weak areas—foundation needs strengthening</li>
+<li><strong><8 correct:</strong> Review beginner track again—don't rush to Intermediate</li>
+</ul>
+
+<h4>Practical Skill Check</h4>
+<p>Perform these tasks on demo without notes:</p>
+<ul>
+<li>Identify current trend on H4 and Daily</li>
+<li>Mark 3 support and 3 resistance levels</li>
+<li>Calculate position size for a trade with $5,000 account, 30 pip stop</li>
+<li>Write a complete trade plan for a setup you see now</li>
+<li>Execute the trade with proper stops and targets</li>
+</ul>
+<p>If you struggled with any, practice daily for one week before advancing.</p>
+
+<div class="tip-box">
+  <strong>Next Steps:</strong>
+  <p>You've built your foundation. Now it's time to build the house—Intermediate lessons cover advanced patterns, confluence trading, and strategy development. But first, ensure you can execute beginner concepts consistently on demo. Don't rush.</p>
+</div>
+
+<h4>30-Day Practice Plan Before Intermediate</h4>
+<ul>
+<li><strong>Week 1:</strong> Daily chart analysis only (no trading)—identify trends, S/R, session times</li>
+<li><strong>Week 2:</strong> Demo trading with 1 trade/day—full trade plans, journal every trade</li>
+<li><strong>Week 3:</strong> Demo trading with 2 trades/day—focus on following plans, managing emotions</li>
+<li><strong>Week 4:</strong> Review journal—what's your win rate? Avg R:R? What patterns emerge?</li>
+</ul>
+<p>Complete this practice before Intermediate. The foundation determines the house's strength.</p>
+
+<h4>Key Takeaways</h4>
+<ul>
+<li>Beginner track built your trading foundation—know these concepts cold</li>
+<li>Quiz identifies weak areas—review before advancing</li>
+<li>Practical application matters more than theory</li>
+<li>Spend 30 days practicing on demo before Intermediate</li>
+<li>Foundation strength determines long-term success</li>
+</ul>` },
+  // Intermediate and Advanced lessons remain unchanged
   { id:26, track:'trader', level:'Intermediate', emoji:'📏', title:'Fibonacci Retracements', duration:'25 min',
     body:`<p>Fibonacci Retracements is a core concept for any serious trader. In this lesson we break down everything you need to know about 0.618.</p>
 <h4>Overview</h4>
@@ -2852,7 +4411,7 @@ const affiliateLessons = [
 let completedLessons = JSON.parse(localStorage.getItem('pc_completed') || '[]');
 let currentLessonId = null;
 
-// switchTrack defined below (see affiliate access control section)
+const allLessons = [...traderLessons, ...affiliateLessons];
 
 function levelStyle(level, track) {
   if (track === 'affiliate') {
