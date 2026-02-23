@@ -1,76 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – The Profits Circle</title>
-  <link rel="stylesheet" href="assets/style.css" />
-</head>
-<body style="background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,67,.07), transparent), var(--black);">
-
-<div class="login-container">
-  <div class="login-box">
-    <div class="login-logo">
-      <a href="/" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:.5rem;">
-        <img src="logo.png" alt="The Profits Circle" style="height:80px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
-        <h1 style="display:none;">THE <span>PROFITS</span> CIRCLE</h1>
-      </a>
-      <p class="text-muted" style="font-size:.85rem;margin-top:.5rem;">Members only — login below</p>
-    </div>
-
-    <!-- LOGIN FORM -->
-    <div id="loginForm" style="margin-top:1.5rem;">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="loginEmail" placeholder="you@email.com" autocomplete="email" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
-      </div>
-      <button class="btn btn-gold btn-full mt-2" id="loginBtn" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
-    </div>
-
-    <p class="text-center mt-3" style="font-size:.78rem;color:var(--white3);">
-      By logging in you agree to our <a href="#" class="text-gold2">Terms</a> and <a href="#" class="text-gold2">Privacy Policy</a>
-    </p>
-    <div class="text-center mt-2">
-      <a href="/" style="font-size:.82rem;color:var(--white3);">← Back to Home</a>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
-
-<script src="assets/app.js"></script>
-<script>
-// Redirect if already logged in
-if (PC.isLoggedIn()) {
-  const r = sessionStorage.getItem('pc_redirect') || '/';
-  sessionStorage.removeItem('pc_redirect');
-  window.location.href = r;
-}
-
-// Pre-load users
-PC.fetchUsers().catch(()=>{});
-
-async function doLogin() {
-  const btn = document.getElementById('loginBtn');
-  const email = document.getElementById('loginEmail').value.trim();
-  const pw = document.getElementById('loginPassword').value;
-  if (!email || !pw) { PC.toast('Please fill in all fields', 'error'); return; }
-  btn.disabled = true; btn.textContent = 'Signing in…';
-  const res = await PC.login(email, pw);
-  btn.disabled = false; btn.textContent = 'Log In →';
-  if (!res.ok) { PC.toast(res.msg, 'error'); return; }
-  const user = PC.getUser();
-  PC.toast('Welcome back, ' + user.name.split(' ')[0] + '! 👋', 'success');
-  setTimeout(() => {
-    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : '/');
-    sessionStorage.removeItem('pc_redirect');
-    window.location.href = redirect;
-  }, 700);
-}
-</script>
-</body>
-</html>
+// This will create a new admin user with password "admin123"
+PC.hashPassword('admin123').then(hash => {
+  console.log('New hash:', hash);
+  const users = PC.getUsers();
+  users.push({
+    id: Date.now(),
+    name: "New Admin",
+    email: "newadmin@example.com",
+    passwordHash: hash,
+    role: "admin",
+    plan: "vip",
+    vip: true,
+    status: "active",
+    joined: new Date().toISOString().split('T')[0],
+    affiliate: false,
+    referralCode: "",
+    referredBy: "",
+    earnings: 0
+  });
+  localStorage.setItem('pc_users', JSON.stringify(users));
+  console.log('New admin created! Try logging in with: newadmin@example.com / admin123');
+});
