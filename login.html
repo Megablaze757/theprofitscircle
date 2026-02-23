@@ -1,22 +1,505 @@
-// This will create a new admin user with password "admin123"
-PC.hashPassword('admin123').then(hash => {
-  console.log('New hash:', hash);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – The Profits Circle</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .error-message { 
+      color: var(--red); 
+      font-size: 0.85rem; 
+      margin-top: 0.5rem; 
+      text-align: center;
+      min-height: 20px;
+    }
+    .debug-info { 
+      background: var(--black4); 
+      border: 1px solid var(--border); 
+      border-radius: 5px; 
+      padding: 0.75rem; 
+      margin-top: 1rem; 
+      font-size: 0.75rem; 
+      color: var(--white3); 
+      max-height: 200px; 
+      overflow: auto; 
+      display: none; 
+    }
+    .debug-toggle {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+    }
+    .debug-toggle a {
+      color: var(--white3);
+      text-decoration: none;
+    }
+    .debug-toggle a:hover {
+      color: var(--gold);
+    }
+    .login-box {
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--black2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .login-logo {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .login-logo h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+    .login-logo h1 span {
+      color: var(--gold);
+    }
+    .text-muted {
+      color: var(--white3);
+    }
+    .text-center {
+      text-align: center;
+    }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .btn-full {
+      width: 100%;
+    }
+  </style>
+</head>
+<body style="background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,67,.07), transparent), var(--black); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+<div class="login-container" style="width: 100%; max-width: 450px; padding: 1rem;">
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="/" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:.5rem;">
+        <img src="logo.png" alt="The Profits Circle" style="height:80px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+        <h1 style="display:none;">THE <span>PROFITS</span> CIRCLE</h1>
+      </a>
+      <p class="text-muted" style="font-size:.85rem;margin-top:.5rem;">Members only — login below</p>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm" style="margin-top:1.5rem;">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="loginEmail" placeholder="you@email.com" autocomplete="email" value="admin@theprofitscircle.co.uk" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button class="btn btn-gold btn-full mt-2" id="loginBtn" onclick="doLogin()" style="min-height:50px;font-size:1rem;font-weight:700;">Log In →</button>
+    </div>
+
+    <!-- Error message display -->
+    <div id="loginError" class="error-message"></div>
+    
+    <!-- Debug toggle -->
+    <div class="debug-toggle">
+      <a href="#" onclick="toggleDebug(); return false;">🔧 Show Debug Info</a>
+    </div>
+    
+    <!-- Debug info -->
+    <div id="debugInfo" class="debug-info"></div>
+
+    <p class="text-center mt-3" style="font-size:.78rem;color:var(--white3);">
+      By logging in you agree to our <a href="#" class="text-gold2">Terms</a> and <a href="#" class="text-gold2">Privacy Policy</a>
+    </p>
+    <div class="text-center mt-2">
+      <a href="/" style="font-size:.82rem;color:var(--white3);">← Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="siteToast"><span id="siteToastMsg"></span></div>
+
+<script>
+// ============================================
+// COMPLETE PC OBJECT DEFINITION
+// ============================================
+
+// Create the PC namespace
+window.PC = {};
+
+// ========== DATA STORAGE ==========
+PC.storage = {
+  users: [],
+  
+  init: function() {
+    // Try to load from localStorage first
+    const cached = localStorage.getItem('pc_users');
+    if (cached) {
+      try {
+        this.users = JSON.parse(cached);
+        console.log('Loaded users from cache:', this.users.length);
+      } catch (e) {
+        this.users = [];
+      }
+    }
+  }
+};
+
+PC.storage.init();
+
+// ========== USER MANAGEMENT ==========
+PC.fetchUsers = async function() {
+  try {
+    console.log('Fetching users from users.json...');
+    const response = await fetch('users.json?' + Date.now()); // Add timestamp to avoid cache
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Raw data loaded:', data);
+    
+    // Handle both array format and { users: [...] } format
+    if (Array.isArray(data)) {
+      PC.storage.users = data;
+      console.log('Loaded users array:', data.length);
+    } else if (data && Array.isArray(data.users)) {
+      PC.storage.users = data.users;
+      console.log('Extracted users from users property:', data.users.length);
+    } else {
+      console.error('Unexpected data format:', data);
+      PC.storage.users = [];
+    }
+    
+    // Store in localStorage for persistence
+    localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
+    
+    // Update debug info
+    updateDebugInfo();
+    return PC.storage.users;
+    
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    
+    // If no users loaded, create default admin as fallback
+    if (PC.storage.users.length === 0) {
+      console.log('Creating default admin user as fallback');
+      PC.storage.users = [{
+        id: 1,
+        name: "Admin",
+        email: "admin@theprofitscircle.co.uk",
+        passwordHash: "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", // hash for "admin123"
+        role: "admin",
+        plan: "vip",
+        vip: true,
+        status: "active",
+        joined: "2024-01-01",
+        affiliate: true,
+        referralCode: "ADMIN",
+        referredBy: "",
+        earnings: 0
+      }];
+      localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
+    }
+    
+    updateDebugInfo();
+    throw error;
+  }
+};
+
+PC.getUsers = function() {
+  return PC.storage.users;
+};
+
+PC.findUser = function(email) {
   const users = PC.getUsers();
-  users.push({
-    id: Date.now(),
-    name: "New Admin",
-    email: "newadmin@example.com",
-    passwordHash: hash,
+  return users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+};
+
+PC.findUserByReferral = function(code) {
+  const users = PC.getUsers();
+  return users.find(u => u.referralCode && u.referralCode.toUpperCase() === code.toUpperCase());
+};
+
+// ========== SESSION MANAGEMENT ==========
+PC.getUser = function() {
+  // Try localStorage first (persists across tabs), then sessionStorage
+  const userStr = localStorage.getItem('pc_user') || sessionStorage.getItem('pc_user');
+  if (userStr) {
+    try {
+      return JSON.parse(userStr);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+};
+
+PC.isLoggedIn = function() {
+  return !!PC.getUser();
+};
+
+PC.logout = function() {
+  localStorage.removeItem('pc_user');
+  sessionStorage.removeItem('pc_user');
+  window.location.href = '/login';
+};
+
+// ========== PASSWORD HANDLING ==========
+PC.hashPassword = async function(password) {
+  const msgBuffer = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+};
+
+PC.verifyPassword = async function(password, hash) {
+  const hashedInput = await PC.hashPassword(password);
+  return hashedInput === hash;
+};
+
+// ========== LOGIN FUNCTION ==========
+PC.login = async function(email, password) {
+  try {
+    console.log('Login attempt for:', email);
+    const users = PC.getUsers();
+    console.log('Available users:', users.length);
+    
+    if (!users || users.length === 0) {
+      console.error('No users loaded');
+      return { ok: false, msg: 'System error: No users loaded. Please refresh the page.' };
+    }
+    
+    const user = PC.findUser(email);
+    console.log('Found user:', user ? 'yes' : 'no');
+    
+    if (!user) {
+      return { ok: false, msg: 'Email not found' };
+    }
+    
+    if (user.status === 'suspended') {
+      return { ok: false, msg: 'Account suspended' };
+    }
+    
+    const isValid = await PC.verifyPassword(password, user.passwordHash);
+    console.log('Password valid:', isValid);
+    
+    if (!isValid) {
+      return { ok: false, msg: 'Invalid password' };
+    }
+    
+    // Create session user (without password hash)
+    const sessionUser = { ...user };
+    delete sessionUser.passwordHash;
+    
+    // Store in both localStorage and sessionStorage
+    localStorage.setItem('pc_user', JSON.stringify(sessionUser));
+    sessionStorage.setItem('pc_user', JSON.stringify(sessionUser));
+    
+    console.log('Login successful for:', user.email);
+    return { ok: true, msg: 'Login successful', user: sessionUser };
+    
+  } catch (error) {
+    console.error('Login error:', error);
+    return { ok: false, msg: 'Login failed: ' + error.message };
+  }
+};
+
+// ========== UTILITIES ==========
+PC.toast = function(message, type = 'info') {
+  const toast = document.getElementById('siteToast');
+  const msgEl = document.getElementById('siteToastMsg');
+  if (toast && msgEl) {
+    msgEl.textContent = message;
+    toast.className = 'toast show ' + type;
+    setTimeout(() => {
+      toast.className = 'toast';
+    }, 3000);
+  } else {
+    alert(message);
+  }
+};
+
+PC.downloadUsersJson = function() {
+  const users = PC.getUsers();
+  const dataStr = JSON.stringify({ users: users }, null, 2);
+  const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+  const exportFileDefaultName = 'users.json';
+  const linkElement = document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.click();
+};
+
+PC.openModal = function(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.add('show');
+};
+
+PC.closeModal = function(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.remove('show');
+};
+
+// ========== DEBUG FUNCTIONS ==========
+function toggleDebug() {
+  const debug = document.getElementById('debugInfo');
+  if (debug.style.display === 'none' || !debug.style.display) {
+    debug.style.display = 'block';
+    updateDebugInfo();
+  } else {
+    debug.style.display = 'none';
+  }
+}
+
+function updateDebugInfo() {
+  const debug = document.getElementById('debugInfo');
+  if (debug) {
+    const users = PC.getUsers();
+    const currentUser = PC.getUser();
+    
+    let usersList = '';
+    if (users && users.length > 0) {
+      usersList = users.map(u => 
+        `- ${u.email} (${u.role})${u.status === 'suspended' ? ' [SUSPENDED]' : ''}`
+      ).join('<br>');
+    } else {
+      usersList = 'No users found';
+    }
+    
+    debug.innerHTML = `
+      <strong>🔧 Debug Information:</strong><br>
+      <br>
+      <strong>System Status:</strong><br>
+      • Users loaded: ${users ? users.length : 0}<br>
+      • Current user: ${currentUser ? currentUser.email : 'Not logged in'}<br>
+      • PC object: ${typeof PC !== 'undefined' ? '✅' : '❌'}<br>
+      • LocalStorage users: ${localStorage.getItem('pc_users') ? '✅' : '❌'}<br>
+      <br>
+      <strong>Registered Users:</strong><br>
+      ${usersList}
+      <br><br>
+      <strong>Test Login:</strong><br>
+      • Email: admin@theprofitscircle.co.uk<br>
+      • Password: admin123<br>
+      <br>
+      <button onclick="testLogin()" style="background:var(--gold); color:var(--black); border:none; padding:5px 10px; border-radius:5px; cursor:pointer; margin-right:5px;">Test Login</button>
+      <button onclick="resetUsers()" style="background:var(--red-dim); color:var(--red); border:1px solid var(--red-border); padding:5px 10px; border-radius:5px; cursor:pointer;">Reset Users</button>
+    `;
+  }
+}
+
+// ========== TEST FUNCTIONS ==========
+window.testLogin = async function() {
+  console.log('Testing login with admin@theprofitscircle.co.uk / admin123');
+  const result = await PC.login('admin@theprofitscircle.co.uk', 'admin123');
+  console.log('Test result:', result);
+  if (result.ok) {
+    PC.toast('Test login successful!', 'success');
+    setTimeout(() => {
+      window.location.href = '/admin';
+    }, 1000);
+  } else {
+    PC.toast('Test login failed: ' + result.msg, 'error');
+  }
+};
+
+window.resetUsers = function() {
+  // Reset to default admin user
+  PC.storage.users = [{
+    id: 1,
+    name: "Admin",
+    email: "admin@theprofitscircle.co.uk",
+    passwordHash: "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", // hash for "admin123"
     role: "admin",
     plan: "vip",
     vip: true,
     status: "active",
-    joined: new Date().toISOString().split('T')[0],
-    affiliate: false,
-    referralCode: "",
+    joined: "2024-01-01",
+    affiliate: true,
+    referralCode: "ADMIN",
     referredBy: "",
     earnings: 0
-  });
-  localStorage.setItem('pc_users', JSON.stringify(users));
-  console.log('New admin created! Try logging in with: newadmin@example.com / admin123');
+  }];
+  localStorage.setItem('pc_users', JSON.stringify(PC.storage.users));
+  PC.toast('Users reset to default admin', 'success');
+  updateDebugInfo();
+};
+
+// ========== INITIALIZATION ==========
+// Redirect if already logged in
+if (PC.isLoggedIn()) {
+  const user = PC.getUser();
+  const redirect = sessionStorage.getItem('pc_redirect') || (user && user.role === 'admin' ? '/admin' : '/');
+  sessionStorage.removeItem('pc_redirect');
+  window.location.href = redirect;
+}
+
+// Load users on page load
+PC.fetchUsers().catch(() => {
+  console.log('Using fallback user data');
+  updateDebugInfo();
 });
+
+// ========== LOGIN FORM HANDLER ==========
+async function doLogin() {
+  const btn = document.getElementById('loginBtn');
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  const errorEl = document.getElementById('loginError');
+  
+  errorEl.textContent = '';
+  
+  if (!email || !pw) { 
+    PC.toast('Please fill in all fields', 'error'); 
+    return; 
+  }
+  
+  btn.disabled = true; 
+  btn.innerHTML = '<span style="display:inline-block; width:20px; height:20px; border:2px solid #fff; border-radius:50%; border-top-color:transparent; animation:spin 1s linear infinite; margin-right:8px;"></span>Signing in…';
+  
+  try {
+    const res = await PC.login(email, pw);
+    
+    if (!res.ok) { 
+      errorEl.textContent = res.msg;
+      PC.toast(res.msg, 'error'); 
+      btn.disabled = false; 
+      btn.innerHTML = 'Log In →';
+      return; 
+    }
+    
+    const user = PC.getUser();
+    PC.toast('Welcome back, ' + (user.name || 'User').split(' ')[0] + '! 👋', 'success');
+    
+    setTimeout(() => {
+      const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : '/');
+      sessionStorage.removeItem('pc_redirect');
+      window.location.href = redirect;
+    }, 700);
+    
+  } catch (error) {
+    btn.disabled = false; 
+    btn.innerHTML = 'Log In →';
+    errorEl.textContent = 'Login failed: ' + error.message;
+    PC.toast('Login failed', 'error');
+    console.error('Login error:', error);
+  }
+}
+
+// Add animation style
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(style);
+
+// Initialize debug info
+setTimeout(updateDebugInfo, 500);
+
+console.log('Login page initialized. Users:', PC.getUsers().length);
+</script>
+</body>
+</html>
