@@ -6,17 +6,248 @@
   <title>Login – The Profits Circle</title>
   <link rel="stylesheet" href="assets/style.css" />
   <style>
-    /* Keep your existing styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --dark: #0a0a0a;
+      --gold: #d4a843;
+      --gold-light: #e5c27a;
+      --gold-dark: #b38f3a;
+      --gray: #888888;
+      --light-gray: #f5f5f5;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,168,67,0.15), transparent), #000;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .login-box {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      border-radius: 32px;
+      padding: 48px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo h1 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .logo p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 168, 67, 0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 4px rgba(212, 168, 67, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      border: none;
+      border-radius: 12px;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 12px;
+      position: relative;
+    }
+
+    .login-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(212, 168, 67, 0.5);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      background: rgba(220, 38, 38, 0.1);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      color: #ef4444;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      border-top-color: #000;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 14px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .toast.error {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .forgot-link {
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    .forgot-link a {
+      color: var(--gray);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-link a:hover {
+      color: var(--gold);
+    }
   </style>
 </head>
-<body style="background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,168,67,0.1), transparent), var(--black);">
+<body>
 
 <div class="login-container">
   <div class="login-box">
-    <!-- Keep your existing logo and form HTML -->
+    <div class="logo">
+      <h1>THE PROFITS CIRCLE</h1>
+      <p>Sign in to your account</p>
+    </div>
     
     <form id="loginForm" onsubmit="event.preventDefault(); doLogin();">
-      <!-- Your form fields -->
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+      </div>
+      
+      <div class="forgot-link">
+        <a href="#">Forgot password?</a>
+      </div>
+      
+      <button type="submit" class="login-btn" id="loginBtn">
+        Log In
+      </button>
+      
+      <div class="error-message" id="errorMessage"></div>
     </form>
   </div>
 </div>
@@ -25,19 +256,14 @@
 
 <script>
 // ============================================
-// FIXED LOGIN PAGE
+// COMPLETE FIXED LOGIN PAGE
 // ============================================
 
 // Clear any existing sessions on login page load
-(function clearExistingSessions() {
-  // Don't redirect if already on login page
-  if (window.location.pathname === '/login') {
-    // Clear any existing sessions
-    localStorage.removeItem('pc_user');
-    sessionStorage.removeItem('pc_user');
-    // Keep user cache but clear session
-    console.log('Login page loaded - sessions cleared');
-  }
+(function() {
+  console.log('Login page loaded - clearing old sessions');
+  localStorage.removeItem('pc_user');
+  sessionStorage.removeItem('pc_user');
 })();
 
 // Toast function
@@ -47,11 +273,15 @@ function showToast(message, type = 'info') {
   if (toast && msgEl) {
     msgEl.textContent = message;
     toast.className = 'toast show ' + type;
-    setTimeout(() => toast.className = 'toast', 3000);
+    setTimeout(() => {
+      toast.className = 'toast';
+    }, 3000);
+  } else {
+    alert(message); // Fallback
   }
 }
 
-// Password hashing
+// Password hashing using SHA-256
 async function hashPassword(password) {
   const msgBuffer = new TextEncoder().encode(password);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -59,10 +289,11 @@ async function hashPassword(password) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Load users
+// Load users from JSON file
 async function loadUsers() {
   try {
-    const response = await fetch('users.json?' + Date.now());
+    console.log('Loading users...');
+    const response = await fetch('users.json?' + Date.now()); // Cache bust
     const data = await response.json();
     
     let users = [];
@@ -72,16 +303,22 @@ async function loadUsers() {
       users = data.users;
     }
     
+    console.log('Users loaded:', users.length);
     localStorage.setItem('pc_users', JSON.stringify(users));
     return users;
   } catch (error) {
     console.error('Error loading users:', error);
+    // Try to get from cache
     const cached = localStorage.getItem('pc_users');
-    return cached ? JSON.parse(cached) : [];
+    if (cached) {
+      console.log('Using cached users');
+      return JSON.parse(cached);
+    }
+    return [];
   }
 }
 
-// Login function
+// Main login function
 async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -89,36 +326,54 @@ async function doLogin() {
   const errorEl = document.getElementById('errorMessage');
   
   // Clear previous errors
-  if (errorEl) errorEl.classList.remove('show');
+  if (errorEl) {
+    errorEl.classList.remove('show');
+    errorEl.textContent = '';
+  }
   
+  // Validate inputs
   if (!email || !password) {
     showToast('Please enter both email and password', 'error');
     return;
   }
   
-  // Show loading
+  // Show loading state
   btn.disabled = true;
   btn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
   
   try {
+    // Load users
     const users = await loadUsers();
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    
+    if (!users || users.length === 0) {
+      showToast('Unable to load user data. Please try again.', 'error');
+      btn.disabled = false;
+      btn.innerHTML = 'Log In';
+      return;
+    }
+    
+    // Find user by email (case insensitive)
+    const user = users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
     
     if (!user) {
+      console.log('User not found:', email);
       showToast('Invalid email or password', 'error');
       btn.disabled = false;
       btn.innerHTML = 'Log In';
       return;
     }
     
+    // Check if account is suspended
     if (user.status === 'suspended') {
-      showToast('Account suspended', 'error');
+      showToast('This account has been suspended', 'error');
       btn.disabled = false;
       btn.innerHTML = 'Log In';
       return;
     }
     
+    // Hash entered password and compare
     const hashedPassword = await hashPassword(password);
+    console.log('Password check:', { entered: hashedPassword, stored: user.passwordHash });
     
     if (hashedPassword !== user.passwordHash) {
       showToast('Invalid email or password', 'error');
@@ -127,37 +382,52 @@ async function doLogin() {
       return;
     }
     
-    // Create session user (without password hash)
+    // Create session user (without sensitive data)
     const sessionUser = {
-      id: user.id,
-      name: user.name,
+      id: user.id || Date.now(),
+      name: user.name || user.email.split('@')[0],
       email: user.email,
-      role: user.role,
-      plan: user.plan,
+      role: user.role || 'user',
+      plan: user.plan || 'free',
       vip: user.vip || false,
-      status: user.status,
+      status: user.status || 'active',
       affiliate: user.affiliate || false,
-      referralCode: user.referralCode || ''
+      referralCode: user.referralCode || '',
+      loggedInAt: new Date().toISOString()
     };
+    
+    console.log('Login successful for:', sessionUser.email);
     
     // Clear any existing sessions first
     localStorage.removeItem('pc_user');
     sessionStorage.removeItem('pc_user');
     
-    // Set new session
+    // Set new session in both storages for redundancy
     localStorage.setItem('pc_user', JSON.stringify(sessionUser));
     sessionStorage.setItem('pc_user', JSON.stringify(sessionUser));
     
-    showToast(`Welcome back, ${user.name}!`, 'success');
+    // Show success message
+    showToast(`Welcome back, ${sessionUser.name}!`, 'success');
     
-    // Get redirect URL
-    const redirect = sessionStorage.getItem('pc_redirect') || (user.role === 'admin' ? '/admin' : '/dashboard');
-    sessionStorage.removeItem('pc_redirect');
+    // Determine redirect URL
+    let redirect = '/dashboard'; // Default
     
-    // Redirect
+    // Check for stored redirect (e.g., if trying to access admin while logged out)
+    const storedRedirect = sessionStorage.getItem('pc_redirect');
+    if (storedRedirect) {
+      redirect = storedRedirect;
+      sessionStorage.removeItem('pc_redirect');
+    } else if (sessionUser.role === 'admin') {
+      // Admin users go to admin panel by default
+      redirect = '/admin';
+    }
+    
+    console.log('Redirecting to:', redirect);
+    
+    // Redirect after a short delay
     setTimeout(() => {
-      window.location.replace(redirect);
-    }, 1000);
+      window.location.href = redirect;
+    }, 1500);
     
   } catch (error) {
     console.error('Login error:', error);
@@ -167,12 +437,28 @@ async function doLogin() {
   }
 }
 
-// Pre-load users
+// Pre-load users for faster login
 loadUsers();
 
-// Make functions global
+// Make functions globally available
 window.doLogin = doLogin;
+window.showToast = showToast;
+
+// Check if there's a redirect parameter in URL
+(function checkUrlParams() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirect = urlParams.get('redirect');
+  if (redirect) {
+    sessionStorage.setItem('pc_redirect', redirect);
+    console.log('Redirect param stored:', redirect);
+  }
+})();
+
+// Debug info
+console.log('Login page initialized', new Date().toISOString());
 </script>
 
+<!-- Add a sample users.json for testing if it doesn't exist -->
+<!-- You'll need to create this file separately -->
 </body>
 </html>
