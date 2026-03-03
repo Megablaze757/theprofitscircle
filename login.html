@@ -340,7 +340,7 @@ async function doLogin() {
     
     // Redirect based on role
     setTimeout(() => {
-      const redirect = user.role === 'admin' ? '/admin' : '/dashboard';
+      const redirect = user.role === 'admin' ? '/admin' : '/';
       window.location.href = redirect;
     }, 1000);
     
@@ -361,7 +361,7 @@ async function doLogin() {
     try {
       const user = JSON.parse(userStr);
       // Redirect to appropriate page
-      window.location.href = user.role === 'admin' ? '/admin' : '/dashboard';
+      window.location.href = user.role === 'admin' ? '/admin' : '/';
     } catch (e) {
       // Clear invalid session
       localStorage.removeItem('pc_user');
