@@ -29,6 +29,17 @@
       "referralCode": "",
       "referredBy": "",
       "earnings": 0
+    },
+    {
+      "id": 1772971705014,
+      "name": "Josh Carnaje",
+      "email": "carnajejosh@gmail.com",
+      "role": "user",
+      "plan": "vip",
+      "status": "active",
+      "vip": true,
+      "affiliate": false,
+      "passwordHash": "c3b5253d59f4c1245c046290abeb5ab63076a48a3596c577ecb7eee5581b3cd2"
     }
   ]
 }
