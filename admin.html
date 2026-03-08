@@ -388,7 +388,10 @@
     <div class="admin-content">
       <div class="content-header">
         <h2>User Management</h2>
-        <button class="add-btn" onclick="showAddUserModal()">+ Add New User</button>
+        <div style="display:flex;gap:10px;">
+          <button class="add-btn" style="background:#2563eb;" onclick="downloadUsersJson()">&#11015; Download users.json</button>
+          <button class="add-btn" onclick="showAddUserModal()">+ Add New User</button>
+        </div>
       </div>
 
       <div class="users-table-container">
@@ -596,6 +599,20 @@
         console.error('Error saving users:', error);
         showToast('Error saving users', 'error');
       }
+    }
+
+    function downloadUsersJson() {
+      const data = JSON.stringify({ users: users }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'users.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('users.json downloaded!', 'success');
     }
 
     // Update users table
